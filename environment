@@ -1,0 +1,60 @@
+# CUCHEB home directory
+CUCHEBDIR := /home/jared/Projects/cuCheb
+
+# directory where CUCHEB will be installed
+INSTALLDIR := /usr/local
+
+# C compiler and flags
+CC := gcc
+CFLAGS := -O3 -fPIC -fopenmp
+
+# CUDA compiler and flags
+CUC := nvcc
+CUFLAGS := -O3 --compiler-options '-fPIC -fopenmp' -arch sm_20
+
+# flags for building shared library
+SOFLAGS := --compiler-options '-fPIC' --shared
+
+# directory for CUDA library
+CUDADIR := #/usr/local/cuda
+
+# directory for CULA library
+CULADIR := /usr/local/cula
+
+# directory for CULASPARSE library
+CULASPARSEDIR := /usr/local/culasparse
+
+# directory for BLAS library
+BLASDIR :=
+
+# directory for LAPACK library
+LAPACKDIR :=
+
+# linking directories
+INCDIRS := -I $(CUCHEBDIR)/include -I $(CUDADIR)/include -I $(CULADIR)/include -I $(CULASPARSEDIR)/include
+LIBDIRS :=  -L $(CULADIR)/lib64 -L $(CULASPARSEDIR)/lib64 -L $(BLASDIR) -L $(LAPACKDIR)
+LIBS := -lcuda -lcudart -lcublas -lcusparse -lcufft -lcurand -lcula_lapack -lcula_sparse -llapack -lblas -lm 
+
+# CUCHEB src directory
+SRCDIR := $(CUCHEBDIR)/src
+
+# CUCHEB individual src directories
+UDIR := $(SRCDIR)/utilities
+SDIR := $(SRCDIR)/single
+DDIR := $(SRCDIR)/double
+CDIR := $(SRCDIR)/complex_single
+ZDIR := $(SRCDIR)/complex_double
+
+# CUCHEB individual srcs
+USRCS := $(wildcard $(UDIR)/*.cu)
+SSRCS := $(wildcard $(SDIR)/*.cu)
+DSRCS := $(wildcard $(DDIR)/*.cu)
+CSRCS := $(wildcard $(CDIR)/*.cu)
+ZSRCS := $(wildcard $(ZDIR)/*.cu)
+
+# CUCHEB individual objs
+UOBJS := $(patsubst $(UDIR)/%.cu,$(UDIR)/%.o,$(USRCS))
+SOBJS := $(patsubst $(SDIR)/%.cu,$(SDIR)/%.o,$(SSRCS))
+DOBJS := $(patsubst $(DDIR)/%.cu,$(DDIR)/%.o,$(DSRCS))
+COBJS := $(patsubst $(CDIR)/%.cu,$(CDIR)/%.o,$(CSRCS))
+ZOBJS := $(patsubst $(ZDIR)/%.cu,$(ZDIR)/%.o,$(ZSRCS))
