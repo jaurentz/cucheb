@@ -9,7 +9,8 @@ CC := gcc
 CFLAGS := -O3 -fPIC -fopenmp
 
 # CUDA compiler and flags
-CUC := nvcc
+#CUC := nvcc
+CUC := /usr/local/cuda/bin/nvcc
 CUFLAGS := -O3 --compiler-options '-fPIC -fopenmp' -arch sm_20
 
 # flags for building shared library
@@ -30,10 +31,13 @@ BLASDIR :=
 # directory for LAPACK library
 LAPACKDIR :=
 
+# directory for MAGMA library
+MAGMADIR := /usr/local/magma
+
 # linking directories
-INCDIRS := -I $(CUCHEBDIR)/include -I $(CUDADIR)/include -I $(CULADIR)/include -I $(CULASPARSEDIR)/include
-LIBDIRS :=  -L $(CULADIR)/lib64 -L $(CULASPARSEDIR)/lib64 -L $(BLASDIR) -L $(LAPACKDIR)
-LIBS := -lcuda -lcudart -lcublas -lcusparse -lcufft -lcurand -lcula_lapack -lcula_sparse -llapack -lblas -lm 
+INCDIRS := -I $(CUCHEBDIR)/include -I $(MAGMADIR)/include -I $(CUDADIR)/include -I $(CULADIR)/include -I $(CULASPARSEDIR)/include
+LIBDIRS :=  -L $(CULADIR)/lib64 -L $(CULASPARSEDIR)/lib64 -L $(BLASDIR) -L $(LAPACKDIR) -L $(MAGMADIR)/lib
+LIBS := -lcuda -lcudart -lcublas -lcusparse -lcufft -lcurand -lcula_lapack -lcula_sparse -lmagma -lmagma_lapack -llapack -lblas -lm 
 
 # CUCHEB src directory
 SRCDIR := $(CUCHEBDIR)/src
