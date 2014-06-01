@@ -51,7 +51,7 @@ cuchebStatus_t cuchebDrestart(int n,int runlength,int neigs,int *nconv,double *v
 	cuchebCheckError(cublasCreate(&cublas_handle),__FILE__,__LINE__);
 	cuchebCheckError(cublasSetPointerMode(cublas_handle, CUBLAS_POINTER_MODE_HOST),__FILE__,__LINE__);
 
-	// compute projected eigenvectors
+	// initialize gpu eigenvectors
 	int len = runlength-*nconv;
 	double temp;
 	double *eigvecs;
@@ -61,10 +61,34 @@ cuchebStatus_t cuchebDrestart(int n,int runlength,int neigs,int *nconv,double *v
 	for(int ii=0;ii<len;ii++){
 		cuchebCheckError(cublasSetVector(1,sizeof(double),&temp,1,&eigvecs[ii+ii*len],1),__FILE__,__LINE__);
 	}
-	culaInitialize();
-	culaDeviceDsteqr('I',len,&diags[(*nconv)],&sdiags[(*nconv)],eigvecs,len);
-	culaShutdown();
-	
+
+	// initialize cpu diags
+	double *h_diags;
+	cuchebCheckError((void*)(h_diags = (double*)malloc(len*sizeof(double))),__FILE__,__LINE__);
+	cuchebCheckError(cudaMemcpy(h_diags,diags,len*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
+
+	// initialize cpu sdiags
+	double *h_sdiags;
+	cuchebCheckError((void*)(h_sdiags = (double*)malloc((len-1)*sizeof(double))),__FILE__,__LINE__);
+	cuchebCheckError(cudaMemcpy(h_sdiags,sdiags,(len-1)*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
+
+	// initialize cpu eigenvectors
+	double *h_eigvecs;
+	cuchebCheckError((void*)(h_eigvecs = (double*)malloc(len*len*sizeof(double))),__FILE__,__LINE__);
+	cuchebCheckError(cudaMemcpy(h_eigvecs,eigvecs,len*len*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
+
+	// call lapacke
+	lapack_int lpint;
+	lpint = LAPACKE_dsteqr(LAPACK_COL_MAJOR,'I',len,h_diags,h_sdiags,h_eigvecs,len);
+	if(lpint |= 0){
+		fprintf(stderr,"\nLapacke error: %d occured in %s at line: %d\n\n",lpint,__FILE__,__LINE__);
+		cuchebExit(-1);
+	}
+
+	// copy results back to gpu
+	cuchebCheckError(cudaMemcpy(diags,h_diags,len*sizeof(double),cudaMemcpyHostToDevice),__FILE__,__LINE__);
+	cuchebCheckError(cudaMemcpy(eigvecs,h_eigvecs,len*len*sizeof(double),cudaMemcpyHostToDevice),__FILE__,__LINE__);
+
 	// swap eigenvalues
 	for(int ii=0;ii < (len/2);ii++){
 		cuchebCheckError(cublasDswap(cublas_handle,1,&diags[ii],1,&diags[len-ii-1],1),__FILE__,__LINE__);
@@ -139,6 +163,10 @@ cuchebStatus_t cuchebDrestart(int n,int runlength,int neigs,int *nconv,double *v
 		// free memory
 		cuchebCheckError(cudaFree(eigvecs),__FILE__,__LINE__);
 
+		free(h_eigvecs);
+		free(h_diags);
+		free(h_sdiags);
+
 		// return success
 		return CUCHEB_STATUS_SUCCESS;
 	}
@@ -183,6 +211,10 @@ cuchebStatus_t cuchebDrestart(int n,int runlength,int neigs,int *nconv,double *v
 
 	// free memory
 	cuchebCheckError(cudaFree(eigvecs),__FILE__,__LINE__);
+
+	free(h_eigvecs);
+	free(h_diags);
+	free(h_sdiags);
 
 	// return success
 	return CUCHEB_STATUS_SUCCESS;

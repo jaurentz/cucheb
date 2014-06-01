@@ -38,7 +38,7 @@ cuchebStatus_t cuchebDspecrad(int n, cuchebOpMult OPMULT, void *USERDATA, double
 	// do Lanzcos run
 	cuchebCheckError(cuchebDlanczos(n,OPMULT,USERDATA,0,runlength,vecs,diags,sdiags),__FILE__,__LINE__);
 
-	// compute projected eigenvectors
+	// initialize gpu eigenvectors
 	double *eigvecs;
 	cuchebCheckError(cudaMalloc(&eigvecs,runlength*runlength*sizeof(double)),__FILE__,__LINE__);
 	cuchebCheckError(cuchebDinit(runlength*runlength,eigvecs,1,0.0),__FILE__,__LINE__);
@@ -46,9 +46,33 @@ cuchebStatus_t cuchebDspecrad(int n, cuchebOpMult OPMULT, void *USERDATA, double
 	for(int ii=0;ii<runlength;ii++){
 		cuchebCheckError(cublasSetVector(1,sizeof(double),&temp,1,&eigvecs[ii+ii*runlength],1),__FILE__,__LINE__);
 	}
-	culaInitialize();
-	culaDeviceDsteqr('I',runlength,diags,sdiags,eigvecs,runlength);
-	culaShutdown();
+
+	// initialize cpu diags
+	double *h_diags;
+	cuchebCheckError((void*)(h_diags = (double*)malloc(runlength*sizeof(double))),__FILE__,__LINE__);
+	cuchebCheckError(cudaMemcpy(h_diags,diags,runlength*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
+
+	// initialize cpu sdiags
+	double *h_sdiags;
+	cuchebCheckError((void*)(h_sdiags = (double*)malloc((runlength-1)*sizeof(double))),__FILE__,__LINE__);
+	cuchebCheckError(cudaMemcpy(h_sdiags,sdiags,(runlength-1)*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
+
+	// initialize cpu eigenvectors
+	double *h_eigvecs;
+	cuchebCheckError((void*)(h_eigvecs = (double*)malloc(runlength*runlength*sizeof(double))),__FILE__,__LINE__);
+	cuchebCheckError(cudaMemcpy(h_eigvecs,eigvecs,runlength*runlength*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
+
+	// call lapacke
+	lapack_int lpint;
+	lpint = LAPACKE_dsteqr(LAPACK_COL_MAJOR,'I',runlength,h_diags,h_sdiags,h_eigvecs,runlength);
+	if(lpint |= 0){
+		fprintf(stderr,"\nLapacke error: %d occured in %s at line: %d\n\n",lpint,__FILE__,__LINE__);
+		cuchebExit(-1);
+	}
+
+	// copy results back to gpu
+	cuchebCheckError(cudaMemcpy(diags,h_diags,runlength*sizeof(double),cudaMemcpyHostToDevice),__FILE__,__LINE__);
+	cuchebCheckError(cudaMemcpy(eigvecs,h_eigvecs,runlength*runlength*sizeof(double),cudaMemcpyHostToDevice),__FILE__,__LINE__);
 	
 	// compute ritz vectors
 	double *ritz_min, *ritz_max;
@@ -114,9 +138,27 @@ cuchebStatus_t cuchebDspecrad(int n, cuchebOpMult OPMULT, void *USERDATA, double
 			for(int jj=0;jj<runlength;jj++){
 				cuchebCheckError(cublasSetVector(1,sizeof(double),&temp,1,&eigvecs[jj+jj*runlength],1),__FILE__,__LINE__);
 			}
-			culaInitialize();
-			culaDeviceDsteqr('I',runlength,diags,sdiags,eigvecs,runlength);
-			culaShutdown();
+
+			// initialize cpu diags
+			cuchebCheckError(cudaMemcpy(h_diags,diags,runlength*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
+
+			// initialize cpu sdiags
+			cuchebCheckError(cudaMemcpy(h_sdiags,sdiags,(runlength-1)*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
+
+			// initialize cpu eigenvectors
+			cuchebCheckError(cudaMemcpy(h_eigvecs,eigvecs,runlength*runlength*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
+
+			// call lapacke
+			lapack_int lpint;
+			lpint = LAPACKE_dsteqr(LAPACK_COL_MAJOR,'I',runlength,h_diags,h_sdiags,h_eigvecs,runlength);
+			if(lpint |= 0){
+				fprintf(stderr,"\nLapacke error: %d occured in %s at line: %d\n\n",lpint,__FILE__,__LINE__);
+				cuchebExit(-1);
+			}
+
+			// copy results back to gpu
+			cuchebCheckError(cudaMemcpy(diags,h_diags,runlength*sizeof(double),cudaMemcpyHostToDevice),__FILE__,__LINE__);
+			cuchebCheckError(cudaMemcpy(eigvecs,h_eigvecs,runlength*runlength*sizeof(double),cudaMemcpyHostToDevice),__FILE__,__LINE__);
 	
 			// compute ritz vectors
 			temp = 1.0;
@@ -162,6 +204,10 @@ cuchebStatus_t cuchebDspecrad(int n, cuchebOpMult OPMULT, void *USERDATA, double
 	cuchebCheckError(cudaFree(eigvecs),__FILE__,__LINE__);
 	cuchebCheckError(cudaFree(ritz_min),__FILE__,__LINE__);
 	cuchebCheckError(cudaFree(ritz_max),__FILE__,__LINE__);
+
+	free(h_eigvecs);
+	free(h_diags);
+	free(h_sdiags);
 
 	// return success
 	return CUCHEB_STATUS_SUCCESS;

@@ -4,18 +4,28 @@ all: $(UOBJS) $(SOBJS) $(DOBJS) $(COBJS) $(ZOBJS)
 
 $(UOBJS): $(USRCS)
 	make -C $(UDIR)
+
+$(USRCS):
  
 $(SOBJS): $(SSRCS)
 	make -C $(SDIR)
 
+$(SSRCS):
+
 $(DOBJS): $(DSRCS)
 	make -C $(DDIR)
+
+$(DSRCS):
 
 $(COBJS): $(CSRCS)
 	make -C $(CDIR)
 
+$(CSRCS):
+
 $(ZOBJS): $(ZSRCS)
 	make -C $(ZDIR)
+
+$(ZSRCS):
 
 clean:
 	make clean -C $(UDIR) &&\

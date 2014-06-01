@@ -6,6 +6,7 @@ MINOR := 1
 VERSION := $(MAJOR).$(MINOR)
 
 OBJS := $(UOBJS) $(SOBJS) $(DOBJS) $(COBJS) $(ZOBJS)
+SRCS := $(USRCS) $(SSRCS) $(DSRCS) $(CSRCS) $(ZSRCS)
 HDRS := $(wildcard $(CUCHEBDIR)/include/*.h)
 
 all: lib$(LIBNAME).so.$(VERSION)
@@ -23,17 +24,19 @@ install: lib$(LIBNAME).so.$(VERSION)
 	ldconfig
 
 uninstall:
-	-rm -rf $(INSTALLDIR)/cucheb touch /etc/ld.so.conf.d/cucheb.conf
-	ldconfig
+	-rm -rf $(INSTALLDIR)/cucheb /etc/ld.so.conf.d/cucheb.conf
  
 lib$(LIBNAME).so.$(VERSION): $(OBJS)
 	$(CUC) $(SOFLAGS) -o lib$(LIBNAME).so.$(VERSION) $^
 
-$(OBJS): $(HDRS)
+$(OBJS): $(HDRS) $(SRCS)
 	make -C $(CUCHEBDIR)/src
 
 $(HDRS):
 
+$(SRCS):
+
 clean:
+	-rm $(CUCHEBDIR)/lib$(LIBNAME).so.$(VERSION) &&\
 	make clean -C $(CUCHEBDIR)/src
 	

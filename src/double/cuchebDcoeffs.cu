@@ -1,5 +1,6 @@
 #include <cucheb.h>
 
+
 /* chebcoeffs */
 /* double precision */
 __global__ void dinput (int n, const double *fvals, int incfvals, cufftDoubleReal *input){

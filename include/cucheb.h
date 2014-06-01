@@ -18,8 +18,9 @@
 #include <string>
 #include <sstream>
 #include <omp.h>
-#include <cula_lapack.h>
-#include <cula_lapack_device.h>
+//#include <cula_lapack.h>
+//#include <cula_lapack_device.h>
+#include <lapacke.h>
 using namespace std;
 #include <cucheberror.h>
 #include <cuchebpoly.h>
