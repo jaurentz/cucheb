@@ -1,32 +1,32 @@
 include ../make.inc
 
-#all: $(UOBJS) $(SOBJS) $(DOBJS) $(COBJS) $(ZOBJS)
-all: $(UOBJS) $(DOBJS) 
+all: $(UOBJS) $(SOBJS) $(DOBJS) $(COBJS) $(ZOBJS)
+#all: $(UOBJS) $(DOBJS) 
 
 $(UOBJS): $(USRCS)
 	make -C $(UDIR)
 
 $(USRCS):
  
-#$(SOBJS): $(SSRCS)
-#	make -C $(SDIR)
+$(SOBJS): $(SSRCS)
+	make -C $(SDIR)
 
-#$(SSRCS):
+$(SSRCS):
 
 $(DOBJS): $(DSRCS)
 	make -C $(DDIR)
 
 $(DSRCS):
 
-#$(COBJS): $(CSRCS)
-#	make -C $(CDIR)
+$(COBJS): $(CSRCS)
+	make -C $(CDIR)
 
-#$(CSRCS):
+$(CSRCS):
 
-#$(ZOBJS): $(ZSRCS)
-#	make -C $(ZDIR)
+$(ZOBJS): $(ZSRCS)
+	make -C $(ZDIR)
 
-#$(ZSRCS):
+$(ZSRCS):
 
 clean:
 	make clean -C $(UDIR) &&\
