@@ -1,8 +1,8 @@
 #include <cucheb.h>
 
 /* helpers for double precision constructors */
-__global__ void dfunkernel(int n, const double *in, int incin, double *out, int incout);
-cuchebStatus_t dfuncaller(int n, const double *in, int incin, double *out, int incout);
+__global__ void dfunkernel(int n, const double *in, int incin, double *out, int incout, void* userdata);
+cuchebStatus_t dfuncaller(int n, const double *in, int incin, double *out, int incout, void* userdata);
 
 /* drvier */
 int main(){
@@ -11,6 +11,7 @@ int main(){
 	int deg;
 	double a, b;
 	double tol;
+	void* userdata;
 	
 	// ChebPoly 1
 	ChebPoly CP(CUCHEB_FIELD_DOUBLE);
@@ -20,20 +21,20 @@ int main(){
 	a = -1.0;
 	b = 1.0;
 	deg = pow(2,4);
-	ChebPoly CP2(&dfuncaller,&a,&b,deg);
+	ChebPoly CP2(&dfuncaller,&a,&b,userdata,deg);
 	CP2.printlong();
 	
 	// ChebPoly 3
 	a = -1.0;
 	b = 1.0;
 	tol = 1e-3;
-	ChebPoly CP3(&dfuncaller,&a,&b,&tol);
+	ChebPoly CP3(&dfuncaller,&a,&b,userdata,&tol);
 	CP3.print();
 	
 	// ChebPoly 4
 	a = -1.0;
 	b = 1.0;
-	ChebPoly CP4(&dfuncaller,&a,&b);
+	ChebPoly CP4(&dfuncaller,&a,&b,userdata);
 	CP4.print();
 
 	// return	
@@ -42,7 +43,7 @@ int main(){
 
 /* helpers for double precision constructors */
 /* kernel to call device function */
-__global__ void dfunkernel(int n, const double *in, int incin, double *out, int incout){
+__global__ void dfunkernel(int n, const double *in, int incin, double *out, int incout, void* userdata){
 	int tix = threadIdx.x, bix = blockIdx.x, bdx = blockDim.x;
 	int ii = bix*bdx+tix;
 
@@ -52,7 +53,7 @@ __global__ void dfunkernel(int n, const double *in, int incin, double *out, int 
 	}
 }
 /* subroutine to call dfunkernel */
-cuchebStatus_t dfuncaller(int n, const double *in, int incin, double *out, int incout){
+cuchebStatus_t dfuncaller(int n, const double *in, int incin, double *out, int incout, void* userdata){
 	
 	// check n
 	if(n <= 0){
@@ -87,7 +88,7 @@ cuchebStatus_t dfuncaller(int n, const double *in, int incin, double *out, int i
 	gridSize = (int)ceil((double)n/blockSize);
 	
 	// launch fill input kernel
-	dfunkernel<<<gridSize,blockSize>>>(n, in, incin, out, incout);
+	dfunkernel<<<gridSize,blockSize>>>(n, in, incin, out, incout, userdata);
 	
 	// check for kernel error
 	cuchebCheckError(cudaPeekAtLastError(),__FILE__,__LINE__);

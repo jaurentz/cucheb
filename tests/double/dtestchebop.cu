@@ -2,8 +2,8 @@
 #include <omp.h>
 
 /* helpers for double precision constructors */
-__global__ void dfunkernel(int n, const double *in, int incin, double* out, int incout);
-cuchebStatus_t dfuncaller(int n, const double *in, int incin, double* out, int incout);
+__global__ void dfunkernel(int n, const double *in, int incin, double* out, int incout, void* userdata);
+cuchebStatus_t dfuncaller(int n, const double *in, int incin, double* out, int incout, void* userdata);
 __global__ void testopkernel(int n, double *x, double *y, double a, double b);
 void testop(void *x, void *y, void *user);
 
@@ -33,7 +33,8 @@ int main(void){
 	
 	// set chebpoly
 	double tol = 1e-2;
-	ChebPoly CP(&dfuncaller,&LD.a,&LD.b,&tol);
+	void* userdata;
+	ChebPoly CP(&dfuncaller,&LD.a,&LD.b,userdata,&tol);
 	CP.print();
 
 	// allocate memory
@@ -74,7 +75,7 @@ int main(void){
 
 /* helpers for single precision constructors */
 /* kernel to call devince function */
-__global__ void dfunkernel(int n, const double *in, int incin, double* out, int incout){
+__global__ void dfunkernel(int n, const double *in, int incin, double* out, int incout, void* userdata){
 	int ii = (blockIdx.z*gridDim.y*gridDim.x + blockIdx.y*gridDim.x + blockIdx.x)*blockDim.x*blockDim.y*blockDim.z 
 			+ threadIdx.z*blockDim.x*blockDim.y + threadIdx.y*blockDim.x + threadIdx.x;
 
@@ -84,7 +85,7 @@ __global__ void dfunkernel(int n, const double *in, int incin, double* out, int 
 	}
 }
 /* subroutine to call sfunkernel */
-cuchebStatus_t dfuncaller(int n, const double *in, int incin, double* out, int incout){
+cuchebStatus_t dfuncaller(int n, const double *in, int incin, double* out, int incout, void* userdata){
 	
 	// check n
 	if(n <= 0){
@@ -109,7 +110,7 @@ cuchebStatus_t dfuncaller(int n, const double *in, int incin, double* out, int i
 	cuchebCheckError(cuchebSetGridBlocks(n,&blockSize,&gridSize),__FILE__,__LINE__);
 	
 	// launch fill input kernel
-	dfunkernel<<<gridSize,blockSize>>>(n, in, incin, out, incout);
+	dfunkernel<<<gridSize,blockSize>>>(n, in, incin, out, incout, userdata);
 	
 	// check for kernel error
 	cuchebCheckError(cudaPeekAtLastError(),__FILE__,__LINE__);
