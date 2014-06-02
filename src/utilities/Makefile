@@ -1,4 +1,4 @@
-include ../../environment
+include ../../make.inc
 
 all: $(UOBJS)
 

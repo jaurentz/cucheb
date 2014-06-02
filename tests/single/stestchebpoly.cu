@@ -2,7 +2,7 @@
 
 /* helpers for single precision constructors */
 __global__ void sfunkernel(int n, const float *in, int incin, float* out, int incout);
-cuchebStatus_t sfuncaller(int n, const float *in, int incin, float* out, int incout);
+cuchebStatus_t sfuncaller(int n, const float *in, int incin, float* out, int incout, void* userdata);
 
 /* driver */
 int main(){
@@ -52,7 +52,7 @@ __global__ void sfunkernel(int n, const float *in, int incin, float* out, int in
 	}
 }
 /* subroutine to call sfunkernel */
-cuchebStatus_t sfuncaller(int n, const float *in, int incin, float* out, int incout){
+cuchebStatus_t sfuncaller(int n, const float *in, int incin, float* out, int incout, void* userdata){
 	
 	// check n
 	if(n <= 0){

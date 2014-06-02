@@ -1,17 +1,23 @@
-include ./environment
+include ./make.inc
 
-LIBNAME := cucheb
-MAJOR := 0
-MINOR := 1
-VERSION := $(MAJOR).$(MINOR)
-
-OBJS := $(UOBJS) $(SOBJS) $(DOBJS) $(COBJS) $(ZOBJS)
-SRCS := $(USRCS) $(SSRCS) $(DSRCS) $(CSRCS) $(ZSRCS)
+TESTS := $(STESTS) $(DTESTS) $(CTESTS) $(ZTESTS)
+TESTSRCS := $(STESTSRCS) $(DTESTSRCS) $(CTESTSRCS) $(ZTESTSRCS)
+#OBJS := $(UOBJS) $(SOBJS) $(DOBJS) $(COBJS) $(ZOBJS)
+#SRCS := $(USRCS) $(SSRCS) $(DSRCS) $(CSRCS) $(ZSRCS)
+OBJS := $(UOBJS) $(DOBJS)
+SRCS := $(USRCS) $(DSRCS)
 HDRS := $(wildcard $(CUCHEBDIR)/include/*.h)
 
 all: lib$(LIBNAME).so.$(VERSION)
 
-install: lib$(LIBNAME).so.$(VERSION)
+tests: $(TESTS)
+
+$(TESTS): lib$(LIBNAME).so.$(VERSION) $(TESTSRCS)
+	make -C $(CUCHEBDIR)/tests
+	
+$(TESTSRCS):
+
+install: lib$(LIBNAME).so.$(VERSION) 
 	mkdir -p $(INSTALLDIR)/cucheb 
 	mkdir -p $(INSTALLDIR)/cucheb/include
 	mkdir -p $(INSTALLDIR)/cucheb/lib
@@ -38,5 +44,6 @@ $(SRCS):
 
 clean:
 	-rm $(CUCHEBDIR)/lib$(LIBNAME).so.$(VERSION) &&\
-	make clean -C $(CUCHEBDIR)/src
+	make clean -C $(CUCHEBDIR)/src &&\
+	make clean -C $(CUCHEBDIR)/tests
 	

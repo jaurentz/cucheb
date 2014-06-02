@@ -3,7 +3,7 @@
 
 /* helpers for single precision constructors */
 __global__ void sfunkernel(int n, const float *in, int incin, float* out, int incout);
-cuchebStatus_t sfuncaller(int n, const float *in, int incin, float* out, int incout);
+cuchebStatus_t sfuncaller(int n, const float *in, int incin, float* out, int incout, void* userdata);
 __global__ void testopkernel(int n, float *x, float *y, float a, float b);
 void testop(void *x, void *y, void *user);
 
@@ -33,7 +33,8 @@ int main(void){
 	
 	// set chebpoly
 	float tol = 1e-3;
-	ChebPoly CP(&sfuncaller,&LD.a,&LD.b,&tol);
+	void * userdata;
+	ChebPoly CP(&sfuncaller,&LD.a,&LD.b,userdata,&tol);
 	CP.print();
 
 	// allocate memory
@@ -84,7 +85,7 @@ __global__ void sfunkernel(int n, const float *in, int incin, float* out, int in
 	}
 }
 /* subroutine to call sfunkernel */
-cuchebStatus_t sfuncaller(int n, const float *in, int incin, float* out, int incout){
+cuchebStatus_t sfuncaller(int n, const float *in, int incin, float* out, int incout, void* userdata){
 	
 	// check n
 	if(n <= 0){
