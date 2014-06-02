@@ -2,17 +2,17 @@ include ./make.inc
 
 TESTS := $(STESTS) $(DTESTS) $(CTESTS) $(ZTESTS)
 TESTSRCS := $(STESTSRCS) $(DTESTSRCS) $(CTESTSRCS) $(ZTESTSRCS)
-#OBJS := $(UOBJS) $(SOBJS) $(DOBJS) $(COBJS) $(ZOBJS)
-#SRCS := $(USRCS) $(SSRCS) $(DSRCS) $(CSRCS) $(ZSRCS)
-OBJS := $(UOBJS) $(DOBJS)
-SRCS := $(USRCS) $(DSRCS)
+OBJS := $(UOBJS) $(SOBJS) $(DOBJS) $(COBJS) $(ZOBJS)
+SRCS := $(USRCS) $(SSRCS) $(DSRCS) $(CSRCS) $(ZSRCS)
+#OBJS := $(UOBJS) $(DOBJS)
+#SRCS := $(USRCS) $(DSRCS)
 HDRS := $(wildcard $(CUCHEBDIR)/include/*.h)
 
 all: lib$(LIBNAME).so.$(VERSION)
 
 tests: $(TESTS)
 
-$(TESTS): lib$(LIBNAME).so.$(VERSION) $(TESTSRCS)
+$(TESTS): $(TESTSRCS)
 	make -C $(CUCHEBDIR)/tests
 	
 $(TESTSRCS):
