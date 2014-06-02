@@ -43,7 +43,7 @@ $(HDRS):
 $(SRCS):
 
 clean:
-	-rm $(CUCHEBDIR)/lib$(LIBNAME).so.$(VERSION) &&\
 	make clean -C $(CUCHEBDIR)/src &&\
-	make clean -C $(CUCHEBDIR)/tests
+	make clean -C $(CUCHEBDIR)/tests &&\
+	-rm $(CUCHEBDIR)/lib$(LIBNAME).so.$(VERSION)
 	
