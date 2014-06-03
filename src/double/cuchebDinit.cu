@@ -29,6 +29,7 @@ cuchebStatus_t cuchebDinit(int n,double *x,int incx,double val){
 
 	// call kernel
 	dinit<<<gridSize,blockSize>>>(n,x,incx,val);
+	//dinit<<<1,n>>>(n,x,incx,val);
 	
 	// check for kernel error
 	cuchebCheckError(cudaPeekAtLastError(),__FILE__,__LINE__);

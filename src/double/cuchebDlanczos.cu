@@ -23,7 +23,7 @@ cuchebStatus_t cuchebDlanczos(int n, cuchebOpMult OPMULT, void *USERDATA, int st
 	// initialize cublas
 	cublasHandle_t cublas_handle;
 	cuchebCheckError(cublasCreate(&cublas_handle),__FILE__,__LINE__);
-	cuchebCheckError(cublasSetPointerMode(cublas_handle, CUBLAS_POINTER_MODE_HOST),__FILE__,__LINE__);
+	cuchebCheckError(cublasSetPointerMode(cublas_handle, CUBLAS_POINTER_MODE_HOST),__FILE__,__LINE__);	
 		
 	// lanczos run
 	double temp;
@@ -62,8 +62,10 @@ cuchebStatus_t cuchebDlanczos(int n, cuchebOpMult OPMULT, void *USERDATA, int st
 		cuchebCheckError(cublasSetVector(1,sizeof(double),&temp,1,&sdiags[ii],1),__FILE__,__LINE__);
 
 		// normalize
-		temp = 1.0/temp;
-		cuchebCheckError(cublasDscal(cublas_handle,n,&temp,&vecs[(ii+1)*n],1),__FILE__,__LINE__);
+		if(temp != 0){
+			temp = 1.0/temp;
+			cuchebCheckError(cublasDscal(cublas_handle,n,&temp,&vecs[(ii+1)*n],1),__FILE__,__LINE__);
+		}
 	}
 	
 	// shutdown cublas
@@ -136,8 +138,10 @@ cuchebStatus_t cuchebDlanczos(ChebOp *CP, int start, int runlength, double *vecs
 		cuchebCheckError(cublasSetVector(1,sizeof(double),&temp,1,&sdiags[ii],1),__FILE__,__LINE__);
 
 		// normalize
-		temp = 1.0/temp;
-		cuchebCheckError(cublasDscal(cublas_handle,n,&temp,&vecs[(ii+1)*n],1),__FILE__,__LINE__);
+		if(temp != 0){
+			temp = 1.0/temp;
+			cuchebCheckError(cublasDscal(cublas_handle,n,&temp,&vecs[(ii+1)*n],1),__FILE__,__LINE__);
+		}
 	}
 	
 	// shutdown cublas

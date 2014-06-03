@@ -41,11 +41,6 @@ cuchebStatus_t cuchebDspecrad(int n, cuchebOpMult OPMULT, void *USERDATA, double
 	// initialize gpu eigenvectors
 	double *eigvecs;
 	cuchebCheckError(cudaMalloc(&eigvecs,runlength*runlength*sizeof(double)),__FILE__,__LINE__);
-	cuchebCheckError(cuchebDinit(runlength*runlength,eigvecs,1,0.0),__FILE__,__LINE__);
-	temp = 1.0;
-	for(int ii=0;ii<runlength;ii++){
-		cuchebCheckError(cublasSetVector(1,sizeof(double),&temp,1,&eigvecs[ii+ii*runlength],1),__FILE__,__LINE__);
-	}
 
 	// initialize cpu diags
 	double *h_diags;
@@ -60,10 +55,19 @@ cuchebStatus_t cuchebDspecrad(int n, cuchebOpMult OPMULT, void *USERDATA, double
 	// initialize cpu eigenvectors
 	double *h_eigvecs;
 	cuchebCheckError((void*)(h_eigvecs = (double*)malloc(runlength*runlength*sizeof(double))),__FILE__,__LINE__);
-	cuchebCheckError(cudaMemcpy(h_eigvecs,eigvecs,runlength*runlength*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
+	for(int ii=0;ii<runlength;ii++){
+		for(int jj=0;jj<runlength;jj++){
+			if(ii == jj){
+				h_eigvecs[ii+jj*runlength] = 1.0;
+			}
+			else{
+				h_eigvecs[ii+jj*runlength] = 0.0;
+			}
+		}
+	}
 
 	// call lapacke
-	lapack_int lpint;
+	lapack_int lpint = 0;
 	lpint = LAPACKE_dsteqr(LAPACK_COL_MAJOR,'I',runlength,h_diags,h_sdiags,h_eigvecs,runlength);
 	if(lpint |= 0){
 		fprintf(stderr,"\nLapacke error: %d occured in %s at line: %d\n\n",lpint,__FILE__,__LINE__);
@@ -132,13 +136,6 @@ cuchebStatus_t cuchebDspecrad(int n, cuchebOpMult OPMULT, void *USERDATA, double
 			// do Lanzcos run
 			cuchebCheckError(cuchebDlanczos(n,OPMULT,USERDATA,0,runlength,vecs,diags,sdiags),__FILE__,__LINE__);
 
-			// compute projected eigenvectors
-			cuchebCheckError(cuchebDinit(runlength*runlength,eigvecs,1,0.0),__FILE__,__LINE__);
-			temp = 1.0;
-			for(int jj=0;jj<runlength;jj++){
-				cuchebCheckError(cublasSetVector(1,sizeof(double),&temp,1,&eigvecs[jj+jj*runlength],1),__FILE__,__LINE__);
-			}
-
 			// initialize cpu diags
 			cuchebCheckError(cudaMemcpy(h_diags,diags,runlength*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
 
@@ -147,6 +144,16 @@ cuchebStatus_t cuchebDspecrad(int n, cuchebOpMult OPMULT, void *USERDATA, double
 
 			// initialize cpu eigenvectors
 			cuchebCheckError(cudaMemcpy(h_eigvecs,eigvecs,runlength*runlength*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
+			for(int kk=0;kk<runlength;kk++){
+				for(int jj=0;jj<runlength;jj++){
+					if(kk == jj){
+						h_eigvecs[kk+jj*runlength] = 1.0;
+					}
+					else{
+						h_eigvecs[kk+jj*runlength] = 0.0;
+					}
+				}
+			}
 
 			// call lapacke
 			lapack_int lpint;

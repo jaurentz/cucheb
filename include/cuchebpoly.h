@@ -268,7 +268,7 @@ class ChebPoly{
 		 *  @param B double pointer to host memory
 		 *  @param DEG non-negative integer
 		 */
-		ChebPoly(cuchebDoubleFun FUN,double* A,double* B,void *USERDATA,int DEG);
+		ChebPoly(cuchebDoubleFun FUN,void *USERDATA,double* A,double* B,int DEG);
 		/**
 		 *  \brief User specified tolerance, double constructor for ChebPoly.
 		 *
@@ -284,7 +284,7 @@ class ChebPoly{
 		 *  @param B double pointer to host memory
 		 *  @param TOL double pointer to host memory
 		 */
-		ChebPoly(cuchebDoubleFun FUN,double* A,double* B,void *USERDATA,double* TOL);
+		ChebPoly(cuchebDoubleFun FUN,void *USERDATA,double* A,double* B,double* TOL);
 		/**
 		 *  \brief Default tolerance, double constructor for ChebPoly.
 		 *
@@ -299,7 +299,7 @@ class ChebPoly{
 		 *  @param A double pointer to host memory
 		 *  @param B double pointer to host memory
 		 */
-		ChebPoly(cuchebDoubleFun FUN,double* A,double* B,void *USERDATA);
+		ChebPoly(cuchebDoubleFun FUN,void *USERDATA,double* A,double* B);
 		/**
 		 *  \brief Fixed degree, cuComplex constructor for ChebPoly.
 		 *

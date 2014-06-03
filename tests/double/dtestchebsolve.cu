@@ -23,15 +23,10 @@ int main(void){
 	begin = omp_get_wtime();
 
 	// set LD
-	LD.n = pow(2,7);
+	LD.n = pow(2,5);
 	LD.a = 0.0;
-	LD.b = 1.0;//2.0*(double)(LD.n+1);
+	LD.b = 2.0*(double)(LD.n+1);
 	printf("\nn = %d\n",LD.n);
-	
-	// set chebpoly
-	//double tol = 1e-2;
-	//ChebPoly CP(&dfuncaller,&LD.a,&LD.b,&tol);
-	//CP.print();
 
 	// allocate memory
 	cuchebCheckError((void*)(x = (double*)malloc((LD.n)*sizeof(double))),__FILE__,__LINE__);
@@ -45,18 +40,15 @@ int main(void){
 
 	// solve
 	cuchebDsolve(LD.n,&testop,(void*)&LD,dx,db);
-
-	// multiply
-	//cuchebCheckError(cuchebDmult(LD.n,dx,dy,&testop,(void*)&LD,&CP),__FILE__,__LINE__);
 	
 	// copy memory to host
 	cuchebCheckError(cudaMemcpy(x,dx,LD.n*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
 	cuchebCheckError(cudaMemcpy(b,db,LD.n*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
 	
 	// print
-//	for(int ii=0;ii<LD.n;ii++){
-//		printf("x[%d] = %+e, b[%d] = %+e\n",ii,x[ii],ii,b[ii]);
-//	}
+	for(int ii=0;ii<LD.n;ii++){
+		printf("x[%d] = %+e, b[%d] = %+e\n",ii,x[ii],ii,b[ii]);
+	}
 	
 	// end timer
 	end = omp_get_wtime();
