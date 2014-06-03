@@ -19,7 +19,7 @@ CUC := nvcc
 #CUC := /usr/local/cuda/bin/nvcc
 CUFLAGS := -O3 --compiler-options '$(CFLAGS)'\
 		   -gencode arch=compute_35,code=sm_35\
-		   #-gencode arch=compute_30,code=sm_30\
+		   -gencode arch=compute_30,code=sm_30\
 		   #-gencode arch=compute_20,code=sm_20
 		   #-gencode arch=compute_13,code=sm_13
 

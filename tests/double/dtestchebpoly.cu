@@ -11,7 +11,8 @@ int main(){
 	int deg;
 	double a, b;
 	double tol;
-	void* userdata;
+	double scl = 10.0;
+	void* userdata = &scl;
 	
 	// ChebPoly 1
 	ChebPoly CP(CUCHEB_FIELD_DOUBLE);
@@ -46,10 +47,11 @@ int main(){
 __global__ void dfunkernel(int n, const double *in, int incin, double *out, int incout, void* userdata){
 	int tix = threadIdx.x, bix = blockIdx.x, bdx = blockDim.x;
 	int ii = bix*bdx+tix;
+	double* scl = (double*)userdata;
 
 	if(ii < n){
-		//out[ii*incout] = exp(sin(10.0*M_PI_2*in[ii*incin]));
-		out[ii*incout] = abs(in[ii*incin]);
+		out[ii*incout] = exp(sin((*scl)*M_PI_2*in[ii*incin]));
+		//out[ii*incout] = abs(in[ii*incin]);
 	}
 }
 /* subroutine to call dfunkernel */
