@@ -27,6 +27,7 @@ cuchebStatus_t cuchebDlanczos(int n, cuchebOpMult OPMULT, void *USERDATA, int st
 		
 	// lanczos run
 	double temp;
+	double alpha;
 	for(int ii=start;ii<runlength;ii++){	
 		// compute A*v
 		OPMULT((void*)&vecs[ii*n],(void*)&vecs[(ii+1)*n],USERDATA);
@@ -37,7 +38,7 @@ cuchebStatus_t cuchebDlanczos(int n, cuchebOpMult OPMULT, void *USERDATA, int st
 			cuchebCheckError(cublasDdot(cublas_handle,n,&vecs[(ii+1)*n],1,&vecs[(ii-jj)*n],1,&temp),__FILE__,__LINE__);
 
 			// store diag
-			if(jj == 0){cuchebCheckError(cublasSetVector(1,sizeof(double),&temp,1,&diags[ii],1),__FILE__,__LINE__);}
+			if(jj == 0){alpha = temp;}
 
 			// subtract
 			temp = -temp;
@@ -49,6 +50,12 @@ cuchebStatus_t cuchebDlanczos(int n, cuchebOpMult OPMULT, void *USERDATA, int st
 
 			// dot prod
 			cuchebCheckError(cublasDdot(cublas_handle,n,&vecs[(ii+1)*n],1,&vecs[(ii-jj)*n],1,&temp),__FILE__,__LINE__);
+
+			// store diag
+			if(jj == 0){
+				alpha += temp;
+				cuchebCheckError(cublasSetVector(1,sizeof(double),&alpha,1,&diags[ii],1),__FILE__,__LINE__);
+			}
 
 			// subract
 			temp = -temp;
