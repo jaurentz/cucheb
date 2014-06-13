@@ -31,6 +31,7 @@ cuchebStatus_t cuchebDspecrad(int n, cuchebOpMult OPMULT, void *USERDATA, double
 	// random starting vector
 	double temp;
 	cuchebCheckError(curandGenerateNormalDouble(curand_gen,vecs,n,0.0,1.0),__FILE__,__LINE__);
+//	cuchebCheckError(cuchebDinit(n,vecs,1,1.0),__FILE__,__LINE__);
 	cuchebCheckError(cublasDnrm2(cublas_handle,n,vecs,1,&temp),__FILE__,__LINE__);
 	temp = 1.0/temp;
 	cuchebCheckError(cublasDscal(cublas_handle,n,&temp,vecs,1),__FILE__,__LINE__);
