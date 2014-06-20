@@ -16,12 +16,8 @@ CFLAGS := -O3 -fPIC -fopenmp
 
 # CUDA compiler and flags
 CUC := nvcc
-#CUC := /usr/local/cuda/bin/nvcc
 CUFLAGS := -O3 --compiler-options '$(CFLAGS)'\
-			-gencode arch=compute_30,code=sm_30\
-			-gencode arch=compute_20,code=sm_20
-		   #-gencode arch=compute_35,code=sm_35\
-		   #-gencode arch=compute_13,code=sm_13
+			-gencode arch=compute_30,code=sm_30
 
 # flags for building shared library
 SOFLAGS := --compiler-options '-fPIC' --shared
@@ -32,16 +28,16 @@ CUDA := -lcuda -lcudart -lcublas -lcusparse -lcufft -lcurand
 
 # directory for LAPACKE library
 LAPACKDIR := 
-LAPACK := #-llapack
+LAPACK := 
 
 # directory for LAPACKE library
 LAPACKEDIR := /usr/local/lapacke
-LAPACKE := -llapacke #-I $(LAPACKEDIR)/include -L $(LAPACKEDIR)/lib -llapacke
+LAPACKE := -llapacke 
 
 # linking directories
 INCDIRS := -I $(CUCHEBDIR)/include #-I $(CUDADIR)/include -I $(LAPACKDIR)/include -I $(LAPACKEDIR)/include  
 LIBDIRS :=   
-LIBS := $(CUDA) $(LAPACK) $(LAPACKE) -lm 
+LIBS := $(CUDA) $(LAPACKE) -lm 
 
 # CUCHEB src directory
 SRCDIR := $(CUCHEBDIR)/src
