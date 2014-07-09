@@ -94,28 +94,11 @@ cuchebStatus_t cuchebDrestart(int n,int runlength,int neigs,int *nconv,double *v
 		cuchebCheckError(cublasDswap(cublas_handle,1,&diags[ii],1,&diags[len-ii-1],1),__FILE__,__LINE__);
 	}
 	
-//for(int jj=0;jj<runlength;jj++){
-//	cudaMemcpy(&temp, &diags[jj], sizeof(double), cudaMemcpyDeviceToHost);
-//	printf("diags[%d] = %e\n",jj,temp);
-//}
-//for(int jj=0;jj<runlength;jj++){
-//	cudaMemcpy(&temp, &sdiags[jj], sizeof(double), cudaMemcpyDeviceToHost);
-//	printf("sdiags[%d] = %e\n",jj,temp);
-//}
-//for(int jj=0;jj<len;jj++){
-//	cudaMemcpy(&temp, &eigvecs[(jj+1)*(len)-1], sizeof(double), cudaMemcpyDeviceToHost);
-//	printf("eigvecs[%d] = %e\n",(jj+1)*(len)-1,temp);
-//}	
 	// swap eigenvectors
 	for(int ii=0;ii < (len/2);ii++){
 		cuchebCheckError(cublasDswap(cublas_handle,len,&eigvecs[ii*len],1,&eigvecs[(len-ii-1)*len],1),__FILE__,__LINE__);
 	}
-	
-//for(int jj=0;jj<8;jj++){
-//	cudaMemcpy(&temp, &vecs[jj], sizeof(double), cudaMemcpyDeviceToHost);
-//	printf("vecs[%d] = %e\n",jj,temp);
-//}
-                           
+	                     
 	// compute ritz vecs
     temp = 1.0;
     double temp2 = 0.0;
@@ -125,32 +108,21 @@ cuchebStatus_t cuchebDrestart(int n,int runlength,int neigs,int *nconv,double *v
 	// copy neigs-nconv+1 ritzvecs into vecs
 	cuchebCheckError(cudaMemcpy(&vecs[(*nconv)*n],ritzvecs,(neigs-(*nconv)+1)*n*sizeof(double),
 		cudaMemcpyDeviceToDevice),__FILE__,__LINE__);
-		
-//for(int jj=0;jj<8;jj++){
-//	cudaMemcpy(&temp, &vecs[jj], sizeof(double), cudaMemcpyDeviceToHost);
-//	printf("vecs[%d] = %e\n",jj,temp);
-//}
 
 	// check convergence
 	double temp3;
 	int neweigs = 0;
 	cuchebCheckError(cublasDnrm2(cublas_handle,1,&sdiags[runlength-1],1,&temp),__FILE__,__LINE__);
-//printf("\ntemp = %e\n",temp);
 	cuchebCheckError(cublasDnrm2(cublas_handle,1,diags,1,&temp3),__FILE__,__LINE__);
-//printf("temp3 = %e\n",temp3);
-//printf("tol = %e\n",tol);
 	for(int ii=0;ii<(neigs-(*nconv));ii++){
 		cuchebCheckError(cublasDnrm2(cublas_handle,1,&eigvecs[(ii+1)*(len)-1],1,&temp2),__FILE__,__LINE__);
-//printf("temp2 = %e\n",temp2);
-		// lock converged
 		if(temp*temp2 < tol*temp3){
 			temp2 = 0.0;
 			cuchebCheckError(cublasSetVector(1,sizeof(double),&temp2,1,&eigvecs[(ii+1)*(len)-1],1),__FILE__,__LINE__);
 			neweigs += 1;
 		}
 	}
-//printf("nconv = %d\n",*nconv);
-//printf("neweigs = %d\n",neweigs);		
+
 	// update nconv
 	*nconv += neweigs;
 
@@ -170,17 +142,6 @@ cuchebStatus_t cuchebDrestart(int n,int runlength,int neigs,int *nconv,double *v
 		// return success
 		return CUCHEB_STATUS_SUCCESS;
 	}
-
-//cudaMemcpy(&temp, &eigvecs[(*nconv+1)*(len)-1], sizeof(double), cudaMemcpyDeviceToHost);
-//printf("temp = %e\n",temp);
-//cudaMemcpy(&temp, &eigvecs[(*nconv+2)*(len)-1], sizeof(double), cudaMemcpyDeviceToHost);
-//printf("temp = %e\n",temp);
-//cudaMemcpy(&temp, &diags[(*nconv)], sizeof(double), cudaMemcpyDeviceToHost);
-//printf("temp = %e\n",temp);
-//cudaMemcpy(&temp, &diags[(*nconv+1)], sizeof(double), cudaMemcpyDeviceToHost);
-//printf("temp = %e\n",temp);
-//cudaMemcpy(&temp, &sdiags[(*nconv)], sizeof(double), cudaMemcpyDeviceToHost);
-//printf("temp = %e\n",temp);
 
 	// update restart vectors
 	for(int ii=*nconv;ii<neigs;ii++){
