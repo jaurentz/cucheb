@@ -26,7 +26,7 @@ using namespace std;
 #include <cuchebpoly.h>
 #include <cuchebop.h>
 #include <cuchebsolve.h>
-#include <cuchebeig.h>
+#include <cuchebeigs.h>
 
 cuchebStatus_t cuchebSetGridBlocks(int n, dim3 *blockSize, dim3 *gridSize);
 
