@@ -24,7 +24,7 @@ int main(void){
 	begin = omp_get_wtime();
 
 	// set LD
-	LD.n = pow(2,20);
+	LD.n = pow(2,22);
 	LD.a = 0.0;
 	LD.b = 1.0;//2.0*(double)(LD.n+1);
 	printf("\nn = %d\n",LD.n);
