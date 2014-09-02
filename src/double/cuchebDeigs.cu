@@ -1,7 +1,6 @@
 #include <cucheb.h>
 
 cuchebStatus_t cuchebDeigs(cuchebLanczosHandle* LH, cuchebOpMult OPMULT, void* USERDATA, double *eigvecs){
-
 	// check n
 	int n = LH->n;
 	if(n < 1){
@@ -44,7 +43,7 @@ cuchebStatus_t cuchebDeigs(cuchebLanczosHandle* LH, cuchebOpMult OPMULT, void* U
 	int numconv = LH->numconv;
 	if(numconv < 0){numconv = 0;}
 	if(numconv >= numeigs){return CUCHEB_STATUS_SUCCESS;}
-
+	
 	// allocate memory for Lanzcos
 	double *vecs, *diags, *sdiags, *ritzvecs;
 	cuchebCheckError(cudaMalloc(&vecs,(runlength+1)*n*sizeof(double)),__FILE__,__LINE__);
@@ -80,7 +79,6 @@ cuchebStatus_t cuchebDeigs(cuchebLanczosHandle* LH, cuchebOpMult OPMULT, void* U
 		cuchebCheckError(curandDestroyGenerator(curand_gen),__FILE__,__LINE__);
 	}
 	cuchebCheckError(cudaMemcpy(vecs,eigvecs,n*sizeof(double),cudaMemcpyDeviceToDevice),__FILE__,__LINE__);
-	
 	// lanczos
 	int nummatvecs = 0;
 	for(int ii=0;ii<restarts+1;ii++){
@@ -240,7 +238,7 @@ cuchebStatus_t cuchebDeigs(cuchebLanczosHandle* LH, ChebOp* CO, double *eigvecs)
 	cuchebCheckError(cublasDestroy(cublas_handle),__FILE__,__LINE__);
 	
 	// copy ritzvecs into eigvecs
-	cuchebCheckError(cudaMemcpy(eigvecs,ritzvecs,numeigs*n*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
+	cuchebCheckError(cudaMemcpy(eigvecs,ritzvecs,numeigs*n*sizeof(double),cudaMemcpyDeviceToDevice),__FILE__,__LINE__);
 
 	// free memory
 	cuchebCheckError(cudaFree(vecs),__FILE__,__LINE__);

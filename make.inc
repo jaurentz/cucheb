@@ -1,8 +1,8 @@
 # CUCHEB home directory
-CUCHEBDIR := /home/jared/Projects/cuCheb
+CUCHEBDIR := /usr1/jaurentz/Projects/cuCheb
 
 # directory where CUCHEB will be installed
-INSTALLDIR := /usr/local
+INSTALLDIR := /usr1/jaurentz/MyLibs
 
 # cucheb lib name
 LIBNAME := cucheb
@@ -17,7 +17,7 @@ CFLAGS := -O3 -fPIC -fopenmp
 # CUDA compiler and flags
 CUC := nvcc
 CUFLAGS := -O3 --compiler-options '$(CFLAGS)'\
-			-gencode arch=compute_30,code=sm_30
+			-gencode arch=compute_35,code=sm_35
 
 # flags for building shared library
 SOFLAGS := --compiler-options '-fPIC' --shared
@@ -27,17 +27,17 @@ CUDADIR := #/usr/local/cuda
 CUDA := -lcuda -lcudart -lcublas -lcusparse -lcufft -lcurand 
 
 # directory for LAPACKE library
-LAPACKDIR := 
+LAPACKDIR := /usr1/jaurentz/MyLibs/lapack-3.5.0
 LAPACK := 
 
 # directory for LAPACKE library
-LAPACKEDIR := /usr/local/lapacke
+LAPACKEDIR := $(LAPACKDIR)/lapacke
 LAPACKE := -llapacke 
 
 # linking directories
-INCDIRS := -I $(CUCHEBDIR)/include #-I $(CUDADIR)/include -I $(LAPACKDIR)/include -I $(LAPACKEDIR)/include  
+INCDIRS := -I $(CUCHEBDIR)/include -I $(LAPACKEDIR)/include  
 LIBDIRS :=   
-LIBS := $(CUDA) $(LAPACKE) -lm 
+LIBS := $(CUDA) -L $(LAPACKDIR) -llapacke -llapack -lblas -lm 
 
 # CUCHEB src directory
 SRCDIR := $(CUCHEBDIR)/src
