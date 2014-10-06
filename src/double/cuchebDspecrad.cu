@@ -48,6 +48,11 @@ cuchebStatus_t cuchebDspecrad(int n, cuchebOpMult OPMULT, void *USERDATA, double
 	cuchebCheckError((void*)(h_diags = (double*)malloc(runlength*sizeof(double))),__FILE__,__LINE__);
 	cuchebCheckError(cudaMemcpy(h_diags,diags,runlength*sizeof(double),cudaMemcpyDeviceToHost),__FILE__,__LINE__);
 
+//for(int ii=0;ii<runlength;ii++){
+//printf("%+1.15e\n",h_diags[ii]);
+//}
+//printf("\n");
+
 	// initialize cpu sdiags
 	double *h_sdiags;
 	cuchebCheckError((void*)(h_sdiags = (double*)malloc((runlength-1)*sizeof(double))),__FILE__,__LINE__);
@@ -56,16 +61,16 @@ cuchebStatus_t cuchebDspecrad(int n, cuchebOpMult OPMULT, void *USERDATA, double
 	// initialize cpu eigenvectors
 	double *h_eigvecs;
 	cuchebCheckError((void*)(h_eigvecs = (double*)malloc(runlength*runlength*sizeof(double))),__FILE__,__LINE__);
-	for(int ii=0;ii<runlength;ii++){
-		for(int jj=0;jj<runlength;jj++){
-			if(ii == jj){
-				h_eigvecs[ii+jj*runlength] = 1.0;
-			}
-			else{
-				h_eigvecs[ii+jj*runlength] = 0.0;
-			}
-		}
-	}
+//	for(int ii=0;ii<runlength;ii++){
+//		for(int jj=0;jj<runlength;jj++){
+//			if(ii == jj){
+//				h_eigvecs[ii+jj*runlength] = 1.0;
+//			}
+//			else{
+//				h_eigvecs[ii+jj*runlength] = 0.0;
+//			}
+//		}
+//	}
 
 	// call lapacke
 	lapack_int lpint = 0;

@@ -11,25 +11,41 @@ SOBJS := $(patsubst $(SSRCDIR)/%.cu,$(SSRCDIR)/%.o,$(wildcard $(SSRCDIR)/*.cu))
 COBJS := $(patsubst $(CSRCDIR)/%.cu,$(CSRCDIR)/%.o,$(wildcard $(CSRCDIR)/*.cu))
 DOBJS := $(patsubst $(DSRCDIR)/%.cu,$(DSRCDIR)/%.o,$(wildcard $(DSRCDIR)/*.cu))
 ZOBJS := $(patsubst $(ZSRCDIR)/%.cu,$(ZSRCDIR)/%.o,$(wildcard $(ZSRCDIR)/*.cu))
+OBJS := $(UOBJS) $(SOBJS) $(COBJS) $(DOBJS) $(ZOBJS)
 
-OBJS := $(UOBJS) $(DOBJS)
+# CUCHEB individual sources
+USRCS := $(wildcard $(UTILDIR)/*.cu)
+SSRCS := $(wildcard $(SSRCDIR)/*.cu)
+CSRCS := $(wildcard $(CSRCDIR)/*.cu)
+DSRCS := $(wildcard $(DSRCDIR)/*.cu)
+ZSRCS := $(wildcard $(ZSRCDIR)/*.cu) 
 
 all: $(OBJS)
 	
-$(UOBJS):
+$(UOBJS): $(USRCS)
 	make -C $(UTILDIR)
+	
+$(USRCS):
 
-$(SOBJS):
+$(SOBJS): $(SSRCS)
 	make -C $(SSRCDIR)
+	
+$(SSRCS):
 
-$(COBJS):
+$(COBJS): $(CSRCS)
 	make -C $(CSRCDIR)
+	
+$(CSRCS):
 
-$(DOBJS):
+$(DOBJS): $(DSRCS)
 	make -C $(DSRCDIR)
+	
+$(DSRCS):
 
-$(ZOBJS):
+$(ZOBJS): $(ZSRCS)
 	make -C $(ZSRCDIR)
+	
+$(ZSRCS):
 
 clean:
 	make clean -C $(UTILDIR) &&\
