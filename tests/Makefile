@@ -1,27 +1,30 @@
 include ../make.inc
 
-#all: $(STESTS) $(DTESTS) $(CTESTS) $(ZTESTS)
-all: $(DTESTS)
+STESTDIR := ./single
+CTESTDIR := ./complex_single
+DTESTDIR := ./double
+ZTESTDIR := ./complex_double
 
-#$(STESTS): $(STESTSRCS)
-#	make -C $(STESTDIR)
-	
-#$(STESTSRCS):
- 
-$(DTESTS): $(DTESTSRCS)
+STESTS := $(patsubst $(STESTDIR)/%.cu,$(STESTDIR)/%,$(wildcard $(STESTDIR)/*.cu))
+CTESTS := $(patsubst $(CTESTDIR)/%.cu,$(CTESTDIR)/%,$(wildcard $(CTESTDIR)/*.cu))
+DTESTS := $(patsubst $(DTESTDIR)/%.cu,$(DTESTDIR)/%,$(wildcard $(DTESTDIR)/*.cu))
+ZTESTS := $(patsubst $(ZTESTDIR)/%.cu,$(ZTESTDIR)/%,$(wildcard $(ZTESTDIR)/*.cu))
+
+TESTS := $(DTESTS)
+
+all: $(TESTS)
+
+$(STESTS):
+	make -C $(STESTDIR)
+
+$(CTESTS):
+	make -C $(CTESTDIR)
+
+$(DTESTS):
 	make -C $(DTESTDIR)
-	
-$(DTESTSRCS):
 
-#$(CTESTS): $(CTESTSRCS)
-#	make -C $(CTESTDIR)
-	
-#$(CTESTSRCS):
-
-#$(ZTESTS): $(ZTESTSRCS)
-#	make -C $(ZTESTDIR)
-	
-#$(ZTESTSRCS):
+$(ZTESTS):
+	make -C $(ZTESTDIR)
 
 clean:
 	make clean -C $(STESTDIR) &&\

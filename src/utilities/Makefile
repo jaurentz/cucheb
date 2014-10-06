@@ -1,12 +1,14 @@
 include ../../make.inc
 
+UOBJS := $(patsubst ./%.cu,./%.o,$(wildcard ./*.cu))
+
 all: $(UOBJS)
 
 %.o: %.cu
-	$(CUC) $(CUFLAGS) -c $< $(INCDIRS) $(LIBDIRS) $(LIBS)
+	$(CUC) $(CUFLAGS) --compiler-options '-fPIC -fopenmp' -c $<
 
 clean:
-	-rm *.o
+	rm *.o
 	
 	
 	

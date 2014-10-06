@@ -1,40 +1,40 @@
 include ../make.inc
 
-all: $(UOBJS) $(SOBJS) $(DOBJS) $(COBJS) $(ZOBJS)
-#all: $(UOBJS) $(DOBJS) 
+UTILDIR := ./utilities
+SSRCDIR := ./single
+CSRCDIR := ./complex_single
+DSRCDIR := ./double
+ZSRCDIR := ./complex_double
 
-$(UOBJS): $(USRCS)
-	make -C $(UDIR)
+UOBJS := $(patsubst $(UTILDIR)/%.cu,$(UTILDIR)/%.o,$(wildcard $(UTILDIR)/*.cu))
+SOBJS := $(patsubst $(SSRCDIR)/%.cu,$(SSRCDIR)/%.o,$(wildcard $(SSRCDIR)/*.cu))
+COBJS := $(patsubst $(CSRCDIR)/%.cu,$(CSRCDIR)/%.o,$(wildcard $(CSRCDIR)/*.cu))
+DOBJS := $(patsubst $(DSRCDIR)/%.cu,$(DSRCDIR)/%.o,$(wildcard $(DSRCDIR)/*.cu))
+ZOBJS := $(patsubst $(ZSRCDIR)/%.cu,$(ZSRCDIR)/%.o,$(wildcard $(ZSRCDIR)/*.cu))
 
-$(USRCS):
- 
-$(SOBJS): $(SSRCS)
-	make -C $(SDIR)
+OBJS := $(UOBJS) $(DOBJS)
 
-$(SSRCS):
+all: $(OBJS)
+	
+$(UOBJS):
+	make -C $(UTILDIR)
 
-$(DOBJS): $(DSRCS)
-	make -C $(DDIR)
+$(SOBJS):
+	make -C $(SSRCDIR)
 
-$(DSRCS):
+$(COBJS):
+	make -C $(CSRCDIR)
 
-$(COBJS): $(CSRCS)
-	make -C $(CDIR)
+$(DOBJS):
+	make -C $(DSRCDIR)
 
-$(CSRCS):
-
-$(ZOBJS): $(ZSRCS)
-	make -C $(ZDIR)
-
-$(ZSRCS):
+$(ZOBJS):
+	make -C $(ZSRCDIR)
 
 clean:
-	make clean -C $(UDIR) &&\
-	make clean -C $(SDIR) &&\
-	make clean -C $(DDIR) &&\
-	make clean -C $(CDIR) &&\
-	make clean -C $(ZDIR)
-	
-	
-	
-	
+	make clean -C $(UTILDIR) &&\
+	make clean -C $(SSRCDIR) &&\
+	make clean -C $(CSRCDIR) &&\
+	make clean -C $(DSRCDIR) &&\
+	make clean -C $(ZSRCDIR)
+
