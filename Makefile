@@ -8,29 +8,24 @@ VERSION := $(MAJOR).$(MINOR)
 
 # CUCHEB individual source directories
 UTILDIR := ./src/utilities
-SSRCDIR := ./src/single
 DSRCDIR := ./src/double
 
 # CUCHEB individual sources
 USRCS := $(wildcard $(UTILDIR)/*.cu)
-SSRCS := $(wildcard $(SSRCDIR)/*.cu)
 DSRCS := $(wildcard $(DSRCDIR)/*.cu)
-SRCS := $(USRCS) $(SSRCS) $(DSRCS) 
+SRCS := $(USRCS) $(DSRCS) 
 
 # CUCHEB individual objects
 UOBJS := $(patsubst $(UTILDIR)/%.cu,$(UTILDIR)/%.o,$(wildcard $(UTILDIR)/*.cu))
-SOBJS := $(patsubst $(SSRCDIR)/%.cu,$(SSRCDIR)/%.o,$(wildcard $(SSRCDIR)/*.cu))
 DOBJS := $(patsubst $(DSRCDIR)/%.cu,$(DSRCDIR)/%.o,$(wildcard $(DSRCDIR)/*.cu))
-OBJS := $(UOBJS) $(SOBJS) $(DOBJS)
+OBJS := $(UOBJS) $(DOBJS)
 
 # CUCHEB individual test directories
-STESTDIR := ./tests/single
 DTESTDIR := ./tests/double
 
 # CUCHEB individual tests
-STESTSRCS := $(wildcard $(STESTDIR)/*.cu)
 DTESTSRCS := $(wildcard $(DTESTDIR)/*.cu)
-TESTSRCS := $(STESTSRCS) $(DTESTSRCS)
+TESTSRCS := $(DTESTSRCS)
 
 all: lib$(LIBNAME).so.$(VERSION)
 

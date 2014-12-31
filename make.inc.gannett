@@ -1,5 +1,5 @@
 # CUCHEB home directory
-CUCHEBDIR := /usr1/jaurentz/Projects/cuCheb
+CUCHEBDIR := /usr1/jaurentz/Projects/cucheb
 
 # directory where CUCHEB will be installed
 INSTALLDIR := /usr1/jaurentz/MyLibs
@@ -35,51 +35,34 @@ LAPACKEDIR := $(LAPACKDIR)/lapacke
 LAPACKE := -llapacke 
 
 # linking directories
-INCDIRS := -I $(CUCHEBDIR)/include -I $(LAPACKEDIR)/include  
+INCDIRS := -I $(CUCHEBDIR)/include -I $(LAPACKEDIR)/include 
+INCS := $(INCDIRS) 
 LIBDIRS :=   
-LIBS := $(CUDA) -L $(LAPACKDIR) -llapacke -llapack -lblas -lm 
+LIBS := $(CUDA) -L $(LAPACKDIR) -L $(LAPACKEDIR) -llapacke -llapack -lblas -lm 
 
 # CUCHEB src directory
 SRCDIR := $(CUCHEBDIR)/src
 
 # CUCHEB individual src directories
 UDIR := $(SRCDIR)/utilities
-SDIR := $(SRCDIR)/single
 DDIR := $(SRCDIR)/double
-CDIR := $(SRCDIR)/complex_single
-ZDIR := $(SRCDIR)/complex_double
 
 # CUCHEB individual srcs
 USRCS := $(wildcard $(UDIR)/*.cu)
-SSRCS := $(wildcard $(SDIR)/*.cu)
 DSRCS := $(wildcard $(DDIR)/*.cu)
-CSRCS := $(wildcard $(CDIR)/*.cu)
-ZSRCS := $(wildcard $(ZDIR)/*.cu)
 
 # CUCHEB individual objs
 UOBJS := $(patsubst $(UDIR)/%.cu,$(UDIR)/%.o,$(USRCS))
-SOBJS := $(patsubst $(SDIR)/%.cu,$(SDIR)/%.o,$(SSRCS))
 DOBJS := $(patsubst $(DDIR)/%.cu,$(DDIR)/%.o,$(DSRCS))
-COBJS := $(patsubst $(CDIR)/%.cu,$(CDIR)/%.o,$(CSRCS))
-ZOBJS := $(patsubst $(ZDIR)/%.cu,$(ZDIR)/%.o,$(ZSRCS))
 
 # CUCHEB test directory
 TESTDIR := $(CUCHEBDIR)/tests
 
 # CUCHEB individual test directories
-STESTDIR := $(TESTDIR)/single
 DTESTDIR := $(TESTDIR)/double
-CTESTDIR := $(TESTDIR)/complex_single
-ZTESTDIR := $(TESTDIR)/complex_double
 
 # CUCHEB individual test sources
-STESTSRCS := $(wildcard $(STESTDIR)/*.cu)
 DTESTSRCS := $(wildcard $(DTESTDIR)/*.cu)
-CTESTSRCS := $(wildcard $(CTESTDIR)/*.cu)
-ZTESTSRCS := $(wildcard $(ZTESTDIR)/*.cu)
 
 # CUCHEB individual tests
-STESTS := $(patsubst $(STESTDIR)/%.cu,%,$(STESTSRCS))
 DTESTS := $(patsubst $(DTESTDIR)/%.cu,%,$(DTESTSRCS))
-CTESTS := $(patsubst $(CTESTDIR)/%.cu,%,$(CTESTSRCS))
-ZTESTS := $(patsubst $(ZTESTDIR)/%.cu,%,$(ZTESTSRCS))
