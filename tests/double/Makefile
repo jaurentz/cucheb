@@ -11,4 +11,4 @@ all: $(DTESTS)
 	$(CUC) $(CUFLAGS) --compiler-options '-fopenmp' -o $@ $< $(INSTALLEDINCLUDES) $(INSTALLEDLIBS) $(INCS) $(CUDA) $(LAPACKE)
 	
 clean:
-	-rm $(DTESTS)
+	@rm -f $(DTESTS)
