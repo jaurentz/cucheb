@@ -8,7 +8,7 @@ INSTALLEDLIBS := -L$(INSTALLDIR)/cucheb/lib -lcucheb
 all: $(DTESTS)
 
 %:: %.cu
-	$(CUC) $(CUFLAGS) --compiler-options '-fopenmp' -o $@ $< $(INSTALLEDINCLUDES) $(INSTALLEDLIBS) $(INCS) $(CUDA) $(LAPACKE)
+	$(CUC) $(CUFLAGS) --compiler-options '-fopenmp' -o $@ $< $(INSTALLEDINCLUDES) $(INSTALLEDLIBS) $(INCS) $(LIBS)
 	
 clean:
 	@rm -f $(DTESTS)
