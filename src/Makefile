@@ -1,29 +1,24 @@
 include ../make.inc
 
-UTILDIR := ./utilities
-DSRCDIR := ./double
+USRCS := $(wildcard ./utilities/*.cu)
+DSRCS := $(wildcard ./double/*.cu)
 
-UOBJS := $(patsubst $(UTILDIR)/%.cu,$(UTILDIR)/%.o,$(wildcard $(UTILDIR)/*.cu))
-DOBJS := $(patsubst $(DSRCDIR)/%.cu,$(DSRCDIR)/%.o,$(wildcard $(DSRCDIR)/*.cu))
-OBJS := $(UOBJS) $(DOBJS)
+UOBJS := $(USRCS:.cu=.o)
+DOBJS := $(DSRCS:.cu=.o)
 
-# CUCHEB individual sources
-USRCS := $(wildcard $(UTILDIR)/*.cu)
-DSRCS := $(wildcard $(DSRCDIR)/*.cu)
-
-all: $(OBJS)
+all: $(UOBJS) $(DOBJS)
 	
 $(UOBJS): $(USRCS)
-	@$(MAKE) -C $(UTILDIR)
+	@$(MAKE) -C ./utilities
 	
 $(USRCS):
 
 $(DOBJS): $(DSRCS)
-	@$(MAKE) -C $(DSRCDIR)
+	@$(MAKE) -C ./double
 	
 $(DSRCS):
 
 clean:
-	@$(MAKE) clean -C $(UTILDIR)
-	@$(MAKE) clean -C $(DSRCDIR)
+	@$(MAKE) clean -C ./utilities
+	@$(MAKE) clean -C ./double
 

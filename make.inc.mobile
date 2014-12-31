@@ -6,14 +6,12 @@ CUC := nvcc
 CUFLAGS := -O3 -gencode arch=compute_35,code=sm_35
 
 # CUDA libraries
-CUDADIR := /usr/local/cuda
-CUDA := -lcuda -lcudart -lcublas -lcusparse -lcufft -lcurand 
+CUDAINCS := 
+CUDALIBS := -lcuda -lcudart -lcublas -lcusparse -lcufft -lcurand 
 
 # LAPACKE library
-LAPACKEDIR := 
-LAPACKE := -llapacke -llapack -lblas -lm
+LAPACKEINCS := 
+LAPACKELIBS := -llapacke -llapack -lblas -lm
 
-# linking directories
-INCS :=  
 
 

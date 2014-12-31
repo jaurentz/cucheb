@@ -1,14 +1,15 @@
 include ../../make.inc
 
-DTESTS := $(patsubst ./%.cu,./%,$(wildcard ./*.cu))
+DTESTS := $(wildcard ./*.cu)
+DTESTS := $(DTESTS:.cu=)
 
-INSTALLEDINCLUDES := -I$(INSTALLDIR)/cucheb/include
-INSTALLEDLIBS := -L$(INSTALLDIR)/cucheb/lib -lcucheb
+CUCHEBINCS := -I $(INSTALLDIR)/cucheb/include
+CUCHEBLIBS := -L $(INSTALLDIR)/cucheb/lib -lcucheb
 
 all: $(DTESTS)
 
 %:: %.cu
-	$(CUC) $(CUFLAGS) --compiler-options '-fopenmp' -o $@ $< $(INSTALLEDINCLUDES) $(INSTALLEDLIBS) $(INCS) $(LIBS)
+	$(CUC) $(CUFLAGS) --compiler-options '-fopenmp' -o $@ $< $(CUCHEBINCS) $(CUCHEBLIBS) $(CUDAINCS) $(CUDALIBS) $(LAPACKEINCS) $(LAPACKELIBS)
 	
 clean:
 	@rm -f $(DTESTS)

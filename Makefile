@@ -4,38 +4,32 @@ include ./make.inc
 LIBNAME := cucheb
 MAJOR := 0
 MINOR := 1
-VERSION := $(MAJOR).$(MINOR)
-
-# CUCHEB individual source directories
-UTILDIR := ./src/utilities
-DSRCDIR := ./src/double
+PATCH := 0
+VERSION := $(MAJOR).$(MINOR).$(PATCH)
+export LIBNAME
+export VERSION
 
 # CUCHEB individual sources
-USRCS := $(wildcard $(UTILDIR)/*.cu)
-DSRCS := $(wildcard $(DSRCDIR)/*.cu)
-SRCS := $(USRCS) $(DSRCS) 
+SRCS := $(wildcard ./src/*/*.cu)
 
 # CUCHEB individual objects
-UOBJS := $(patsubst $(UTILDIR)/%.cu,$(UTILDIR)/%.o,$(wildcard $(UTILDIR)/*.cu))
-DOBJS := $(patsubst $(DSRCDIR)/%.cu,$(DSRCDIR)/%.o,$(wildcard $(DSRCDIR)/*.cu))
-OBJS := $(UOBJS) $(DOBJS)
-
-# CUCHEB individual test directories
-DTESTDIR := ./tests/double
+OBJS := $(SRCS:.cu=.o)
 
 # CUCHEB individual tests
-DTESTSRCS := $(wildcard $(DTESTDIR)/*.cu)
-TESTSRCS := $(DTESTSRCS)
+TESTSRCS := $(wildcard ./tests/*/*.cu)
+TESTS := $(TESTSRCS:.cu=)
 
 all: lib$(LIBNAME).so.$(VERSION)
 
-tests: $(OBJS) $(TESTSRCS)
+tests: $(TESTS) $(TESTSRCS)
 	@$(MAKE) -C ./tests
 	
 $(TESTSRCS):
 
+$(TESTS):
+
 lib$(LIBNAME).so.$(VERSION): $(OBJS)
-	$(CUC) --compiler-options '-fPIC' --shared -o lib$(LIBNAME).so.$(VERSION) $^
+	$(CUC) --compiler-options '-fPIC' --shared -o $@ $^
 
 $(OBJS): $(SRCS)
 	@$(MAKE) -C ./src
@@ -49,7 +43,7 @@ install: lib$(LIBNAME).so.$(VERSION)
 	@cp -r ./include/*.h $(INSTALLDIR)/cucheb/include/
 	@mv ./lib$(LIBNAME).so.$(VERSION) $(INSTALLDIR)/cucheb/lib/
 	@ln -s $(INSTALLDIR)/cucheb/lib/lib$(LIBNAME).so.$(VERSION) lib$(LIBNAME).so
-	mv ./lib$(LIBNAME).so $(INSTALLDIR)/cucheb/lib/
+	@mv ./lib$(LIBNAME).so $(INSTALLDIR)/cucheb/lib/
 
 uninstall: clean
 	@rm -rf $(INSTALLDIR)/cucheb

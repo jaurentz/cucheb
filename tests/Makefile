@@ -1,23 +1,17 @@
 include ../make.inc
 
-DTESTDIR := ./double
+DTESTSRCS := $(wildcard ./double/*.cu)
+DTESTS := $(DTESTSRCS:.cu=)
 
-DTESTS := $(patsubst $(DTESTDIR)/%.cu,$(DTESTDIR)/%,$(wildcard $(DTESTDIR)/*.cu))
-
-# CUCHEB individual test sources
-DTESTSRCS := $(wildcard $(DTESTDIR)/*.cu)
-
-TESTS := $(DTESTS)
-
-all: $(TESTS)
+all: $(DTESTS)
 
 $(DTESTS): $(DTESTSRCS)
-	@$(MAKE) -C $(DTESTDIR)
+	@$(MAKE) -C ./double
 	
 $(DTESTSRCS):
 
 clean:
-	@$(MAKE) clean -C $(DTESTDIR)
+	@$(MAKE) clean -C ./double
 	
 	
 	
