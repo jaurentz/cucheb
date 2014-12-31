@@ -105,17 +105,8 @@ ChebOp::ChebOp(const ChebOp& CHEBOP){
 /* mult */
 cuchebStatus_t ChebOp::Mult(void*x, void* y){
 
-	if(field == CUCHEB_FIELD_FLOAT){
-		cuchebCheckError(cuchebSmult(n,(float*)x,(float*)y,opmult,userdata,chebpoly),__FILE__,__LINE__);
-	}
-	else if(field == CUCHEB_FIELD_DOUBLE){
+	if(field == CUCHEB_FIELD_DOUBLE){
 		cuchebCheckError(cuchebDmult(n,(double*)x,(double*)y,opmult,userdata,chebpoly),__FILE__,__LINE__);
-	}
-	else if(field == CUCHEB_FIELD_FLOAT_COMPLEX){
-		cuchebCheckError(cuchebCmult(n,(cuComplex*)x,(cuComplex*)y,opmult,userdata,chebpoly),__FILE__,__LINE__);
-	}
-	else if(field == CUCHEB_FIELD_DOUBLE_COMPLEX){
-		cuchebCheckError(cuchebZmult(n,(cuDoubleComplex*)x,(cuDoubleComplex*)y,opmult,userdata,chebpoly),__FILE__,__LINE__);
 	}
 	else{
 		fprintf(stderr,"\nWarning in ChebOp Mult: invalid field!\n\n");

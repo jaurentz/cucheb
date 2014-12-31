@@ -30,9 +30,6 @@ using namespace std;
 
 cuchebStatus_t cuchebSetGridBlocks(int n, dim3 *blockSize, dim3 *gridSize);
 
-cuchebStatus_t cuchebSinit(int n,float *x,int incx,float val);
 cuchebStatus_t cuchebDinit(int n,double *x,int incx,double val);
-cuchebStatus_t cuchebCinit(int n,cuComplex *x,int incx,cuComplex val);
-cuchebStatus_t cuchebZinit(int n,cuDoubleComplex *x,int incx,cuDoubleComplex val);
 
 #endif /* __cucheb_h__ */

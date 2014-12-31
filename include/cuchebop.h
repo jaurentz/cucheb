@@ -164,20 +164,6 @@ class ChebOp{
 };
 
 /**
- *  \brief Single precision matrix-vector multiplier for ChebOp.
- *
- *  This computes y = p(A)x where A, x and y are
- *  stored as floats. The product y = Ax is computed
- *  using opmult and userdata. 
- *  @param n dimension of the square matrix A
- *  @param x float pointer to device allocated memory
- *  @param y float pointer to device allocated memory
- *  @param opmult function pointer to matrix-vector multiply routine
- *  @param userdata void pointer to memory that describes A
- *  @param chebpoly ChebPoly pointer to valid ChebPoly object
- */
-cuchebStatus_t cuchebSmult(int n,float* x,float* y,cuchebOpMult opmult,void* userdata,ChebPoly* chebpoly);
-/**
  *  \brief Double precision matrix-vector multiplier for ChebOp.
  *
  *  This computes y = p(A)x where A, x and y are
@@ -191,33 +177,5 @@ cuchebStatus_t cuchebSmult(int n,float* x,float* y,cuchebOpMult opmult,void* use
  *  @param chebpoly ChebPoly pointer to valid ChebPoly object
  */
 cuchebStatus_t cuchebDmult(int n,double* x,double* y,cuchebOpMult opmult,void* userdata,ChebPoly* chebpoly);
-/**
- *  \brief Complex single precision matrix-vector multiplier for ChebOp.
- *
- *  This computes y = p(A)x where A, x and y are
- *  stored as cuComplex types. The product y = Ax is computed
- *  using opmult and userdata. 
- *  @param n dimension of the square matrix A
- *  @param x cuComplex pointer to device allocated memory
- *  @param y cuComplex pointer to device allocated memory 
- *  @param opmult function pointer to matrix-vector multiply routine
- *  @param userdata void pointer to memory that describes A
- *  @param chebpoly ChebPoly pointer to valid ChebPoly object
- */
-cuchebStatus_t cuchebCmult(int n,cuComplex* x,cuComplex* y,cuchebOpMult opmult,void* userdata,ChebPoly* chebpoly);
-/**
- *  \brief Complex double precision matrix-vector multiplier for ChebOp.
- *
- *  This computes y = p(A)x where A, x and y are
- *  stored as cuDoubleComplex types. The product y = Ax is computed
- *  using opmult and userdata. 
- *  @param n dimension of the square matrix A
- *  @param x cuDoubleComplex pointer to device allocated memory
- *  @param y cuDoubleComplex pointer to device allocated memory 
- *  @param opmult function pointer to matrix-vector multiply routine
- *  @param userdata void pointer to memory that describes A
- *  @param chebpoly ChebPoly pointer to valid ChebPoly object
- */
-cuchebStatus_t cuchebZmult(int n,cuDoubleComplex* x,cuDoubleComplex* y,cuchebOpMult opmult,void* userdata,ChebPoly* chebpoly);
 
 #endif /* __cuchebop_h__ */
