@@ -3,7 +3,7 @@ INSTALLDIR := $(HOME)
 
 # CUDA compiler and flags
 CUC := nvcc
-CUFLAGS := -O3 -gencode arch=compute_35,code=sm_35 
+CUFLAGS := -O3 -gencode arch=compute_35,code=sm_35
 
 # CUDA libraries
 CUDADIR := /usr/local/cuda
