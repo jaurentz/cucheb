@@ -1,0 +1,26 @@
+# directory where CUCHEB will be installed
+INSTALLDIR := /usr1/jaurentz/MyLibs
+
+# CUDA compiler and flags
+CUC := nvcc
+CUFLAGS := -O3 -gencode arch=compute_35,code=sm_35
+
+# flags for building shared library
+SOFLAGS := --compiler-options '-fPIC' --shared
+
+# CUDA libraries
+CUDAINCS := 
+CUDALIBS := -lcuda -lcudart -lcublas -lcusparse -lcufft -lcurand 
+
+# directory for LAPACKE library
+LAPACKDIR := 
+LAPACK := 
+
+# directory for LAPACKE library
+LAPACKEDIR := 
+LAPACKE := -llapacke 
+
+# LAPACKE library
+LAPACKEINCS := -I /usr1/jaurentz/MyLibs/lapack-3.5.0/lapacke/include
+LAPACKELIBS := -L /usr1/jaurentz/MyLibs/lapack-3.5.0/lapacke -llapacke -L /usr1/jaurentz/MyLibs/lapack-3.5.0 -llapack -lblas -lm
+
