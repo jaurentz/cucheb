@@ -23,6 +23,9 @@ int main(){
 	double *dpts, *dfvs, *dcfs;
 	double da, db; 
 	double *ddcfs, *ddfvs;
+
+        // set device
+        cuchebCheckError(cudaSetDevice(7),__FILE__,__LINE__); 
 	
 	// allocate host memory
 	/* double */
