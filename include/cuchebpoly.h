@@ -2,6 +2,19 @@
 #ifndef __cuchebpoly_h__ 
 #define __cuchebpoly_h__
 
+#include <stdio.h>
+#include <math.h>
+#include <cuda.h>
+#include <cufft.h>
+
+/* double precision pi */
+#ifdef DOUBLE_PI
+#undef DOUBLE_PI
+#define DOUBLE_PI 3.141592653589793238
+#else
+#define DOUBLE_PI 3.141592653589793238
+#endif
+
 /* maximum construction degree */
 #ifdef DOUBLE_DEG
 #undef DOUBLE_DEG
@@ -39,11 +52,14 @@ typedef struct {
 /* instantiate cuchebpoly object */
 int cuchebpoly_init(cuchebpoly* ccp);
 
-/* print cuchebpoly object */
+/* standard print cuchebpoly object */
 int cuchebpoly_print(cuchebpoly* ccp);
 
+/* long print cuchebpoly object */
+int cuchebpoly_printlong(cuchebpoly* ccp);
+
 /* second kind Chebyshev points */
-int cuchebpoints(double a, double b, double* coeffs);
+int cuchebpoints(double a, double b, double* points);
 
 /* convert values to coefficients */
 int cuchebcoeffs(double* coeffs);
