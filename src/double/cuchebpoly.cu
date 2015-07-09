@@ -105,21 +105,21 @@ int cuchebcoeffs (double *coeffs){
   int deg = DOUBLE_DEG;
   int N = 2*deg;
 
-  cudaMemcpy(&coeffs[deg], &input[0], sizeof(double), cudaMemcpyHostToDevice);
-  cudaMemcpy(&coeffs[0], &input[deg], sizeof(double), cudaMemcpyHostToDevice);
+  cudaMemcpy(&input[0], &coeffs[deg], sizeof(double), cudaMemcpyHostToDevice);
+  cudaMemcpy(&input[deg], &coeffs[0], sizeof(double), cudaMemcpyHostToDevice);
   for (int ii=1; ii<deg; ii++) {
-    cudaMemcpy(&coeffs[deg-ii], &input[ii], sizeof(double), cudaMemcpyHostToDevice);
-    cudaMemcpy(&coeffs[deg-ii], &input[N-ii], sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemcpy(&input[ii], &coeffs[deg-ii], sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemcpy(&input[N-ii], &coeffs[deg-ii], sizeof(double), cudaMemcpyHostToDevice);
   }
- 
+
   // execute plan
   cufftExecD2Z(cufftHand,input,output);
  
   // extract output
-  cudaMemcpy(&output[deg], &coeffs[0], sizeof(double), cudaMemcpyDeviceToHost);
-  cudaMemcpy(&output[0], &coeffs[deg], sizeof(double), cudaMemcpyDeviceToHost);
+  cudaMemcpy(&coeffs[0], &output[0], sizeof(double), cudaMemcpyDeviceToHost);
+  cudaMemcpy(&coeffs[deg], &output[deg], sizeof(double), cudaMemcpyDeviceToHost);
   for (int ii=1; ii<deg; ii++) {
-    cudaMemcpy(&output[deg-ii], &coeffs[ii], sizeof(double), cudaMemcpyDeviceToHost);
+    cudaMemcpy(&coeffs[ii], &output[ii], sizeof(double), cudaMemcpyDeviceToHost);
   }
 
   // normalize output
@@ -140,3 +140,41 @@ int cuchebcoeffs (double *coeffs){
   return 0;
 
 }
+
+/* routine for chopping Chebyshev coefficients */
+int cuchebchop(int* degree, double* coeffs){
+
+  // find maximum
+  double maximum = 0.0;
+  for (int ii=0; ii<DOUBLE_DEG+1; ii++) {
+    maximum = max(maximum, abs(coeffs[ii]));
+  }
+
+  // maximum == 0
+  if (maximum == 0) {
+    *degree = 0;
+  }
+  
+  // maximum != 0
+  else {
+    
+    // compute degree
+    for (int ii=0; ii<MAX_DOUBLE_DEG+1; ii++) {
+
+      // set current degree
+      *degree = MAX_DOUBLE_DEG-ii;
+
+      // exit if trailing coefficient is too large
+      if (abs(coeffs[MAX_DOUBLE_DEG-ii]) >= DOUBLE_EPS*maximum) {
+        break;
+      }
+
+    }
+
+  }
+
+  // return 
+  return 0;
+
+}
+

@@ -4,7 +4,7 @@ DTESTS := $(wildcard ./*.cu)
 DTESTS := $(DTESTS:.cu=)
 
 CUCHEBINCS := -I $(INSTALLDIR)/cucheb/include
-CUCHEBLIBS := -L $(INSTALLDIR)/cucheb/lib -lcucheb
+CUCHEBLIBS := -L $(INSTALLDIR)/cucheb/lib -lcucheb -lcufft
 
 all: $(DTESTS)
 
