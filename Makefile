@@ -29,7 +29,7 @@ $(TESTSRCS):
 $(TESTS):
 
 lib$(LIBNAME).so.$(VERSION): $(OBJS)
-	$(CUC) --compiler-options '-fPIC' --shared -o $@ $^
+	@$(CUC) --compiler-options '-fPIC' --shared -o $@ $^
 
 $(OBJS): $(SRCS)
 	@$(MAKE) -C ./src
@@ -44,7 +44,7 @@ install: lib$(LIBNAME).so.$(VERSION)
 	@mv ./lib$(LIBNAME).so.$(VERSION) $(INSTALLDIR)/cucheb/lib/
 	@ln -s $(INSTALLDIR)/cucheb/lib/lib$(LIBNAME).so.$(VERSION) lib$(LIBNAME).so
 	@mv ./lib$(LIBNAME).so $(INSTALLDIR)/cucheb/lib/
-
+	
 uninstall: clean
 	@rm -rf $(INSTALLDIR)/cucheb
 
@@ -53,3 +53,5 @@ clean:
 	@$(MAKE) clean -C ./tests
 
 	
+LD_LIBRARY_PATH := $(INSTALLDIR)/cucheb/lib:$(LD_LIBRARY_PATH)
+export LD_LIBRARY_PATH

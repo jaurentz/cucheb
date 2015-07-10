@@ -29,6 +29,20 @@ int main(){
   cuchebchop(&ccp1.degree,&ccp1.coeffs[0]);
   cuchebpoly_print(&ccp1);
 
+  // cuhebpoly 2
+  cuchebpoly ccp2;
+
+  // point_filter
+  cuchebpoly_pointfilter(0.0,1000.0,900.0,&ccp2);
+  cuchebpoly_print(&ccp2);
+
+  // cuhebpoly 3
+  cuchebpoly ccp3;
+
+  // step_filter
+  cuchebpoly_stepfilter(0.0,100.0,10.0,20.0,&ccp3);
+  cuchebpoly_print(&ccp3);
+
   // return 
   return 0;
 

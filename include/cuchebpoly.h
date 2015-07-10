@@ -67,4 +67,10 @@ int cuchebcoeffs(double* coeffs);
 /* threshold coefficients */
 int cuchebchop(int *degree, double* coeffs);
 
+/* routine for creating point filter */
+int cuchebpoly_pointfilter(double a, double b, double rho, cuchebpoly* ccp);
+
+/* routine for creating step filter */
+int cuchebpoly_stepfilter(double a, double b, double c, double d, cuchebpoly* ccp);
+
 #endif /* __cuchebpoly_h__ */
