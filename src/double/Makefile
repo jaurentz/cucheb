@@ -6,7 +6,7 @@ DOBJS := $(DOBJS:.cu=.o)
 all: $(DOBJS)
 
 %.o: %.cu
-	$(CUC) $(CUFLAGS) --compiler-options '-fPIC -fopenmp' -c $< -I../../include $(CUDAINCS) 
+	$(CUC) $(CUFLAGS) --compiler-options '-fPIC -fopenmp' -c $< -I../../include $(INCS) 
 
 clean:
 	@rm -f *.o
