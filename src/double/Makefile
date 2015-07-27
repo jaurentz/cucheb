@@ -1,12 +1,15 @@
 include ../../make.inc
 
-DOBJS := $(wildcard ./*.cu)
-DOBJS := $(DOBJS:.cu=.o)
+DOBJS := $(wildcard ./*.cu) $(wildcard ./*.f)
+DOBJS := $(DOBJS:.cu=.o) $(DOBJS:.f=.o)
 
-all: $(DOBJS)
+all: $(DOBJS) 
 
 %.o: %.cu
-	$(CUC) $(CUFLAGS) --compiler-options '-fPIC -fopenmp' -c $< -I../../include $(INCS)
+	$(CUC) $(CUFLAGS) --compiler-options '-fPIC -fopenmp' -c $< -I../../include $(CUDAINCS) 
+
+%.o: %.f
+	$(FC) $(FFLAGS) -fPIC -c $<
 
 clean:
 	@rm -f *.o
