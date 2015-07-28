@@ -1,17 +1,19 @@
 # directory where CUCHEB will be installed
-INSTALLDIR := $(HOME)
+INSTALLDIR := /home/aurentz/Mylibs
 
 # CUDA compiler and flags
 CUC := nvcc
-CUFLAGS := -O3 -gencode arch=compute_35,code=sm_35
+CUFLAGS := -O3 -gencode arch=compute_35,code=sm_35 
 
 # CUDA libraries
-CUDAINCS := 
-CUDALIBS := -lcuda -lcudart -lcublas -lcusparse -lcufft -lcurand 
+CUDADIR := /usr/local/cuda-6.0
+CUDA := -lcuda -lcudart -lcublas -lcusparse -lcufft -lcurand 
 
 # LAPACKE library
-LAPACKEINCS := 
-LAPACKELIBS := -llapacke -llapack -lblas -lm
+LAPACKEDIR := /home/aurentz/Mylibs/lapack-3.5.0
+LAPACKE := -L$(LAPACKEDIR) -llapacke -llapack -lblas -lm
 
+# linking directories
+INCS := -I$(LAPACKEDIR)/lapacke/include 
 
 

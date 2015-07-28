@@ -77,9 +77,6 @@ cuchebStatus_t cuchebDcoeffs (int n, const double *fvals, int incfvals, double *
 		// launch fill input kernel
 		dinput<<<gridSize,blockSize>>>(n,fvals,incfvals,input);
 	
-		// check for kernel error
-		cuchebCheckError(cudaPeekAtLastError(),__FILE__,__LINE__);
-	
 		// initialize cufft
 		cufftHandle cufftHand;
 		cuchebCheckError(cufftPlan1d(&cufftHand, 2*(n-1), CUFFT_D2Z, 1),__FILE__,__LINE__);
@@ -89,9 +86,6 @@ cuchebStatus_t cuchebDcoeffs (int n, const double *fvals, int incfvals, double *
 	
 		// launch extract output kernel
 		doutput<<<gridSize,blockSize>>>(n,output,coeffs,inccfs);
-	
-		// check for kernel error
-		cuchebCheckError(cudaPeekAtLastError(),__FILE__,__LINE__);
 	
 		// free cufft
 		cuchebCheckError(cufftDestroy(cufftHand),__FILE__,__LINE__);
