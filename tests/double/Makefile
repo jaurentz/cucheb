@@ -4,12 +4,12 @@ DTESTS := $(wildcard ./*.cu)
 DTESTS := $(DTESTS:.cu=)
 
 CUCHEBINCS := -I $(INSTALLDIR)/cucheb/include
-CUCHEBLIBS := -L $(INSTALLDIR)/cucheb/lib -lcucheb -lcufft -lcublas -lcusparse -llapack -lblas
+CUCHEBLIBS := -L $(INSTALLDIR)/cucheb/lib -lcucheb 
 
 all: $(DTESTS)
 
 %:: %.cu
-	$(CUC) $(CUFLAGS) --compiler-options '-fopenmp' -o $@ $< $(CUCHEBINCS) $(CUCHEBLIBS) $(CUDAINCS) $(CUDALIBS) -lgfortran -lm 
+	$(CUC) $(CUFLAGS) --compiler-options '-fopenmp' -o $@ $< $(CUCHEBINCS) $(CUCHEBLIBS) $(INCS) $(LIBS) 
 	
 clean:
 	@rm -f $(DTESTS)

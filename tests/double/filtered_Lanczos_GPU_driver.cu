@@ -45,10 +45,12 @@ int main() {
    read_coo_MM(h_coo, finput1);
    n   = h_coo->n;   // number of rows
    nnz = h_coo->nnz; // number of non-zero entries
+   mat_choice = 0;
 
    //----------------------------------------
    // Read input file to determine parameters
    //----------------------------------------
+   /*
    input_h = fopen(finput2, "r");
    for (k = 0; k < 5; k++) {
       if (k==0)
@@ -75,7 +77,7 @@ int main() {
       else if (k==4)
         printf("%f\n", lmax);
    } 
-
+   */
 
    // Initialize all possible matrix-structures
    mat->n   = n;  
@@ -93,10 +95,10 @@ int main() {
    //----------------------------------
    // Lanczos with polynomial filtering
    //----------------------------------
-   lanczos_steps  = 100;      // maximum number of Lanczos steps
-   degree  = 200;             // degree of the polynomial
+   lanczos_steps  = 20;       // maximum number of Lanczos steps
+   degree  = 120;             // degree of the polynomial
    lmin = 0;                  // for now lambda_min should be known
-   lmax = 13;                 // same applies to lambda_max
+   lmax = 8;                  // same applies to lambda_max
    double w    = (lmax-lmin) / 2; // scaling to [-1,1]
    double c    = (lmax+lmin) / 2; //        >>
 

@@ -1,7 +1,8 @@
 include ../../make.inc
 
-DOBJS := $(wildcard ./*.cu) $(wildcard ./*.f)
-DOBJS := $(DOBJS:.cu=.o) $(DOBJS:.f=.o)
+DSRCS := $(wildcard ./*.cu) $(wildcard ./*.f)
+DOBJS := $(DSRCS:.cu=.o) 
+DOBJS := $(DOBJS:.f=.o)
 
 all: $(DOBJS) 
 

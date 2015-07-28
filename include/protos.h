@@ -84,7 +84,7 @@ void coo2csr(int n, int nnz, double *coo_vals, int *coo_rows, int *coo_cols, dou
 
 //
 
-void filtered_spmv_csr_vector(matrix_t *mat, double *x, double *y, int neg, int degree, double w, double c, double *mu, int mat_choice);
+void filtered_spmv_csr_vector(matrix_t *mat, double *x, double *y, int degree, double w, double c, double *mu, int mat_choice);
 
 void vector_operations(int choice, int n, double *x, double *y, double *z);
 

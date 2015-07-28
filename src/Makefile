@@ -1,24 +1,16 @@
 include ../make.inc
 
-USRCS := $(wildcard ./utilities/*.cu)
-DSRCS := $(wildcard ./double/*.cu)
+DSRCS := $(wildcard ./double/*.cu) $(wildcard ./double/*.f)
+DOBJS := $(DSRCS:.cu=.o) 
+DOBJS := $(DOBJS:.f=.o)
 
-UOBJS := $(USRCS:.cu=.o)
-DOBJS := $(DSRCS:.cu=.o)
-
-all: $(UOBJS) $(DOBJS)
+all: $(DOBJS)
 	
-$(UOBJS): $(USRCS)
-	@$(MAKE) -C ./utilities
-	
-$(USRCS):
-
 $(DOBJS): $(DSRCS)
 	@$(MAKE) -C ./double
 	
 $(DSRCS):
 
 clean:
-	@$(MAKE) clean -C ./utilities
 	@$(MAKE) clean -C ./double
 

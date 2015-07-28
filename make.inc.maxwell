@@ -3,7 +3,7 @@ INSTALLDIR := /home/aurentz/Mylibs
 
 # CUDA compiler and flags
 CUC := nvcc
-CUFLAGS := -O3 -gencode arch=compute_35,code=sm_35 
+CUFLAGS := -O3 -gencode arch=compute_30,code=sm_30 
 
 # FORTRAN compiler and flags
 FC := gfortran
@@ -11,9 +11,12 @@ FFLAGS := -O3
 
 # CUDA libraries
 CUDADIR := /usr/local/cuda-6.0
-CUDA := -lcuda -lcudart -lcublas -lcufft 
+CUDA :=  
 
 # linking directories
 INCS := -I$(CUDADIR)/include 
+
+# libraries
+LIBS := -lcuda -lcusparse -lcublas -llapack -lblas -lm -lgfortran 
 
 

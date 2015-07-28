@@ -10,10 +10,11 @@ export LIBNAME
 export VERSION
 
 # CUCHEB individual sources
-SRCS := $(wildcard ./src/*/*.cu)
+SRCS := $(wildcard ./src/*/*.cu) $(wildcard ./src/*/*.f)
 
 # CUCHEB individual objects
-OBJS := $(wildcard ./src/*/*.o)
+OBJS := $(SRCS:.cu=.o)
+OBJS := $(OBJS:.f=.o)
 
 # CUCHEB individual tests
 TESTSRCS := $(wildcard ./tests/*/*.cu)
@@ -35,7 +36,7 @@ $(OBJS): $(SRCS)
 	@$(MAKE) -C ./src
 
 $(SRCS):
-	
+
 install: lib$(LIBNAME).so.$(VERSION) 
 	@mkdir -p $(INSTALLDIR)/cucheb 
 	@mkdir -p $(INSTALLDIR)/cucheb/include
@@ -53,5 +54,3 @@ clean:
 	@$(MAKE) clean -C ./tests
 
 	
-LD_LIBRARY_PATH := $(INSTALLDIR)/cucheb/lib:$(LD_LIBRARY_PATH)
-export LD_LIBRARY_PATH
