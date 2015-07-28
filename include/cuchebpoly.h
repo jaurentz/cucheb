@@ -3,6 +3,7 @@
 #define __cuchebpoly_h__
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <cuda.h>
 #include <cufft.h>
