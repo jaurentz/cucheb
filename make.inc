@@ -1,15 +1,18 @@
 # directory where CUCHEB will be installed
-INSTALLDIR := /home/aurentz/Mylibs
+INSTALLDIR := $(HOME)/Mylibs
 
 # CUDA compiler and flags
 CUC := nvcc
 CUFLAGS := -O3 -gencode arch=compute_35,code=sm_35 
 
 # CUDA libraries
-CUDADIR := /usr/local/cuda-6.0
-CUDA := -lcuda -lcudart -lcublas -lcufft 
+CUDA := -lcuda 
+CUBLAS := -lcublas 
+CUSPARSE := -lcusparse
+CUFFT := -lcufft 
 
 # linking directories
-INCS := -I$(CUDADIR)/include 
+INCS := 
 
-
+# All libraries
+LIBS := $(CUDA) $(CUBLAS) $(CUSPARSE) $(CUFFT)

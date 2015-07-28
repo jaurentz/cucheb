@@ -33,4 +33,7 @@ int cuchebmatrix_print(cuchebmatrix* ccm);
 /* longprint cuchebmatrix object */
 int cuchebmatrix_printlong(cuchebmatrix* ccm);
 
+/* routine for sorting entries using GPU */
+int cuchebmatrix_sort(cuchebmatrix* ccm);
+
 #endif /* __cuchebmatrix_h__ */

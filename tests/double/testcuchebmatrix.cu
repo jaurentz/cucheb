@@ -15,6 +15,12 @@ int main(){
   // printlong CCM
   cuchebmatrix_printlong(&ccm);
 
+  // sort entries of CCM
+  cuchebmatrix_sort(&ccm);
+
+  // printlong CCM
+  cuchebmatrix_printlong(&ccm);
+
   // destroy CCM
   cuchebmatrix_destroy(&ccm);
 
