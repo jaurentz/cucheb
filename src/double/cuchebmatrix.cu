@@ -1,7 +1,7 @@
 #include <cuchebmatrix.h>
 
 /* routine to initialize cuchebmatrix object */
-int cuchebmatrix_init(char* mtxfile, cuchebmatrix* ccm){
+int cuchebmatrix_init(string mtxfile, cuchebmatrix* ccm){
 
   // compute variables
   int ret;

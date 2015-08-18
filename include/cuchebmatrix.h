@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <mmio.h>
 #include <cuda.h>
 #include <cusparse.h>
@@ -22,7 +23,7 @@ typedef struct {
 } cuchebmatrix;
 
 /* instantiate cuchebmatrix object */
-int cuchebmatrix_init(char* mtxfile, cuchebmatrix* ccm);
+int cuchebmatrix_init(string mtxfile, cuchebmatrix* ccm);
 
 /* destroy cuchebmatrix object */
 int cuchebmatrix_destroy(cuchebmatrix* ccm);
