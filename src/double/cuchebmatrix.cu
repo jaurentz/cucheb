@@ -1,26 +1,75 @@
 #include <cuchebmatrix.h>
 
 /* routine to initialize cuchebmatrix object */
-int cuchebmatrix_init(string mtxfile, cuchebmatrix* ccm){
+int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){
 
   // compute variables
-  int ret;
   int new_nnz;
-  FILE *fptr;
+  ifstream input_file;
 
   // attempt to open file
-  fptr = fopen(mtxfile, "r");
-  if (fptr == NULL) { 
+  input_file.open(mtxfile.c_str());
+  if (!input_file.is_open()) { 
     printf("Could not open matrix file.\n");
     exit(1); 
   }
 
-  // attempt to read file banner
-  ret = mm_read_banner(fptr, &(ccm->matcode));
-  if (ret != 0) {
-    printf("Could not process Matrix Market banner.\n");
-    exit(1);
-  }
+  // variables to parse banner
+  string line, banner, mtx, crd, data_type, storage_scheme;
+
+  // scan first line
+  getline(input_file,line);
+  istringstream iss(line);
+  iss >> banner >> mtx >> crd >> data_type >> storage_scheme;
+
+  // check for banner 
+  if (banner.compare(MatrixMarketBanner) != 0)
+    return MM_NO_HEADER;
+
+  // first field should be "mtx"
+  if (mtx.compare(MM_MTX_STR) != 0)
+    return  MM_UNSUPPORTED_TYPE;
+  mm_set_matrix(&(ccm->matcode));
+
+  // second field describes whether this is a sparse matrix (in coordinate
+  //  storage) or a dense array
+  if (crd.compare(MM_SPARSE_STR) == 0)
+    mm_set_sparse(&(ccm->matcode));
+  else
+  if (crd.compare(MM_DENSE_STR) == 0)
+    mm_set_dense(&(ccm->matcode));
+  else
+    return MM_UNSUPPORTED_TYPE;
+    
+  // third field
+  if (data_type.compare(MM_REAL_STR) == 0)
+    mm_set_real(&(ccm->matcode));
+  else
+  if (data_type.compare(MM_COMPLEX_STR) == 0)
+    mm_set_complex(&(ccm->matcode));
+  else
+  if (data_type.compare(MM_PATTERN_STR) == 0)
+    mm_set_pattern(&(ccm->matcode));
+  else
+  if (data_type.compare(MM_INT_STR) == 0)
+    mm_set_integer(&(ccm->matcode));
+  else
+    return MM_UNSUPPORTED_TYPE;
+    
+  // fourth field 
+  if (storage_scheme.compare(MM_GENERAL_STR) == 0)
+    mm_set_general(&(ccm->matcode));
+  else
+  if (storage_scheme.compare(MM_SYMM_STR) == 0)
+    mm_set_symmetric(&(ccm->matcode));
+  else
+  if (storage_scheme.compare(MM_HERM_STR) == 0)
+    mm_set_hermitian(&(ccm->matcode));
+  else
+  if (storage_scheme.compare(MM_SKEW_STR) == 0)
+    mm_set_skew(&(ccm->matcode));
+  else
+    return MM_UNSUPPORTED_TYPE;      
 
   // check matcode
   if ((ccm->matcode)[3] != 'S') {
@@ -28,12 +77,15 @@ int cuchebmatrix_init(string mtxfile, cuchebmatrix* ccm){
     exit(1);
   }
 
+  // read past comment block
+  do {
+    getline(input_file,line);
+  } while (line[0] == '%');
+
   // get matrix dimensions
-  ret = mm_read_mtx_crd_size(fptr, &(ccm->m), &(ccm->n), &(ccm->nnz));
-  if (ret != 0) {
-    printf("Could not read matrix dimensions.\n");
-    exit(1);
-  }
+  iss.clear();
+  iss.str(line);
+  iss >> (ccm->m) >> (ccm->n) >> (ccm->nnz);
 
   // allocate memory
   // for faster matvecs all elements of symmetric matrices must be stored
@@ -55,8 +107,10 @@ int cuchebmatrix_init(string mtxfile, cuchebmatrix* ccm){
 
   // read in matrix entries
   for (int ii=0; ii<ccm->nnz; ii++) {
-    ret = fscanf(fptr, "%d %d %lg\n", &(ccm->rowinds)[ii], &(ccm->colinds)[ii],
-                 &(ccm->vals)[ii]);
+    getline(input_file,line);
+    iss.clear();
+    iss.str(line);
+    iss >> (ccm->rowinds)[ii] >> (ccm->colinds)[ii] >> (ccm->vals)[ii];
     (ccm->rowinds)[ii]--;  
     (ccm->colinds)[ii]--;
   }
@@ -74,7 +128,7 @@ int cuchebmatrix_init(string mtxfile, cuchebmatrix* ccm){
   ccm->nnz += new_nnz;
 
   // close file
-  if (fptr != stdin) fclose(fptr);
+  input_file.close();
 
   // return  
   return 0;
@@ -159,14 +213,16 @@ int cuchebmatrix_sort(cuchebmatrix* ccm){
   int* d_rowinds;
   int* d_colinds;
   double* d_vals;
-  void *pBuffer = NULL; 
-  int *P = NULL; 
-  size_t pBufferSizeInBytes = 0; 
+  double* d_vals_sorted;
+  void *pBuffer; 
+  int *P; 
+  size_t pBufferSizeInBytes; 
 
   // allocate device memory
   cudaMalloc(&d_rowinds, (ccm->nnz)*sizeof(int));
   cudaMalloc(&d_colinds, (ccm->nnz)*sizeof(int));
   cudaMalloc(&d_vals, (ccm->nnz)*sizeof(double));
+  cudaMalloc(&d_vals_sorted, (ccm->nnz)*sizeof(double));
 
   // copy memory to device
   cudaMemcpy(&d_rowinds, &(ccm->rowinds), (ccm->nnz)*sizeof(int),
@@ -183,17 +239,19 @@ int cuchebmatrix_sort(cuchebmatrix* ccm){
   // step 1: allocate buffer
   cusparseXcoosort_bufferSizeExt(cusparse_hand, ccm->m, ccm->n, ccm->nnz,
                                  d_rowinds, d_colinds, &pBufferSizeInBytes); 
-  cudaMalloc(&pBuffer, sizeof(char)* pBufferSizeInBytes);
+  cudaMalloc(&pBuffer, sizeof(char)*pBufferSizeInBytes);
 
-// step 2: setup permutation vector P to identity 
-//cudaMalloc( &P, sizeof(int)*nnz); 
-//cusparseCreateIdentityPermutation(handle, nnz, P); 
+  // step 2: setup permutation vector P to identity 
+  cudaMalloc(&P, (ccm->nnz)*sizeof(int)); 
+  cusparseCreateIdentityPermutation(cusparse_hand, ccm->nnz, P); 
 
-// step 3: sort COO format by Row 
-//cusparseXcoosortByRow(handle, m, n, nnz, cooRows, cooCols, P, pBuffer); 
+  // step 3: sort COO format by Row 
+  cusparseXcoosortByRow(cusparse_hand, ccm->m, ccm->n, ccm->nnz, d_rowinds,
+                        d_colinds, P, pBuffer); 
 
-// step 4: gather sorted cooVals 
-//cusparseDgthr(handle, nnz, cooVals, cooVals_sorted, P, CUSPARSE_INDEX_BASE_ZERO);
+  // step 4: gather sorted cooVals 
+  cusparseDgthr(cusparse_hand, ccm->nnz, d_vals, d_vals_sorted, P,
+                CUSPARSE_INDEX_BASE_ZERO);
 
   // Shutdown CUSPARSE
   cusparseDestroy(cusparse_hand);
@@ -203,13 +261,14 @@ int cuchebmatrix_sort(cuchebmatrix* ccm){
              cudaMemcpyDeviceToHost); 
   cudaMemcpy(&(ccm->colinds), &d_colinds, (ccm->nnz)*sizeof(int),
              cudaMemcpyDeviceToHost); 
-  cudaMemcpy(&(ccm->vals), &d_vals, (ccm->nnz)*sizeof(double),
+  cudaMemcpy(&(ccm->vals), &d_vals_sorted, (ccm->nnz)*sizeof(double),
              cudaMemcpyDeviceToHost); 
 
   // free device memory
   cudaFree(d_rowinds);
   cudaFree(d_colinds);
   cudaFree(d_vals);
+  cudaFree(d_vals_sorted);
   cudaFree(pBuffer);
 
   // return 

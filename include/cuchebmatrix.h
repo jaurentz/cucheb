@@ -5,6 +5,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
+#include <vector>
+#include <tuple>
+using namespace std;
+
 #include <mmio.h>
 #include <cuda.h>
 #include <cusparse.h>
@@ -23,7 +31,7 @@ typedef struct {
 } cuchebmatrix;
 
 /* instantiate cuchebmatrix object */
-int cuchebmatrix_init(string mtxfile, cuchebmatrix* ccm);
+int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm);
 
 /* destroy cuchebmatrix object */
 int cuchebmatrix_destroy(cuchebmatrix* ccm);

@@ -3,11 +3,14 @@
 /* driver */
 int main(){
 
+  // input file
+  string mtxfile("./matrices/Trefethen_20.mtx");
+
   // cuhebmatrix
   cuchebmatrix ccm;
 
   // initialize CCM
-  cuchebmatrix_init("./matrices/Trefethen_20.mtx",&ccm);
+  cuchebmatrix_init(mtxfile, &ccm);
 
   // print CCM
   cuchebmatrix_print(&ccm);
