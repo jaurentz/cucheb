@@ -206,70 +206,26 @@ int cuchebmatrix_printlong(cuchebmatrix* ccm){
 
 }
 
-/* routine for sorting entries using GPU */
+/* routine for sorting entries */
 int cuchebmatrix_sort(cuchebmatrix* ccm){
 
-  // device memory
-  int* d_rowinds;
-  int* d_colinds;
-  double* d_vals;
-  double* d_vals_sorted;
-  void *pBuffer; 
-  int *P; 
-  size_t pBufferSizeInBytes; 
+  // create a vector of tuples
+  vector<tuple<int,int,double>> mat;
+  for(int ii=0; ii<(ccm->nnz); ii++){
+    mat.push_back(make_tuple((ccm->rowinds)[ii],(ccm->colinds)[ii],(ccm->vals)[ii]));
+  }
 
-  // allocate device memory
-  cudaMalloc(&d_rowinds, (ccm->nnz)*sizeof(int));
-  cudaMalloc(&d_colinds, (ccm->nnz)*sizeof(int));
-  cudaMalloc(&d_vals, (ccm->nnz)*sizeof(double));
-  cudaMalloc(&d_vals_sorted, (ccm->nnz)*sizeof(double));
+  // sort vector
+  sort(mat.begin(),mat.end());
 
-  // copy memory to device
-  cudaMemcpy(&d_rowinds, &(ccm->rowinds), (ccm->nnz)*sizeof(int),
-             cudaMemcpyHostToDevice); 
-  cudaMemcpy(&d_colinds, &(ccm->colinds), (ccm->nnz)*sizeof(int),
-             cudaMemcpyHostToDevice); 
-  cudaMemcpy(&d_vals, &(ccm->vals), (ccm->nnz)*sizeof(double),
-             cudaMemcpyHostToDevice); 
-
-  // Initialize CUSPARSE
-  cusparseHandle_t cusparse_hand;
-  cusparseCreate(&cusparse_hand);
-
-  // step 1: allocate buffer
-  cusparseXcoosort_bufferSizeExt(cusparse_hand, ccm->m, ccm->n, ccm->nnz,
-                                 d_rowinds, d_colinds, &pBufferSizeInBytes); 
-  cudaMalloc(&pBuffer, sizeof(char)*pBufferSizeInBytes);
-
-  // step 2: setup permutation vector P to identity 
-  cudaMalloc(&P, (ccm->nnz)*sizeof(int)); 
-  cusparseCreateIdentityPermutation(cusparse_hand, ccm->nnz, P); 
-
-  // step 3: sort COO format by Row 
-  cusparseXcoosortByRow(cusparse_hand, ccm->m, ccm->n, ccm->nnz, d_rowinds,
-                        d_colinds, P, pBuffer); 
-
-  // step 4: gather sorted cooVals 
-  cusparseDgthr(cusparse_hand, ccm->nnz, d_vals, d_vals_sorted, P,
-                CUSPARSE_INDEX_BASE_ZERO);
-
-  // Shutdown CUSPARSE
-  cusparseDestroy(cusparse_hand);
-
-  // copy memory to host
-  cudaMemcpy(&(ccm->rowinds), &d_rowinds, (ccm->nnz)*sizeof(int),
-             cudaMemcpyDeviceToHost); 
-  cudaMemcpy(&(ccm->colinds), &d_colinds, (ccm->nnz)*sizeof(int),
-             cudaMemcpyDeviceToHost); 
-  cudaMemcpy(&(ccm->vals), &d_vals_sorted, (ccm->nnz)*sizeof(double),
-             cudaMemcpyDeviceToHost); 
-
-  // free device memory
-  cudaFree(d_rowinds);
-  cudaFree(d_colinds);
-  cudaFree(d_vals);
-  cudaFree(d_vals_sorted);
-  cudaFree(pBuffer);
+  // update ccm
+  int ii = 0;
+  for(vector<tuple<int,int,double>>::iterator iter = mat.begin(); iter != mat.end(); iter++){
+    (ccm->rowinds)[ii] = get<0>(*iter);
+    (ccm->colinds)[ii] = get<1>(*iter);
+    (ccm->vals)[ii] = get<2>(*iter);
+    ii++;
+  }
 
   // return 
   return 0;
