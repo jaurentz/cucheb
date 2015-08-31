@@ -24,6 +24,12 @@ int main(){
   // printlong CCM
   cuchebmatrix_printlong(&ccm);
 
+  // convert CCM to csr format
+  cuchebmatrix_csr(&ccm);
+
+  // printlong CCM
+  cuchebmatrix_printlong(&ccm);
+
   // destroy CCM
   cuchebmatrix_destroy(&ccm);
 

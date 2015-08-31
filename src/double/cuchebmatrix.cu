@@ -159,7 +159,7 @@ int cuchebmatrix_print(cuchebmatrix* ccm){
   printf("\ncuchebmatrix:\n");
 
   // print matcode
-  printf(" matcode = %s\n",mm_typecode_to_str(ccm->matcode));
+  printf(" matcode = %.4s\n",ccm->matcode);
  
   // print m
   printf(" m = %d\n",ccm->m);
@@ -183,7 +183,7 @@ int cuchebmatrix_printlong(cuchebmatrix* ccm){
   printf("\ncuchebmatrix:\n");
 
   // print matcode
-  printf(" matcode = %s\n",mm_typecode_to_str(ccm->matcode));
+  printf(" matcode = %.4s\n",ccm->matcode);
  
   // print m
   printf(" m = %d\n",ccm->m);
@@ -209,26 +209,43 @@ int cuchebmatrix_printlong(cuchebmatrix* ccm){
 /* routine for sorting entries */
 int cuchebmatrix_sort(cuchebmatrix* ccm){
 
-  // create a vector of tuples
-  vector<tuple<int,int,double>> mat;
+  // create a vector of pairs of pairs
+  vector< pair< pair<int,int> , double > > mat;
   for(int ii=0; ii<(ccm->nnz); ii++){
-    mat.push_back(make_tuple((ccm->rowinds)[ii],(ccm->colinds)[ii],(ccm->vals)[ii]));
+    mat.push_back(make_pair( make_pair((ccm->rowinds)[ii],(ccm->colinds)[ii]) , (ccm->vals)[ii] ));
   }
 
   // sort vector
   sort(mat.begin(),mat.end());
 
   // update ccm
-  int ii = 0;
-  for(vector<tuple<int,int,double>>::iterator iter = mat.begin(); iter != mat.end(); iter++){
-    (ccm->rowinds)[ii] = get<0>(*iter);
-    (ccm->colinds)[ii] = get<1>(*iter);
-    (ccm->vals)[ii] = get<2>(*iter);
-    ii++;
+  for(int ii=0; ii < mat.size(); ii++){
+    (ccm->rowinds)[ii] = mat[ii].first.first;
+    (ccm->colinds)[ii] = mat[ii].first.second;
+    (ccm->vals)[ii] = mat[ii].second;
   }
 
   // return 
   return 0;
 
 }
+
+/* routine for converting to csr format */
+int cuchebmatrix_csr(cuchebmatrix* ccm){
+
+  // loop through row inds
+  int cind = 0;
+  for(int ii=0; ii<(ccm->nnz); ii++){
+    if((ccm->rowinds)[ii] > cind){
+      cind += 1;
+      (ccm->rowinds)[cind] = ii;
+    }
+  }
+  (ccm->rowinds)[ccm->m] = ccm->nnz;
+
+  // return 
+  return 0;
+
+}
+
 

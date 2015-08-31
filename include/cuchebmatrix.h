@@ -10,7 +10,6 @@
 #include <sstream>
 #include <algorithm>
 #include <vector>
-#include <tuple>
 using namespace std;
 
 #include <mmio.h>
@@ -42,7 +41,10 @@ int cuchebmatrix_print(cuchebmatrix* ccm);
 /* longprint cuchebmatrix object */
 int cuchebmatrix_printlong(cuchebmatrix* ccm);
 
-/* routine for sorting entries using GPU */
+/* routine for sorting entries */
 int cuchebmatrix_sort(cuchebmatrix* ccm);
+
+/* routine for converting to csr format */
+int cuchebmatrix_csr(cuchebmatrix* ccm);
 
 #endif /* __cuchebmatrix_h__ */
