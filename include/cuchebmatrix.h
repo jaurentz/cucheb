@@ -56,4 +56,8 @@ int cuchebmatrix_sort(cuchebmatrix* ccm);
 /* routine for converting to csr format */
 int cuchebmatrix_csr(cuchebmatrix* ccm);
 
+/* routine for mv multiply on GPU */
+int cuchebmatrix_mv(cuchebmatrix* ccm, double* alpha, double* x, double* beta,
+                    double* y);
+
 #endif /* __cuchebmatrix_h__ */

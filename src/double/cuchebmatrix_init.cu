@@ -136,6 +136,9 @@ int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){
     exit(1);
   }
 
+  // set pointer mode to Host
+  cusparseSetPointerMode(ccm->handle,CUSPARSE_POINTER_MODE_HOST);
+
   // create cusparse MatDescr
   if(cusparseCreateMatDescr(&(ccm->matdescr)) != 0) {
     printf("CUSPARSE MatDescr initialization failed.\n");
@@ -155,6 +158,12 @@ int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){
     printf("Memory allocation failed.\n");
     exit(1);
   }
+
+  // sort entries of CCM
+  cuchebmatrix_sort(ccm);
+
+  // convert CCM to csr format and copy to GPU
+  cuchebmatrix_csr(ccm);
 
   // return  
   return 0;
