@@ -27,6 +27,12 @@ typedef struct {
   int* colinds;
   double* vals;
 
+  cusparseHandle_t handle;
+  cusparseMatDescr_t matdescr;
+  int* drowinds;
+  int* dcolinds;
+  double* dvals;
+ 
 } cuchebmatrix;
 
 /* instantiate cuchebmatrix object */
@@ -40,6 +46,9 @@ int cuchebmatrix_print(cuchebmatrix* ccm);
 
 /* longprint cuchebmatrix object */
 int cuchebmatrix_printlong(cuchebmatrix* ccm);
+
+/* gpuprint cuchebmatrix object */
+int cuchebmatrix_gpuprint(cuchebmatrix* ccm);
 
 /* routine for sorting entries */
 int cuchebmatrix_sort(cuchebmatrix* ccm);

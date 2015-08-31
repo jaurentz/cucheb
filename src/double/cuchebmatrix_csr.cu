@@ -13,6 +13,16 @@ int cuchebmatrix_csr(cuchebmatrix* ccm){
   }
   (ccm->rowinds)[ccm->m] = ccm->nnz;
 
+  // copy to device memory
+  // rowinds
+  cudaMemcpy(ccm->drowinds,ccm->rowinds,((ccm->m)+1)*sizeof(int),cudaMemcpyHostToDevice);
+
+  // colinds
+  cudaMemcpy(ccm->dcolinds,ccm->colinds,(ccm->nnz)*sizeof(int),cudaMemcpyHostToDevice);
+
+  // vals
+  cudaMemcpy(ccm->dvals,ccm->vals,(ccm->nnz)*sizeof(double),cudaMemcpyHostToDevice);
+
   // return 
   return 0;
 

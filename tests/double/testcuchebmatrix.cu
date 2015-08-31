@@ -28,7 +28,7 @@ int main(){
   cuchebmatrix_csr(&ccm);
 
   // printlong CCM
-  cuchebmatrix_printlong(&ccm);
+  cuchebmatrix_gpuprint(&ccm);
 
   // destroy CCM
   cuchebmatrix_destroy(&ccm);

@@ -87,7 +87,7 @@ int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){
   iss.str(line);
   iss >> (ccm->m) >> (ccm->n) >> (ccm->nnz);
 
-  // allocate memory
+  // allocate host memory
   // for faster matvecs all elements of symmetric matrices must be stored
   ccm->rowinds = new int[2*(ccm->nnz)];
   if (ccm->rowinds == NULL) {
@@ -129,6 +129,32 @@ int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){
 
   // close file
   input_file.close();
+
+  // create cusparse handle
+  if(cusparseCreate(&(ccm->handle)) != 0) {
+    printf("CUSPARSE initialization failed.\n");
+    exit(1);
+  }
+
+  // create cusparse MatDescr
+  if(cusparseCreateMatDescr(&(ccm->matdescr)) != 0) {
+    printf("CUSPARSE MatDescr initialization failed.\n");
+    exit(1);
+  }
+
+  // allocate device memory
+  if(cudaMalloc(&(ccm->drowinds),((ccm->m)+1)*sizeof(int)) != 0) {
+    printf("Memory allocation failed.\n");
+    exit(1);
+  }
+  if(cudaMalloc(&(ccm->dcolinds),(ccm->nnz)*sizeof(int)) != 0) {
+    printf("Memory allocation failed.\n");
+    exit(1);
+  }
+  if(cudaMalloc(&(ccm->dvals),(ccm->nnz)*sizeof(double)) != 0) {
+    printf("Memory allocation failed.\n");
+    exit(1);
+  }
 
   // return  
   return 0;
