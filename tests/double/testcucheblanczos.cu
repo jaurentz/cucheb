@@ -14,7 +14,7 @@ int main(){
 
   // cucheblanczos
   cucheblanczos ccl;
-  cucheblanczos_init(&ccm, &ccl);
+  cucheblanczos_init(7, &ccm, &ccl);
 
   // print CCL
   cucheblanczos_print(&ccl);
@@ -25,7 +25,7 @@ int main(){
   // do arnoldi run
   cucheblanczos_arnoldi(&ccm,&ccl);
 
-  // print starting vector
+  // print arnoldi vectors
   double val;
   for(int jj=0; jj < ccl.nvecs+1; jj++){
   for(int ii=0; ii < ccl.n; ii++){
@@ -60,10 +60,11 @@ int main(){
   }
   printf("\n");
 
-  // print schurvecs
-  for(int jj=0; jj < ccl.nvecs; jj++){
-  for(int ii=0; ii < ccl.nvecs; ii++){
-    printf(" schurvecs[%d] = %+e\n", jj*ccl.nvecs+ii, ccl.schurvecs[jj*ccl.nvecs+ii]);
+  // print ritz vectors
+  for(int jj=0; jj < ccl.nvecs+1; jj++){
+  for(int ii=0; ii < ccl.n; ii++){
+    cudaMemcpy(&val,&(ccl.dvecs)[jj*ccl.n + ii],sizeof(double),cudaMemcpyDeviceToHost);
+    printf(" dvecs[%d] = %+e\n", jj*ccl.n+ii, val);
   }
   printf("\n");
   }

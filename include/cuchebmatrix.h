@@ -23,6 +23,7 @@ typedef struct {
   int m;
   int n;
   int nnz;
+  double a, b;
   int* rowinds;
   int* colinds;
   double* vals;
@@ -59,5 +60,8 @@ int cuchebmatrix_csr(cuchebmatrix* ccm);
 /* routine for mv multiply on GPU */
 int cuchebmatrix_mv(cuchebmatrix* ccm, double* alpha, double* x, double* beta,
                     double* y);
+
+/* routine for estimating spectral interval */
+int cuchebmatrix_specint(cuchebmatrix* ccm);
 
 #endif /* __cuchebmatrix_h__ */

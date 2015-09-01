@@ -4,15 +4,18 @@
 int main(){
 
   // input file
-  string mtxfile("./matrices/Sandi_authors.mtx");
+  //string mtxfile("./matrices/Sandi_authors.mtx");
   //string mtxfile("./matrices/Trefethen_20.mtx");
-  //string mtxfile("./matrices/Stranke94.mtx");
+  string mtxfile("./matrices/Stranke94.mtx");
 
   // cuhebmatrix
   cuchebmatrix ccm;
 
   // initialize CCM
   cuchebmatrix_init(mtxfile, &ccm);
+
+  // print 
+  cuchebmatrix_print(&ccm);
 
   // create come vectors on the GPU
   double alpha, beta;
@@ -49,6 +52,12 @@ int main(){
     cudaMemcpy(&beta,&dy[ii],sizeof(double),cudaMemcpyDeviceToHost);
     printf(" dx[%d] = %+e, dy[%d] = %+e\n", ii, alpha, ii, beta);
   }
+
+  // compute specint
+  cuchebmatrix_specint(&ccm);
+
+  // print 
+  cuchebmatrix_print(&ccm);
 
   // destroy CCM
   cuchebmatrix_destroy(&ccm);

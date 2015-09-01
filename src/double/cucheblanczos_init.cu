@@ -1,11 +1,11 @@
 #include <cucheblanczos.h>
 
 /* routine to initialize cucheblanczos object */
-int cucheblanczos_init(cuchebmatrix* ccm, cucheblanczos* ccl){
+int cucheblanczos_init(int nvecs, cuchebmatrix* ccm, cucheblanczos* ccl){
 
   // set dimensions
   ccl->n = ccm->m;
-  ccl->nvecs = min(ccl->n,100);
+  ccl->nvecs = min(ccl->n,max(nvecs,1));
 
   // allocate host memory
   ccl->diag = new double[ccl->nvecs];

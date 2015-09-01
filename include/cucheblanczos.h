@@ -23,7 +23,7 @@ typedef struct {
 } cucheblanczos;
 
 /* instantiate cucheblanczos object */
-int cucheblanczos_init(cuchebmatrix* ccm, cucheblanczos* ccl);
+int cucheblanczos_init(int nvecs, cuchebmatrix* ccm, cucheblanczos* ccl);
 
 /* destroy cucheblanczos object */
 int cucheblanczos_destroy(cucheblanczos* ccl);

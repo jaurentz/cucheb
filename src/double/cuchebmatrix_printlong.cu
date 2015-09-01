@@ -17,6 +17,9 @@ int cuchebmatrix_printlong(cuchebmatrix* ccm){
  
   // print nnz
   printf(" nnz = %d\n",ccm->nnz);
+ 
+  // print [a,b]
+  printf(" [a,b] = [%+e,%+e]\n",ccm->a,ccm->b);
 
   // print rowinds, colinds and vals
   for (int ii=0; ii<ccm->nnz; ii++) {

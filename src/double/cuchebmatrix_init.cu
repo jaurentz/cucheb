@@ -87,6 +87,10 @@ int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){
   iss.str(line);
   iss >> (ccm->m) >> (ccm->n) >> (ccm->nnz);
 
+  // initialize specint
+  ccm->a = -1.0;
+  ccm->b = 1.0;
+
   // allocate host memory
   // for faster matvecs all elements of symmetric matrices must be stored
   ccm->rowinds = new int[2*(ccm->nnz)];
