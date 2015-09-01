@@ -119,7 +119,7 @@ int mm_is_valid(MM_typecode matcode);		/* too complex for a macro */
 #define MM_PATTERN_STR  "pattern"
 
 
-/*  high level routines */
+/*  high level routines 
 
 extern "C" {
 int mm_write_mtx_crd(char fname[], int M, int N, int nz, int I[], int J[],
@@ -132,7 +132,7 @@ int mm_read_mtx_crd_entry(FILE *f, int *I, int *J, double *real, double *img,
 int mm_read_unsymmetric_sparse(const char *fname, int *M_, int *N_, int *nz_,
                 double **val_, int **I_, int **J_);
 };
-
+*/
 
 
 #endif

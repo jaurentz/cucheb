@@ -19,51 +19,61 @@ int main(){
   // print CCL
   cucheblanczos_print(&ccl);
 
-  // create come vectors on the GPU
-  double alpha, beta;
-  double* dx;
-  double* dy;
+  // set starting vector
+  cucheblanczos_startvec(&ccl);
 
-  cudaMalloc(&dx,(ccm.n)*sizeof(double));
-  cudaMalloc(&dy,(ccm.n)*sizeof(double));
+  // do arnoldi run
+  cucheblanczos_arnoldi(&ccm,&ccl);
 
-  // initialize dx to all 1's and dy to all zeros
-  alpha = 1.0;
-  beta = 0.0;
-  for(int ii=0; ii < ccm.n; ii++){
-    cudaMemcpy(&dx[ii],&alpha,sizeof(double),cudaMemcpyHostToDevice);
-    cudaMemcpy(&dy[ii],&beta,sizeof(double),cudaMemcpyHostToDevice);
+  // print starting vector
+  double val;
+  for(int jj=0; jj < ccl.nvecs+1; jj++){
+  for(int ii=0; ii < ccl.n; ii++){
+    cudaMemcpy(&val,&(ccl.dvecs)[jj*ccl.n + ii],sizeof(double),cudaMemcpyDeviceToHost);
+    printf(" dvecs[%d] = %+e\n", jj*ccl.n+ii, val);
   }
-
-  // print dx and dy 
-  for(int ii=0; ii < ccm.n; ii++){
-    cudaMemcpy(&alpha,&dx[ii],sizeof(double),cudaMemcpyDeviceToHost);
-    cudaMemcpy(&beta,&dy[ii],sizeof(double),cudaMemcpyDeviceToHost);
-    printf(" dx[%d] = %+e, dy[%d] = %+e\n", ii, alpha, ii, beta);
+  printf("\n");
   }
   printf("\n");
 
-  // compute dy = alpha*ccm*dx + beta*dy
-  alpha = 1.0;
-  beta = 0.0;
-  cuchebmatrix_mv(&ccm,&alpha,dx,&beta,dy);
-
-  // print dx and dy 
-  for(int ii=0; ii < ccm.n; ii++){
-    cudaMemcpy(&alpha,&dx[ii],sizeof(double),cudaMemcpyDeviceToHost);
-    cudaMemcpy(&beta,&dy[ii],sizeof(double),cudaMemcpyDeviceToHost);
-    printf(" dx[%d] = %+e, dy[%d] = %+e\n", ii, alpha, ii, beta);
+  // print schurvecs
+  for(int jj=0; jj < ccl.nvecs; jj++){
+  for(int ii=0; ii < ccl.nvecs; ii++){
+    printf(" schurvecs[%d] = %+e\n", jj*ccl.nvecs+ii, ccl.schurvecs[jj*ccl.nvecs+ii]);
   }
+  printf("\n");
+  }
+  printf("\n");
+
+  // print sdiag
+  for(int ii=0; ii < ccl.nvecs; ii++){
+    printf(" sdiag[%d] = %+e\n", ii, ccl.sdiag[ii]);
+  }
+  printf("\n");
+
+  // compute ritz values
+  cucheblanczos_eig(&ccl);
+
+  // print diag and sdiag
+  for(int ii=0; ii < ccl.nvecs; ii++){
+    printf(" diag[%d] = %+e, sdiag[%d] = %+e\n", ii, ccl.diag[ii], ii, ccl.sdiag[ii]);
+  }
+  printf("\n");
+
+  // print schurvecs
+  for(int jj=0; jj < ccl.nvecs; jj++){
+  for(int ii=0; ii < ccl.nvecs; ii++){
+    printf(" schurvecs[%d] = %+e\n", jj*ccl.nvecs+ii, ccl.schurvecs[jj*ccl.nvecs+ii]);
+  }
+  printf("\n");
+  }
+  printf("\n");
 
   // destroy CCM
   cuchebmatrix_destroy(&ccm);
 
   // destroy CCL
   cucheblanczos_destroy(&ccl);
-
-  // destroy vectors
-  cudaFree(dx);
-  cudaFree(dy);
 
   // return 
   return 0;

@@ -15,6 +15,9 @@ int cucheblanczos_destroy(cucheblanczos* ccl){
   // destroy cublas handle
   cublasDestroy(ccl->handle);
  
+  // free dtemp
+  cudaFree(ccl->dtemp);
+
   // free dvecs
   cudaFree(ccl->dvecs);
 

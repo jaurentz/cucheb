@@ -2,6 +2,7 @@
 #ifndef __cucheblanczos_h__ 
 #define __cucheblanczos_h__
 
+#include <lapacke.h>
 #include <cublas_v2.h>
 #include <cuchebmatrix.h>
 
@@ -15,6 +16,7 @@ typedef struct {
   double* schurvecs;
 
   cublasHandle_t handle;
+  double* dtemp;
   double* dvecs;
   double* dschurvecs;
  
@@ -28,5 +30,14 @@ int cucheblanczos_destroy(cucheblanczos* ccl);
 
 /* print cucheblanczos object */
 int cucheblanczos_print(cucheblanczos* ccl);
+
+/* set cucheblanczos starting vector */
+int cucheblanczos_startvec(cucheblanczos* ccl);
+
+/* arnoldi run using cuchebmatrix */
+int cucheblanczos_arnoldi(cuchebmatrix* ccm, cucheblanczos* ccl);
+
+/* compute ritz values and vectors */
+int cucheblanczos_eig(cucheblanczos* ccl);
 
 #endif /* __cucheblanczos_h__ */

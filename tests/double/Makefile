@@ -9,7 +9,7 @@ CUCHEBLIBS := -L $(INSTALLDIR)/cucheb/lib -lcucheb
 all: $(DTESTS)
 
 %:: %.cu
-	$(CUC) $(CUFLAGS) --compiler-options '-fopenmp' -o $@ $< $(CUCHEBINCS) $(CUCHEBLIBS) $(INCS) $(LIBS) 
+	$(CUC) $(CUFLAGS) -o $@ $< $(CUCHEBINCS) $(CUCHEBLIBS) $(INCS) $(LIBS) 
 	
 clean:
 	@rm -f $(DTESTS)

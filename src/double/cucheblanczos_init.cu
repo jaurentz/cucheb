@@ -34,7 +34,11 @@ int cucheblanczos_init(cuchebmatrix* ccm, cucheblanczos* ccl){
   cublasSetPointerMode(ccl->handle,CUBLAS_POINTER_MODE_HOST);
 
   // allocate device memory
-  if(cudaMalloc(&(ccl->dvecs),(ccl->n)*(ccl->nvecs)*sizeof(double)) != 0) {
+  if(cudaMalloc(&(ccl->dtemp),(ccl->nvecs)*sizeof(double)) != 0) {
+    printf("Memory allocation failed.\n");
+    exit(1);
+  }
+  if(cudaMalloc(&(ccl->dvecs),(ccl->n)*((ccl->nvecs)+1)*sizeof(double)) != 0) {
     printf("Memory allocation failed.\n");
     exit(1);
   }
