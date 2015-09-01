@@ -56,7 +56,7 @@ int cuchebpoly_stepfilter(double a, double b, double c, double d, cuchebpoly* cc
   }
 
   // chop Chebyshev coefficients
-  cuchebpoly_chop(&(ccp->degree),&(ccp->coeffs[0]));
+  cuchebpoly_chop(ccp);
 
   // return 
   return 0;

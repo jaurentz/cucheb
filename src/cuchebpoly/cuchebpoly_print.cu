@@ -11,6 +11,7 @@ int cuchebpoly_print(cuchebpoly* ccp){
  
   // a and b
   printf(" [a,b] = [%+e,%+e]\n",ccp->a,ccp->b);
+  printf("\n");
   
   // coeffs
   for (int ii=0; ii<ccp->degree+1; ii++) {

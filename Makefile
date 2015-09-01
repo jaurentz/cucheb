@@ -28,10 +28,10 @@ $(TESTSRCS):
 
 $(TESTS):
 
-lib$(LIBNAME).so.$(VERSION): $(OBJS)
-	@$(CUC) --compiler-options '-fPIC' --shared -o $@ $^
+lib$(LIBNAME).so.$(VERSION): objects
+	@$(CUC) --compiler-options '-fPIC' --shared -o $@ $(OBJS)
 
-$(OBJS): FORCE
+objects: FORCE
 	@$(MAKE) -C ./src
 
 FORCE:

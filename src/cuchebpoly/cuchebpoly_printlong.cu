@@ -11,6 +11,13 @@ int cuchebpoly_printlong(cuchebpoly* ccp){
  
   // a and b
   printf(" [a,b] = [%+e,%+e]\n",ccp->a,ccp->b);
+  printf("\n");
+  
+  // points
+  for (int ii=0; ii < 2*DOUBLE_DEG; ii++) {
+    printf(" points[%d] = %+e\n",ii,ccp->points[ii]);
+  }
+  printf("\n");
   
   // coeffs
   for (int ii=0; ii<DOUBLE_DEG+1; ii++) {

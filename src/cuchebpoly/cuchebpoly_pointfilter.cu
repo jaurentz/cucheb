@@ -13,7 +13,7 @@ int cuchebpoly_pointfilter(double a, double b, double rho, cuchebpoly* ccp){
   ccp->b = b;
 
   // compute Chebyshev points in [a,b]
-  cuchebpoly_points(a,b,&(ccp->coeffs[0]));
+  cuchebpoly_points(a,b,ccp);
 
   // compute shift
   double shift;
@@ -23,15 +23,15 @@ int cuchebpoly_pointfilter(double a, double b, double rho, cuchebpoly* ccp){
 
   // compute function values for f(x) = exp(-100*(x-shift)^2)
   double scl = pow(b - a,2);
-  for (int ii=0; ii<DOUBLE_DEG+1; ii++) {
-    ccp->coeffs[ii] = exp(-100.0*pow(ccp->coeffs[ii]-shift,2)/scl);
+  for (int ii=0; ii < 2*DOUBLE_DEG; ii++) {
+    (ccp->points)[ii] = exp(-100.0*pow((ccp->points)[ii]-shift,2)/scl);
   }
  
   // compute Chebyshev coefficients
-  cuchebpoly_coeffs(&(ccp->coeffs[0]));
+  cuchebpoly_coeffs(ccp);
 
   // chop Chebyshev coefficients
-  cuchebpoly_chop(&(ccp->degree),&(ccp->coeffs[0]));
+  cuchebpoly_chop(ccp);
 
   // return 
   return 0;

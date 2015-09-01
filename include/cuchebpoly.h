@@ -46,12 +46,20 @@ typedef struct {
   int degree;
   double a;
   double b;
+  double points[2*DOUBLE_DEG];
   double coeffs[DOUBLE_DEG+1];
+
+  cufftHandle handle;
+  cufftDoubleReal *dinput;
+  cufftDoubleComplex *doutput;
 
 } cuchebpoly;
 
 /* instantiate cuchebpoly object */
 int cuchebpoly_init(cuchebpoly* ccp);
+
+/* destroy cuchebpoly object */
+int cuchebpoly_destroy(cuchebpoly* ccp);
 
 /* standard print cuchebpoly object */
 int cuchebpoly_print(cuchebpoly* ccp);
@@ -60,13 +68,13 @@ int cuchebpoly_print(cuchebpoly* ccp);
 int cuchebpoly_printlong(cuchebpoly* ccp);
 
 /* second kind Chebyshev points */
-int cuchebpoly_points(double a, double b, double* points);
+int cuchebpoly_points(double a, double b, cuchebpoly* ccp);
 
 /* convert values to coefficients */
-int cuchebpoly_coeffs(double* coeffs);
+int cuchebpoly_coeffs(cuchebpoly* ccp);
 
 /* threshold coefficients */
-int cuchebpoly_chop(int *degree, double* coeffs);
+int cuchebpoly_chop(cuchebpoly* ccp);
 
 /* routine for creating point filter */
 int cuchebpoly_pointfilter(double a, double b, double rho, cuchebpoly* ccp);
