@@ -60,13 +60,13 @@ int cuchebpoly_print(cuchebpoly* ccp);
 int cuchebpoly_printlong(cuchebpoly* ccp);
 
 /* second kind Chebyshev points */
-int cuchebpoints(double a, double b, double* points);
+int cuchebpoly_points(double a, double b, double* points);
 
 /* convert values to coefficients */
-int cuchebcoeffs(double* coeffs);
+int cuchebpoly_coeffs(double* coeffs);
 
 /* threshold coefficients */
-int cuchebchop(int *degree, double* coeffs);
+int cuchebpoly_chop(int *degree, double* coeffs);
 
 /* routine for creating point filter */
 int cuchebpoly_pointfilter(double a, double b, double rho, cuchebpoly* ccp);

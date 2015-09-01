@@ -1,7 +1,7 @@
 #include <cuchebpoly.h>
 
 /* routine for chopping Chebyshev coefficients */
-int cuchebchop(int* degree, double* coeffs){
+int cuchebpoly_chop(int* degree, double* coeffs){
 
   // find maximum
   double maximum = 0.0;

@@ -1,7 +1,7 @@
 #include <cuchebpoly.h>
 
 /* routine for Chebyshev points */
-int cuchebpoints(double a, double b, double* points){
+int cuchebpoly_points(double a, double b, double* points){
 
   // check a and b
   if ( a >= b ) {

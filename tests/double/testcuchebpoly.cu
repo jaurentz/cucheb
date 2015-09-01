@@ -12,7 +12,7 @@ int main(){
   cuchebpoly_printlong(&ccp1);
 
   // compute Chebyshev points in [-1,1]
-  cuchebpoints(-1.0,1.0,&ccp1.coeffs[0]);
+  cuchebpoly_points(-1.0,1.0,&ccp1.coeffs[0]);
   cuchebpoly_printlong(&ccp1);
 
   // compute function values for f(x) = exp(-100*(x-.7)^2)
@@ -22,11 +22,11 @@ int main(){
   cuchebpoly_printlong(&ccp1);
  
   // compute Chebyshev coefficients
-  cuchebcoeffs(&ccp1.coeffs[0]);
+  cuchebpoly_coeffs(&ccp1.coeffs[0]);
   cuchebpoly_printlong(&ccp1);
 
   // chop Chebyshev coefficients
-  cuchebchop(&ccp1.degree,&ccp1.coeffs[0]);
+  cuchebpoly_chop(&ccp1.degree,&ccp1.coeffs[0]);
   cuchebpoly_print(&ccp1);
 
   // cuhebpoly 2

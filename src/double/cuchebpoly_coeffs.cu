@@ -1,7 +1,7 @@
 #include <cuchebpoly.h>
 
-/* cuchebcoeffs */
-int cuchebcoeffs (double *coeffs){
+/* cuchebpoly_coeffs */
+int cuchebpoly_coeffs (double *coeffs){
  
   // allocate workspace
   cufftDoubleReal *input;
