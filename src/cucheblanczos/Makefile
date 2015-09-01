@@ -1,9 +1,9 @@
 include ../../make.inc
 
-DOBJS := $(wildcard ./*.cu)
-DOBJS := $(DOBJS:.cu=.o)
+OBJS := $(wildcard ./*.cu)
+OBJS := $(OBJS:.cu=.o)
 
-all: $(DOBJS)
+all: $(OBJS)
 
 %.o: %.cu
 	$(CUC) $(CUFLAGS) --compiler-options '-fPIC -fopenmp' -c $< -I ../../include $(INCS) 

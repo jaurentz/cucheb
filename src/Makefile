@@ -1,16 +1,16 @@
 include ../make.inc
 
-DSRCS := $(wildcard ./double/*.cu)
-
-DOBJS := $(DSRCS:.cu=.o)
-
-all: $(DOBJS)
+all: objects 
 	
-$(DOBJS): $(DSRCS)
-	@$(MAKE) -C ./double
+objects: FORCE
+	@$(MAKE) -C ./cuchebpoly
+	@$(MAKE) -C ./cuchebmatrix
+	@$(MAKE) -C ./cucheblanczos
 	
-$(DSRCS):
+FORCE:
 
 clean:
-	@$(MAKE) clean -C ./double
+	@$(MAKE) clean -C ./cuchebpoly
+	@$(MAKE) clean -C ./cuchebmatrix
+	@$(MAKE) clean -C ./cucheblanczos
 

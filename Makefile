@@ -31,10 +31,10 @@ $(TESTS):
 lib$(LIBNAME).so.$(VERSION): $(OBJS)
 	@$(CUC) --compiler-options '-fPIC' --shared -o $@ $^
 
-$(OBJS): $(SRCS)
+$(OBJS): FORCE
 	@$(MAKE) -C ./src
 
-$(SRCS):
+FORCE:
 	
 install: lib$(LIBNAME).so.$(VERSION) 
 	@mkdir -p $(INSTALLDIR)/cucheb 
