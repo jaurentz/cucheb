@@ -15,18 +15,7 @@ SRCS := $(wildcard ./src/*/*.cu)
 # CUCHEB individual objects
 OBJS := $(SRCS:.cu=.o)
 
-# CUCHEB individual tests
-TESTSRCS := $(wildcard ./tests/*/*.cu)
-TESTS := $(TESTSRCS:.cu=)
-
 all: lib$(LIBNAME).so.$(VERSION)
-
-tests: $(TESTS) $(TESTSRCS)
-	@$(MAKE) -C ./tests
-	
-$(TESTSRCS):
-
-$(TESTS):
 
 lib$(LIBNAME).so.$(VERSION): objects
 	@$(CUC) --compiler-options '-fPIC' --shared -o $@ $(OBJS)
@@ -34,6 +23,9 @@ lib$(LIBNAME).so.$(VERSION): objects
 objects: FORCE
 	@$(MAKE) -C ./src
 
+tests: FORCE
+	@$(MAKE) -C ./tests
+	
 FORCE:
 	
 install: lib$(LIBNAME).so.$(VERSION) 
