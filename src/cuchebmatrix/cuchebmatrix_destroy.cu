@@ -12,8 +12,11 @@ int cuchebmatrix_destroy(cuchebmatrix* ccm){
   // free vals
   delete[] ccm->vals;
 
+  // destroy cublas handle
+  cublasDestroy(ccm->cublashandle);
+ 
   // destroy cusparse handle
-  cusparseDestroy(ccm->handle);
+  cusparseDestroy(ccm->cusparsehandle);
  
   // destroy cusparse matdescr
   cusparseDestroyMatDescr(ccm->matdescr);
@@ -26,6 +29,9 @@ int cuchebmatrix_destroy(cuchebmatrix* ccm){
 
   // free dvals
   cudaFree(ccm->dvals);
+
+  // free dtemp
+  cudaFree(ccm->dtemp);
 
   // return  
   return 0;

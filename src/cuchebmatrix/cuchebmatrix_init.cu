@@ -134,14 +134,23 @@ int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){
   // close file
   input_file.close();
 
+  // create cublas handle
+  if(cublasCreate(&(ccm->cublashandle)) != 0) {
+    printf("CUBLAS initialization failed.\n");
+    exit(1);
+  }
+
+  // set pointer mode to Host
+  cublasSetPointerMode(ccm->cublashandle,CUBLAS_POINTER_MODE_HOST);
+
   // create cusparse handle
-  if(cusparseCreate(&(ccm->handle)) != 0) {
+  if(cusparseCreate(&(ccm->cusparsehandle)) != 0) {
     printf("CUSPARSE initialization failed.\n");
     exit(1);
   }
 
   // set pointer mode to Host
-  cusparseSetPointerMode(ccm->handle,CUSPARSE_POINTER_MODE_HOST);
+  cusparseSetPointerMode(ccm->cusparsehandle,CUSPARSE_POINTER_MODE_HOST);
 
   // create cusparse MatDescr
   if(cusparseCreateMatDescr(&(ccm->matdescr)) != 0) {
@@ -159,6 +168,10 @@ int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){
     exit(1);
   }
   if(cudaMalloc(&(ccm->dvals),(ccm->nnz)*sizeof(double)) != 0) {
+    printf("Memory allocation failed.\n");
+    exit(1);
+  }
+  if(cudaMalloc(&(ccm->dtemp),2*(ccm->m)*sizeof(double)) != 0) {
     printf("Memory allocation failed.\n");
     exit(1);
   }

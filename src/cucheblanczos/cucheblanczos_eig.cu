@@ -1,7 +1,7 @@
 #include <cucheblanczos.h>
 
 /* compute ritz values and vectors */
-int cucheblanczos_eig(cucheblanczos* ccl){
+int cucheblanczos_eig(cuchebmatrix* ccm, cucheblanczos* ccl){
 
   // local variables
   int n, nvecs;
@@ -48,14 +48,13 @@ int cucheblanczos_eig(cucheblanczos* ccl){
                nvecs*sizeof(double),cudaMemcpyHostToDevice);
   }
 
-
   // update schurvecs
   cudaMemcpy(&schurvecs[0],&dschurvecs[0],
                nvecs*nvecs*sizeof(double),cudaMemcpyDeviceToHost);
 
   // update dvecs
   double one = 1.0, zero = 0.0;
-  cublasDgemm(ccl->handle, CUBLAS_OP_N, CUBLAS_OP_N, n, nvecs, nvecs, &one,
+  cublasDgemm(ccm->cublashandle, CUBLAS_OP_N, CUBLAS_OP_N, n, nvecs, nvecs, &one,
               &dvecs[0], n, &dschurvecs[0], nvecs, &zero, &dvecs[0], n);
 
   // return  

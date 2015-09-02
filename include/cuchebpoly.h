@@ -49,7 +49,7 @@ typedef struct {
   double points[2*DOUBLE_DEG];
   double coeffs[DOUBLE_DEG+1];
 
-  cufftHandle handle;
+  cufftHandle cuffthandle;
   cufftDoubleReal *dinput;
   cufftDoubleComplex *doutput;
 

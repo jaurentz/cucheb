@@ -4,7 +4,7 @@
 int cuchebpoly_destroy(cuchebpoly* ccp){
 
   // free cufft
-  cufftDestroy(ccp->handle);
+  cufftDestroy(ccp->cuffthandle);
  
   // free workspace
   cudaFree(ccp->dinput);

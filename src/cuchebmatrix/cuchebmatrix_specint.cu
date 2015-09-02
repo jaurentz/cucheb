@@ -18,7 +18,7 @@ int cuchebmatrix_specint(cuchebmatrix* ccm){
   cucheblanczos_arnoldi(ccm,&ccl);
 
   // compute ritz values
-  cucheblanczos_eig(&ccl);
+  cucheblanczos_eig(ccm,&ccl);
 
   // estimate spectral interval
   double a, b, eps;

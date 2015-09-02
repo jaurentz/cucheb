@@ -5,7 +5,7 @@ int cuchebmatrix_mv(cuchebmatrix* ccm, double* alpha, double* x, double* beta,
                     double* y){
 
   // cusparseDcsrmv
-  cusparseDcsrmv(ccm->handle, CUSPARSE_OPERATION_NON_TRANSPOSE, ccm->m, ccm->n, 
+  cusparseDcsrmv(ccm->cusparsehandle, CUSPARSE_OPERATION_NON_TRANSPOSE, ccm->m, ccm->n, 
                  ccm->nnz, alpha, ccm->matdescr, ccm->dvals, ccm->drowinds,
                  ccm->dcolinds, x, beta, y);
  

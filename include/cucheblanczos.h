@@ -3,7 +3,6 @@
 #define __cucheblanczos_h__
 
 #include <lapacke.h>
-#include <cublas_v2.h>
 #include <cuchebmatrix.h>
 
 /* cucheblanczos data type */
@@ -15,7 +14,6 @@ typedef struct {
   double* sdiag;
   double* schurvecs;
 
-  cublasHandle_t handle;
   double* dtemp;
   double* dvecs;
   double* dschurvecs;
@@ -38,6 +36,6 @@ int cucheblanczos_startvec(cucheblanczos* ccl);
 int cucheblanczos_arnoldi(cuchebmatrix* ccm, cucheblanczos* ccl);
 
 /* compute ritz values and vectors */
-int cucheblanczos_eig(cucheblanczos* ccl);
+int cucheblanczos_eig(cuchebmatrix* ccm, cucheblanczos* ccl);
 
 #endif /* __cucheblanczos_h__ */

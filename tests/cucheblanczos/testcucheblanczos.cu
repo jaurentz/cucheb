@@ -52,7 +52,7 @@ int main(){
   printf("\n");
 
   // compute ritz values
-  cucheblanczos_eig(&ccl);
+  cucheblanczos_eig(&ccm,&ccl);
 
   // print diag and sdiag
   for(int ii=0; ii < ccl.nvecs; ii++){

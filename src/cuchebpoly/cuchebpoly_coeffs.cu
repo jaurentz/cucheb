@@ -8,7 +8,7 @@ int cuchebpoly_coeffs (cuchebpoly* ccp){
   cudaMemcpy(&(ccp->dinput)[0], &(ccp->points)[0], 2*deg*sizeof(double), cudaMemcpyHostToDevice);
 
   // execute plan
-  cufftExecD2Z(ccp->handle,ccp->dinput,ccp->doutput);
+  cufftExecD2Z(ccp->cuffthandle,ccp->dinput,ccp->doutput);
  
   // extract output
   for (int ii=0; ii < deg+1; ii++) {

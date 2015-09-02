@@ -14,7 +14,9 @@ using namespace std;
 
 #include <mmio.h>
 #include <cuda.h>
+#include <cublas_v2.h>
 #include <cusparse.h>
+#include <cuchebpoly.h>
 
 /* cuchebmatrix data type */
 typedef struct {
@@ -28,11 +30,13 @@ typedef struct {
   int* colinds;
   double* vals;
 
-  cusparseHandle_t handle;
+  cublasHandle_t cublashandle;
+  cusparseHandle_t cusparsehandle;
   cusparseMatDescr_t matdescr;
   int* drowinds;
   int* dcolinds;
   double* dvals;
+  double* dtemp;
  
 } cuchebmatrix;
 
@@ -60,6 +64,10 @@ int cuchebmatrix_csr(cuchebmatrix* ccm);
 /* routine for mv multiply on GPU */
 int cuchebmatrix_mv(cuchebmatrix* ccm, double* alpha, double* x, double* beta,
                     double* y);
+
+/* routine for poly mv multiply on GPU */
+int cuchebmatrix_polymv(cuchebmatrix* ccm, cuchebpoly* ccp, double* alpha, double* x, 
+                        double* beta, double* y);
 
 /* routine for estimating spectral interval */
 int cuchebmatrix_specint(cuchebmatrix* ccm);

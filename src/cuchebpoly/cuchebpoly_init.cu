@@ -11,7 +11,7 @@ int cuchebpoly_init(cuchebpoly* ccp){
   ccp->b = 1.0;
   
   // initialize cufftHandle
-  cufftPlan1d(&(ccp->handle), 2*DOUBLE_DEG, CUFFT_D2Z, 1);
+  cufftPlan1d(&(ccp->cuffthandle), 2*DOUBLE_DEG, CUFFT_D2Z, 1);
 
   // allocate workspace
   if(cudaMalloc(&(ccp->dinput),2*DOUBLE_DEG*sizeof(cufftDoubleReal)) != 0) {
