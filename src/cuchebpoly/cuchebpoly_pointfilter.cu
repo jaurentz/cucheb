@@ -1,7 +1,7 @@
 #include <cucheb.h>
 
 /* routine for creating point filter */
-int cuchebpoly_pointfilter(double a, double b, double rho, cuchebpoly* ccp){
+int cuchebpoly_pointfilter(double a, double b, double rho, double tau, cuchebpoly* ccp){
 
   // check a and b
   if ( a >= b ) {
@@ -24,7 +24,7 @@ int cuchebpoly_pointfilter(double a, double b, double rho, cuchebpoly* ccp){
   // compute function values for f(x) = exp(-100*(x-shift)^2)
   double scl = pow(b - a,2);
   for (int ii=0; ii < 2*DOUBLE_DEG; ii++) {
-    (ccp->points)[ii] = exp(-100.0*pow((ccp->points)[ii]-shift,2)/scl);
+    (ccp->points)[ii] = exp(-abs(tau)*pow((ccp->points)[ii]-shift,2)/scl);
   }
  
   // compute Chebyshev coefficients

@@ -32,7 +32,7 @@ int cuchebpoly_coeffs(cuchebpoly* ccp);
 int cuchebpoly_chop(cuchebpoly* ccp);
 
 /* routine for creating point filter */
-int cuchebpoly_pointfilter(double a, double b, double rho, cuchebpoly* ccp);
+int cuchebpoly_pointfilter(double a, double b, double rho, double tau, cuchebpoly* ccp);
 
 /* routine for creating step filter */
 int cuchebpoly_stepfilter(double a, double b, double c, double d, cuchebpoly* ccp);

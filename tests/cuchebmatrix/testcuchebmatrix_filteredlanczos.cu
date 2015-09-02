@@ -4,9 +4,7 @@
 int main(){
 
   // input file
-  string mtxfile("./matrices/Sandi_authors.mtx");
-  //string mtxfile("./matrices/Trefethen_20.mtx");
-  //string mtxfile("./matrices/Stranke94.mtx");
+  string mtxfile("./matrices/m_t1.mtx");
 
   // cuhebmatrix
   cuchebmatrix ccm;
@@ -18,13 +16,6 @@ int main(){
 
   // call filtered lanczos
   cuchebmatrix_filteredlanczos(4,0,&ccm,&ccl);
-
-  // print eigenvalues
-  for(int ii=0; ii < ccl.nvecs; ii++){
-    printf(" diag[%d] = %+e, sdiag[%d] = %+e\n",
-           ii,ccl.diag[ii],ii,ccl.sdiag[ii]);
-  }
-  printf("\n");
 
   // destroy CCM
   cuchebmatrix_destroy(&ccm);

@@ -15,9 +15,9 @@
 /* maximum construction degree */
 #ifdef DOUBLE_DEG
 #undef DOUBLE_DEG
-#define DOUBLE_DEG 128
+#define DOUBLE_DEG 1024
 #else
-#define DOUBLE_DEG 128
+#define DOUBLE_DEG 1024
 #endif
 
 /* construction tolerance */
@@ -31,9 +31,9 @@
 /* maximum filter degree */
 #ifdef MAX_DOUBLE_DEG
 #undef MAX_DOUBLE_DEG
-#define MAX_DOUBLE_DEG 50
+#define MAX_DOUBLE_DEG 512
 #else
-#define MAX_DOUBLE_DEG 50
+#define MAX_DOUBLE_DEG 512
 #endif
 
 /* cuchebpoly data type */

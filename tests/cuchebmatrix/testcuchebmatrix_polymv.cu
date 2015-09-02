@@ -21,7 +21,7 @@ int main(){
   // create a point filter
   cuchebpoly ccp;
   cuchebpoly_init(&ccp);
-  cuchebpoly_pointfilter(ccm.a,ccm.b,0.0,&ccp);
+  cuchebpoly_pointfilter(ccm.a,ccm.b,0.0,100,&ccp);
   cuchebpoly_print(&ccp);
 
   // create some vectors on the GPU
