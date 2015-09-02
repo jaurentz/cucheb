@@ -1,4 +1,4 @@
-#include <cuchebpoly.h>
+#include <cucheb.h>
 
 /* routine for creating step filter */
 int cuchebpoly_stepfilter(double a, double b, double c, double d, cuchebpoly* ccp){

@@ -1,4 +1,4 @@
-#include <cuchebmatrix.h>
+#include <cucheb.h>
 
 /* routine to free memory in cuchebmatrix object */
 int cuchebmatrix_destroy(cuchebmatrix* ccm){

@@ -1,4 +1,4 @@
-#include <cuchebpoly.h>
+#include <cucheb.h>
 
 /* routine for chopping Chebyshev coefficients */
 int cuchebpoly_chop(cuchebpoly* ccp){

@@ -1,4 +1,4 @@
-#include <cucheblanczos.h>
+#include <cucheb.h>
 
 /* compute ritz values and vectors */
 int cucheblanczos_eig(cuchebmatrix* ccm, cucheblanczos* ccl){

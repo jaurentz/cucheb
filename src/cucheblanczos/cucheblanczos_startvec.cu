@@ -1,4 +1,4 @@
-#include <cucheblanczos.h>
+#include <cucheb.h>
 
 /* routine to create starting vector for cucheblanczos */
 int cucheblanczos_startvec(cucheblanczos* ccl){

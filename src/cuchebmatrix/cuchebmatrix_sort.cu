@@ -1,4 +1,4 @@
-#include <cuchebmatrix.h>
+#include <cucheb.h>
 
 /* routine for sorting entries */
 int cuchebmatrix_sort(cuchebmatrix* ccm){

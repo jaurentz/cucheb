@@ -1,4 +1,4 @@
-#include <cuchebpoly.h>
+#include <cucheb.h>
 
 /* cuchebpoly_coeffs */
 int cuchebpoly_coeffs (cuchebpoly* ccp){

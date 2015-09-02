@@ -1,4 +1,4 @@
-#include <cuchebmatrix.h>
+#include <cucheb.h>
 
 /* routine to initialize cuchebmatrix object */
 int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){

@@ -1,12 +1,8 @@
+#include <cuchebdependencies.h>
+
 /* header file for cuchebpoly data type */
 #ifndef __cuchebpoly_h__ 
 #define __cuchebpoly_h__
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <cuda.h>
-#include <cufft.h>
 
 /* double precision pi */
 #ifdef DOUBLE_PI
@@ -54,32 +50,5 @@ typedef struct {
   cufftDoubleComplex *doutput;
 
 } cuchebpoly;
-
-/* instantiate cuchebpoly object */
-int cuchebpoly_init(cuchebpoly* ccp);
-
-/* destroy cuchebpoly object */
-int cuchebpoly_destroy(cuchebpoly* ccp);
-
-/* standard print cuchebpoly object */
-int cuchebpoly_print(cuchebpoly* ccp);
-
-/* long print cuchebpoly object */
-int cuchebpoly_printlong(cuchebpoly* ccp);
-
-/* second kind Chebyshev points */
-int cuchebpoly_points(double a, double b, cuchebpoly* ccp);
-
-/* convert values to coefficients */
-int cuchebpoly_coeffs(cuchebpoly* ccp);
-
-/* threshold coefficients */
-int cuchebpoly_chop(cuchebpoly* ccp);
-
-/* routine for creating point filter */
-int cuchebpoly_pointfilter(double a, double b, double rho, cuchebpoly* ccp);
-
-/* routine for creating step filter */
-int cuchebpoly_stepfilter(double a, double b, double c, double d, cuchebpoly* ccp);
 
 #endif /* __cuchebpoly_h__ */

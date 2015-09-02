@@ -1,4 +1,4 @@
-#include <cuchebpoly.h>
+#include <cucheb.h>
 
 /* routine for destroying cuchebpoly object */
 int cuchebpoly_destroy(cuchebpoly* ccp){

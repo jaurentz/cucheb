@@ -1,4 +1,4 @@
-#include <cuchebmatrix.h>
+#include <cucheb.h>
 
 /* routine for converting to csr format */
 int cuchebmatrix_csr(cuchebmatrix* ccm){

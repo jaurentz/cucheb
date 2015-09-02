@@ -1,7 +1,7 @@
 #include <cucheb.h>
 
-/* arnoldi run using cuchebmatrix */
-int cucheblanczos_arnoldi(cuchebmatrix* ccm, cucheblanczos* ccl){
+/* filtered arnoldi run using cuchebmatrix */
+int cucheblanczos_filteredarnoldi(cuchebmatrix* ccm, cuchebpoly* ccp, cucheblanczos* ccl){
 
   // local variables
   int n, nvecs;
@@ -21,7 +21,7 @@ int cucheblanczos_arnoldi(cuchebmatrix* ccm, cucheblanczos* ccl){
   for(int ii=0; ii < nvecs; ii++){
 
     // apply matrix
-    cuchebmatrix_mv(ccm,&one,&dvecs[ii*n],&zero,&dvecs[(ii+1)*n]);
+    cuchebmatrix_polymv(ccm,ccp,&dvecs[ii*n],&dvecs[(ii+1)*n]);
 
     // orthogonalize
     cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, (ii+1), &one, &dvecs[0], n, 

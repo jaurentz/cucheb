@@ -1,4 +1,4 @@
-#include <cuchebmatrix.h>
+#include <cucheb.h>
 
 /* routine for poly mv multiply on GPU */
 /* y = p(A)*x */

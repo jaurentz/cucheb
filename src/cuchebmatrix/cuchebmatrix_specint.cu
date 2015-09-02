@@ -1,4 +1,4 @@
-#include <cucheblanczos.h>
+#include <cucheb.h>
 
 /* routine to estimate spectral interval */
 int cuchebmatrix_specint(cuchebmatrix* ccm){

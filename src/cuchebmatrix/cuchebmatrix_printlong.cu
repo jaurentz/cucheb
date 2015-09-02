@@ -1,4 +1,4 @@
-#include <cuchebmatrix.h>
+#include <cucheb.h>
 
 /* routine for long print */
 int cuchebmatrix_printlong(cuchebmatrix* ccm){

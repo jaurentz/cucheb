@@ -1,4 +1,4 @@
-#include <cuchebpoly.h>
+#include <cucheb.h>
 
 /* routine for creating point filter */
 int cuchebpoly_pointfilter(double a, double b, double rho, cuchebpoly* ccp){

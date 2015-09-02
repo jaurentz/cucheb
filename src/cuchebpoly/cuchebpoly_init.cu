@@ -1,4 +1,4 @@
-#include <cuchebpoly.h>
+#include <cucheb.h>
 
 /* routine for basic initialization */
 int cuchebpoly_init(cuchebpoly* ccp){

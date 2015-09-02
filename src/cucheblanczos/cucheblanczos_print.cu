@@ -1,4 +1,4 @@
-#include <cucheblanczos.h>
+#include <cucheb.h>
 
 /* routine for standard print */
 int cucheblanczos_print(cucheblanczos* ccl){

@@ -1,4 +1,4 @@
-#include <cuchebpoly.h>
+#include <cucheb.h>
 
 /* routine for long print */
 int cuchebpoly_printlong(cuchebpoly* ccp){

@@ -1,4 +1,4 @@
-#include <cuchebmatrix.h>
+#include <cucheb.h>
 
 /* routine for mv multiply on GPU */
 int cuchebmatrix_mv(cuchebmatrix* ccm, double* alpha, double* x, double* beta,

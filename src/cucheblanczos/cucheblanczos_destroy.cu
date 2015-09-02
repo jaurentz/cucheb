@@ -1,4 +1,4 @@
-#include <cucheblanczos.h>
+#include <cucheb.h>
 
 /* routine to free memory in cucheblanczos object */
 int cucheblanczos_destroy(cucheblanczos* ccl){

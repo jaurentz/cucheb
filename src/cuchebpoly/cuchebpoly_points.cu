@@ -1,4 +1,4 @@
-#include <cuchebpoly.h>
+#include <cucheb.h>
 
 /* routine for Chebyshev points */
 int cuchebpoly_points(double a, double b, cuchebpoly* ccp){

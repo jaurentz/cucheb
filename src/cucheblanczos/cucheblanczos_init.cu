@@ -1,4 +1,4 @@
-#include <cucheblanczos.h>
+#include <cucheb.h>
 
 /* routine to initialize cucheblanczos object */
 int cucheblanczos_init(int nvecs, cuchebmatrix* ccm, cucheblanczos* ccl){
