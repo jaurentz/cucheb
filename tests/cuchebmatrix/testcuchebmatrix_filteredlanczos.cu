@@ -4,12 +4,14 @@
 int main(){
 
   // input file
-  string mtxfile("./matrices/Si34H36.mtx");
+  //string mtxfile("../matrices/H2O.mtx");
+  //string mtxfile("../matrices/Si10H16.mtx");
+  //string mtxfile("../matrices/G2_circuit.mtx");
+  string mtxfile("../matrices/Trefethen_20000.mtx");
 
   // cuhebmatrix
   cuchebmatrix ccm;
   cuchebmatrix_init(mtxfile, &ccm);
-  cuchebmatrix_print(&ccm);
 
   // cucheblanczos
   cucheblanczos ccl;

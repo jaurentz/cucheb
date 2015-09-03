@@ -15,9 +15,9 @@
 /* maximum number of arnoldi vectors */
 #ifdef MAX_ARNOLDI_VECS
 #undef MAX_ARNOLDI_VECS
-#define MAX_ARNOLDI_VECS 100
+#define MAX_ARNOLDI_VECS 200
 #else
-#define MAX_ARNOLDI_VECS 100
+#define MAX_ARNOLDI_VECS 200
 #endif
 
 /* maximum number of computed eigenvalues */

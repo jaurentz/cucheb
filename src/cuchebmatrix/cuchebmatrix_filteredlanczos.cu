@@ -44,11 +44,11 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, cuchebmatrix* ccm,
   // loop through various filters
   double tau;
   tau = 10.0*(ccm->m);
-  //for (int jj=0; jj<MAX_RESTARTS+1; jj++) {
-  for (int jj=0; jj<1; jj++) {
+  for (int jj=0; jj<MAX_RESTARTS+1; jj++) {
+  //for (int jj=0; jj<0; jj++) {
 
     // create filter polynomial
-    //cuchebpoly_pointfilter(ccm->a,ccm->b,shift,256,&ccp);
+    //cuchebpoly_pointfilter(ccm->a,ccm->b,rho,50*(jj+3),&ccp);
     cuchebpoly_gaussianfilter(ccm->a,ccm->b,rho,pow(10.0,jj)*tau,&ccp);
     cuchebpoly_print(&ccp);
 
@@ -59,11 +59,11 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, cuchebmatrix* ccm,
     cucheblanczos_eig(ccm,ccl);
 
     // print eigenvalues
-    for(int ii=0; ii < ccl->nvecs; ii++){
-      printf(" diag[%d] = %+e, sdiag[%d] = %+e\n",
-             ii,ccl->diag[ii],ii,ccl->sdiag[ii]);
-    }
-    printf("\n");
+//    for(int ii=0; ii < ccl->nvecs; ii++){
+//      printf(" diag[%d] = %+e, sdiag[%d] = %+e\n",
+//             ii,ccl->diag[ii],ii,ccl->sdiag[ii]);
+//    }
+//    printf("\n");
 
     // compute rayleigh quotients
     cucheblanczos_rayleigh(ccm,ccl);
