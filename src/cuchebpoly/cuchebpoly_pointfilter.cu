@@ -1,7 +1,7 @@
 #include <cucheb.h>
 
 /* routine for creating point filter */
-int cuchebpoly_pointfilter(double a, double b, double rho, double tau, cuchebpoly* ccp){
+int cuchebpoly_pointfilter(double a, double b, double rho, int order, cuchebpoly* ccp){
 
   // check a and b
   if ( a >= b ) {
@@ -12,26 +12,27 @@ int cuchebpoly_pointfilter(double a, double b, double rho, double tau, cuchebpol
   ccp->a = a;
   ccp->b = b;
 
-  // compute Chebyshev points in [a,b]
-  cuchebpoly_points(a,b,ccp);
-
   // compute shift
   double shift;
   if (rho <= a) {shift = a;}
   else if (rho >= b) {shift = b;}
   else {shift = rho;}
 
-  // compute function values for f(x) = exp(-100*(x-shift)^2)
-  double scl = pow(b - a,2);
-  for (int ii=0; ii < 2*DOUBLE_DEG; ii++) {
-    (ccp->points)[ii] = exp(-abs(tau)*pow((ccp->points)[ii]-shift,2)/scl);
-  }
- 
-  // compute Chebyshev coefficients
-  cuchebpoly_coeffs(ccp);
+  // map shift to [-1,1]
+  shift = (2.0*shift - b - a)/(b-a);
 
-  // chop Chebyshev coefficients
-  cuchebpoly_chop(ccp);
+  // use clenshaw algorithm to compute coefficients for delta function
+  double* coeffs;
+  coeffs = &(ccp->coeffs)[0];
+  coeffs[0] = 1.0;
+  coeffs[1] = shift;
+  for (int ii=2; ii < DOUBLE_DEG; ii++) {
+    coeffs[ii] = 2.0*shift*coeffs[ii-1] - coeffs[ii-2];
+  }
+  coeffs[DOUBLE_DEG] = shift*coeffs[DOUBLE_DEG-1] - coeffs[DOUBLE_DEG-2];
+ 
+  // set length
+  ccp->degree = min(MAX_DOUBLE_DEG,max(0,order));
 
   // return 
   return 0;

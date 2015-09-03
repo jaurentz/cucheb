@@ -4,7 +4,7 @@
 int main(){
 
   // input file
-  string mtxfile("./matrices/m_t1.mtx");
+  string mtxfile("./matrices/Si34H36.mtx");
 
   // cuhebmatrix
   cuchebmatrix ccm;

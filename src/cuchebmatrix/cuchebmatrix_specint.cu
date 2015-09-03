@@ -5,7 +5,7 @@ int cuchebmatrix_specint(cuchebmatrix* ccm){
 
   // number of arnoldi steps
   int nvecs;
-  nvecs = min(ccm->m,20);
+  nvecs = min(ccm->m,100);
 
   // create lanczos object
   cucheblanczos ccl;
@@ -24,7 +24,7 @@ int cuchebmatrix_specint(cuchebmatrix* ccm){
   double a, b, eps;
   a = (ccl.diag)[ccl.nvecs-1];
   b = (ccl.diag)[0];
-  eps = .1*abs(b-a);
+  eps = .05*abs(b-a);
   ccm->a = a-eps;
   ccm->b = b+eps;
 

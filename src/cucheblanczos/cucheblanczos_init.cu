@@ -5,9 +5,14 @@ int cucheblanczos_init(int nvecs, cuchebmatrix* ccm, cucheblanczos* ccl){
 
   // set dimensions
   ccl->n = ccm->m;
-  ccl->nvecs = min(ccl->n,max(nvecs,1));
+  ccl->nvecs = min(min(ccl->n,max(nvecs,1)),MAX_ARNOLDI_VECS);
 
   // allocate host memory
+  ccl->index = new int[ccl->nvecs];
+  if (ccl->index == NULL) {
+    printf("Memory allocation failed.\n");
+    exit(1);
+  }
   ccl->diag = new double[ccl->nvecs];
   if (ccl->diag == NULL) {
     printf("Memory allocation failed.\n");
@@ -22,6 +27,11 @@ int cucheblanczos_init(int nvecs, cuchebmatrix* ccm, cucheblanczos* ccl){
   if (ccl->schurvecs == NULL) {
     printf("Memory allocation failed.\n");
     exit(1);
+  }
+
+  // initialize index
+  for (int ii=0; ii < ccl->nvecs; ii++) {
+    (ccl->index)[ii] = ii;
   }
 
   // allocate device memory

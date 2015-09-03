@@ -3,6 +3,9 @@
 /* routine to free memory in cucheblanczos object */
 int cucheblanczos_destroy(cucheblanczos* ccl){
 
+  // free index
+  delete[] ccl->index;
+
   // free diag
   delete[] ccl->diag;
 

@@ -15,9 +15,9 @@
 /* maximum construction degree */
 #ifdef DOUBLE_DEG
 #undef DOUBLE_DEG
-#define DOUBLE_DEG 1024
+#define DOUBLE_DEG 8192
 #else
-#define DOUBLE_DEG 1024
+#define DOUBLE_DEG 8192
 #endif
 
 /* construction tolerance */
