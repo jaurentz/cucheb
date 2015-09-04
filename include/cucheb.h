@@ -3,6 +3,7 @@
 #include <cuchebpoly.h>
 #include <cuchebmatrix.h>
 #include <cucheblanczos.h>
+#include <cuchebblocklanczos.h>
 
 /* header file for cucheb data type */
 #ifndef __cucheb_h__ 
@@ -106,6 +107,27 @@ int cucheblanczos_rayleigh(cuchebmatrix* ccm, cucheblanczos* ccl);
 
 /* check convergence */
 int cucheblanczos_checkconvergence(int* numconv, double rho, cuchebmatrix* ccm, cucheblanczos* ccl);
+
+
+
+/* cuchebblocklanczos subroutines */
+/* instantiate cuchebblocklanczos object */
+int cuchebblocklanczos_init(int bsize, int nblocks, cuchebmatrix* ccm, cuchebblocklanczos* ccb);
+
+/* destroy cuchebblocklanczos object */
+int cuchebblocklanczos_destroy(cuchebblocklanczos* ccb);
+
+/* print cuchebblocklanczos object */
+int cuchebblocklanczos_print(cuchebblocklanczos* ccb);
+
+/* set cuchebblocklanczos starting vectors */
+int cuchebblocklanczos_startvecs(cuchebblocklanczos* ccb);
+
+/* arnoldi run using cuchebmatrix */
+int cuchebblocklanczos_arnoldi(cuchebmatrix* ccm, cuchebblocklanczos* ccb);
+
+/* compute ritz values and vectors */
+int cuchebblocklanczos_eig(cuchebmatrix* ccm, cuchebblocklanczos* ccb);
 
 
 #endif /* __cucheb_h__ */
