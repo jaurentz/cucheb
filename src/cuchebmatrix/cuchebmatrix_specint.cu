@@ -5,7 +5,11 @@ int cuchebmatrix_specint(cuchebmatrix* ccm){
 
   // number of arnoldi steps
   int nvecs;
-  nvecs = min(ccm->m,MAX_ARNOLDI_VECS);
+  nvecs = min(ccm->m,200);
+
+  // create cuchebpoly object
+  cuchebpoly ccp;
+  cuchebpoly_init(&ccp);
 
   // create lanczos object
   cucheblanczos ccl;
@@ -20,19 +24,82 @@ int cuchebmatrix_specint(cuchebmatrix* ccm){
   // compute ritz values
   cucheblanczos_eig(ccm,&ccl);
 
-  // estimate spectral interval
-  double a, b, eps;
+  // compute residuals
+  double a, b;
   double ar, br;
   a = (ccl.diag)[nvecs-1];
   b = (ccl.diag)[0];
   ar = (ccl.sdiag)[nvecs-1]*abs(ccl.schurvecs[nvecs*nvecs-1]);
   br = (ccl.sdiag)[nvecs-1]*abs(ccl.schurvecs[nvecs-1]);
-  eps = .05*abs(b-a);
-  ccm->a = a-eps;
-  ccm->b = b+eps;
+  ccm->a = a;
+  ccm->b = b;
+  printf(" a = %+e, ar = %+e\n", a, ar);
+  printf(" b = %+e, br = %+e\n", b, br);
+
+  // refine lower bound if necessary
+  double tol = 100.0*DOUBLE_TOL*(ccl.n);
+  if ( ar >= tol*max(abs(a),abs(b)) ) {
+  
+    // create point filter
+    cuchebpoly_pointfilter(a,b,a,50,&ccp);
+
+    // set starting vector
+    cucheblanczos_startvec(&ccl);
+
+    // arnoldi run
+    cucheblanczos_filteredarnoldi(ccm,&ccp,&ccl);
+
+    // compute ritz values
+    cucheblanczos_eig(ccm,&ccl);
+
+    // compute rayleigh quotients
+    cucheblanczos_rayleigh(ccm,&ccl);
+
+    // compute new candidate b
+    a = (ccl.diag)[0];
+    ar = (ccl.sdiag)[0];
+    ccm->a = a;
+    printf(" a = %+e, ar = %+e\n", a, ar);
+
+  }
+
+  // refine upper bound if necessary
+  if ( br >= tol*max(abs(a),abs(b)) ) {
+  
+    // create point filter
+    cuchebpoly_pointfilter(a,b,b,50,&ccp);
+
+    // set starting vector
+    cucheblanczos_startvec(&ccl);
+
+    // arnoldi run
+    cucheblanczos_filteredarnoldi(ccm,&ccp,&ccl);
+
+    // compute ritz values
+    cucheblanczos_eig(ccm,&ccl);
+
+    // compute rayleigh quotients
+    cucheblanczos_rayleigh(ccm,&ccl);
+
+    // compute new candidate b
+    b = (ccl.diag)[0];
+    br = (ccl.sdiag)[0];
+    ccm->b = b;
+    printf(" b = %+e, br = %+e\n", b, br);
+
+  }
+
+  // add a litte wiggle room
+  double eps;
+  eps = tol*max(abs(ccm->a),abs(ccm->b));
+  ccm->a = ccm->a - eps;
+  ccm->b = ccm->b + eps;
 
   // destroy ccl
   cucheblanczos_destroy(&ccl);
+
+  // destory CCP
+  cuchebpoly_destroy(&ccp);
 
   // return  
   return 0;

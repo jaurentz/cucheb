@@ -27,8 +27,9 @@ typedef struct {
   int bsize;
   int nblocks;
   int* index;
-  double* bands;
   double* evals;
+  double* res;
+  double* bands;
   double* schurvecs;
 
   double* dtemp;

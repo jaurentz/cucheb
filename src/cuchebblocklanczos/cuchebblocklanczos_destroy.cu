@@ -12,6 +12,9 @@ int cuchebblocklanczos_destroy(cuchebblocklanczos* ccb){
   // free evals
   delete[] ccb->evals;
 
+  // free res
+  delete[] ccb->res;
+
   // free schurvecs
   delete[] ccb->schurvecs;
 

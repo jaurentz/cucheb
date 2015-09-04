@@ -4,17 +4,29 @@
 int main(){
 
   // input file
-  //string mtxfile("./matrices/Sandi_authors.mtx");
-  //string mtxfile("../matrices/Trefethen_20.mtx");
-  string mtxfile("../matrices/Stranke94.mtx");
+  //string mtxfile("../matrices/H2O.mtx");
+  string mtxfile("../matrices/G2_circuit.mtx");
+  //string mtxfile("../matrices/Si10H16.mtx");
+  //string mtxfile("../matrices/Stranke94.mtx");
 
   // cuchebmatrix
   cuchebmatrix ccm;
   cuchebmatrix_init(mtxfile, &ccm);
+  cuchebmatrix_specint(&ccm);
+  cuchebmatrix_print(&ccm);
+
+  // filter polynomial
+  double tau;
+  tau = 100.0*(ccm.m);
+  cuchebpoly ccp;
+  cuchebpoly_init(&ccp);
+  cuchebpoly_gaussianfilter(ccm.a,ccm.b,0,tau,&ccp);
+  //cuchebpoly_pointfilter(ccm.a,ccm.b,0,100,&ccp);
+  cuchebpoly_print(&ccp);
 
   // cuchebblocklanczos
   cuchebblocklanczos ccb;
-  cuchebblocklanczos_init(2, 5, &ccm, &ccb);
+  cuchebblocklanczos_init(3, 100, &ccm, &ccb);
 
   // print CCB
   cuchebblocklanczos_print(&ccb);
@@ -23,8 +35,9 @@ int main(){
   cuchebblocklanczos_startvecs(&ccb);
 
   // do arnoldi run
-  cuchebblocklanczos_arnoldi(&ccm,&ccb);
+  cuchebblocklanczos_filteredarnoldi(&ccm,&ccp,&ccb);
 
+/*
   // print arnoldi vectors
   double val;
   int nvecs;
@@ -37,10 +50,12 @@ int main(){
   printf("\n");
   }
   printf("\n");
+*/
 
   // compute ritz values
   cuchebblocklanczos_eig(&ccm,&ccb);
 
+/*
   // print bands
   for(int ii=0; ii < nvecs; ii++){
 
@@ -73,16 +88,20 @@ int main(){
   printf("\n");
   }
   printf("\n");
+*/
 
   // compute rayleigh quotients and residuals
   cuchebblocklanczos_rayleigh(&ccm,&ccb);
 
   // print ritz vectors
-  for(int jj=0; jj < nvecs; jj++){
+  for(int jj=0; jj < (ccb.bsize)*(ccb.nblocks); jj++){
     printf(" evals[%d] = %+e, res[%d] = %+e\n", jj, ccb.evals[jj], 
            jj, ccb.res[jj]);
   }
   printf("\n");
+
+  // destroy CCP
+  cuchebpoly_destroy(&ccp);
 
   // destroy CCM
   cuchebmatrix_destroy(&ccm);

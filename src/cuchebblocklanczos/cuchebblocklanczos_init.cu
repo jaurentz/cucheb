@@ -16,17 +16,21 @@ int cuchebblocklanczos_init(int bsize, int nblocks, cuchebmatrix* ccm, cuchebblo
     printf("Memory allocation failed.\n");
     exit(1);
   }
-  ccb->bands = new double[nvecs*(ccb->bsize + 1)];
-  if (ccb->bands == NULL) {
-    printf("Memory allocation failed.\n");
-    exit(1);
-  }
   ccb->evals = new double[nvecs];
   if (ccb->evals == NULL) {
     printf("Memory allocation failed.\n");
     exit(1);
   }
-
+  ccb->res = new double[nvecs];
+  if (ccb->res == NULL) {
+    printf("Memory allocation failed.\n");
+    exit(1);
+  }
+  ccb->bands = new double[nvecs*(ccb->bsize + 1)];
+  if (ccb->bands == NULL) {
+    printf("Memory allocation failed.\n");
+    exit(1);
+  }
   ccb->schurvecs = new double[nvecs*(nvecs + ccb->bsize)];
   if (ccb->schurvecs == NULL) {
     printf("Memory allocation failed.\n");

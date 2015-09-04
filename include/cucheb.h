@@ -126,8 +126,15 @@ int cuchebblocklanczos_startvecs(cuchebblocklanczos* ccb);
 /* arnoldi run using cuchebmatrix */
 int cuchebblocklanczos_arnoldi(cuchebmatrix* ccm, cuchebblocklanczos* ccb);
 
+/* filtered arnoldi run using cuchebmatrix */
+int cuchebblocklanczos_filteredarnoldi(cuchebmatrix* ccm, cuchebpoly* ccp,
+                                       cuchebblocklanczos* ccb);
+
 /* compute ritz values and vectors */
 int cuchebblocklanczos_eig(cuchebmatrix* ccm, cuchebblocklanczos* ccb);
+
+/* compute rayleigh quotients */
+int cuchebblocklanczos_rayleigh(cuchebmatrix* ccm, cuchebblocklanczos* ccb);
 
 
 #endif /* __cucheb_h__ */
