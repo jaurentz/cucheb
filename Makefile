@@ -45,5 +45,3 @@ clean:
 	@$(MAKE) clean -C ./tests
 
 	
-LD_LIBRARY_PATH := $(INSTALLDIR)/cucheb/lib:$(LD_LIBRARY_PATH)
-export LD_LIBRARY_PATH
