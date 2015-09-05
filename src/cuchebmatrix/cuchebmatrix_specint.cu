@@ -33,11 +33,11 @@ int cuchebmatrix_specint(cuchebmatrix* ccm){
   br = (ccl.sdiag)[nvecs-1]*abs(ccl.schurvecs[nvecs-1]);
   ccm->a = a;
   ccm->b = b;
-  printf(" a = %+e, ar = %+e\n", a, ar);
-  printf(" b = %+e, br = %+e\n", b, br);
+//  printf(" a = %+e, ar = %+e\n", a, ar);
+//  printf(" b = %+e, br = %+e\n", b, br);
 
   // refine lower bound if necessary
-  double tol = 100.0*DOUBLE_TOL*(ccl.n);
+  double tol = 1e-4;
   if ( ar >= tol*max(abs(a),abs(b)) ) {
   
     // create point filter
@@ -90,10 +90,10 @@ int cuchebmatrix_specint(cuchebmatrix* ccm){
   }
 
   // add a litte wiggle room
-  double eps;
-  eps = tol*max(abs(ccm->a),abs(ccm->b));
-  ccm->a = ccm->a - eps;
-  ccm->b = ccm->b + eps;
+//  double eps;
+//  eps = tol*max(abs(ccm->a),abs(ccm->b));
+//  ccm->a = ccm->a - eps;
+//  ccm->b = ccm->b + eps;
 
   // destroy ccl
   cucheblanczos_destroy(&ccl);

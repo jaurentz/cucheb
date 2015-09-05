@@ -78,6 +78,10 @@ int cuchebmatrix_specint(cuchebmatrix* ccm);
 /* filtered lanczos routine */
 int cuchebmatrix_filteredlanczos(int neigs, double shift, cuchebmatrix* ccm, cucheblanczos* ccl);
 
+/* filtered block lanczos routine */
+int cuchebmatrix_filteredblocklanczos(int neigs, double shift, int bsize, 
+                                      cuchebmatrix* ccm, cuchebblocklanczos* ccb);
+
 
 
 /* cucheblanczos subroutines */
@@ -135,6 +139,11 @@ int cuchebblocklanczos_eig(cuchebmatrix* ccm, cuchebblocklanczos* ccb);
 
 /* compute rayleigh quotients */
 int cuchebblocklanczos_rayleigh(cuchebmatrix* ccm, cuchebblocklanczos* ccb);
+
+/* check convergence */
+int cuchebblocklanczos_checkconvergence(int* numconv, double rho, cuchebmatrix* ccm, 
+                                        cuchebblocklanczos* ccb);
+
 
 
 #endif /* __cucheb_h__ */
