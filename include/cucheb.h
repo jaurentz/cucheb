@@ -9,6 +9,18 @@
 #ifndef __cucheb_h__ 
 #define __cucheb_h__
 
+/* cuchebutils subroutines */
+/* rotation generator */
+int cuchebutils_rotation(const double a, const double b, double* c, double* s,
+                         double* nrm);
+
+/* function to perform banded symmetric bulge chase */
+int cuchebutils_chasebulge(int n, int bwidth, double* bands, int ldbands,
+                           double* bulge, double* vecs, int ldvecs);
+
+/* eigenvalues and eigenvectors of 2x2 symmetric matrix */
+int cuchebutils_2x2symeig(double a1, double a2, double b, double* e1, double* e2,
+                         double* vecs);
 
 /* cuchebpoly subroutines */
 /* instantiate cuchebpoly object */
