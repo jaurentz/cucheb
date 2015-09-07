@@ -20,7 +20,17 @@ int cuchebutils_chasebulge(int n, int bwidth, double* bands, int ldbands,
 
 /* eigenvalues and eigenvectors of 2x2 symmetric matrix */
 int cuchebutils_2x2symeig(double a1, double a2, double b, double* e1, double* e2,
-                         double* vecs);
+                         double* c, double* s);
+
+/* reduce banded symmetric matrix to tridiagonal */
+int cuchebutils_bandsymred(int n, int bwidth, double* bands, int ldbands,
+                           double* vecs, int ldvecs);
+
+/* eigenvalues and eigenvectors of banded symmetric matrix via QR */
+int cuchebutils_bandsymqr(int n, int bwidth, double* bands, int ldbands,
+                           double* evals, double* vecs, int ldvecs);
+
+
 
 /* cuchebpoly subroutines */
 /* instantiate cuchebpoly object */

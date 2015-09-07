@@ -2,7 +2,7 @@
 
 /* eigenvalues and eigenvectors of 2x2 symmetric matrix */
 int cuchebutils_2x2symeig(double a1, double a2, double b, double* e1, double* e2,
-                         double* vecs){
+                          double* c, double* s){
 
   // local variables
   double trace, detm, disc;
@@ -25,9 +25,7 @@ int cuchebutils_2x2symeig(double a1, double a2, double b, double* e1, double* e2
   }
 
   // compute eigenvectors
-  cuchebutils_rotation(-b,a1-*e1,&vecs[0],&vecs[1],&trace);
-  vecs[2] = -vecs[1];
-  vecs[3] = vecs[0];
+  cuchebutils_rotation(-b,a1-*e1,c,s,&trace);
 
   // return success
   return 0;
