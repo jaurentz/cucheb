@@ -24,28 +24,28 @@ int main(){
   //cuchebpoly_pointfilter(ccm.a,ccm.b,0,100,&ccp);
   cuchebpoly_print(&ccp);
 
-  // cuchebblocklanczos
-  cuchebblocklanczos ccb;
-  cuchebblocklanczos_init(3, 100, &ccm, &ccb);
+  // cucheblanczos
+  cucheblanczos ccl;
+  cucheblanczos_init(3, 100, &ccm, &ccl);
 
   // print CCB
-  cuchebblocklanczos_print(&ccb);
+  cucheblanczos_print(&ccl);
 
   // set starting vector
-  cuchebblocklanczos_startvecs(&ccb);
+  cucheblanczos_startvecs(&ccl);
 
   // do arnoldi run
-  cuchebblocklanczos_filteredarnoldi(&ccm,&ccp,&ccb);
+  cucheblanczos_filteredarnoldi(&ccm,&ccp,&ccl);
 
 /*
   // print arnoldi vectors
   double val;
   int nvecs;
-  nvecs = (ccb.bsize)*(ccb.nblocks);
-  for(int jj=0; jj < nvecs+ccb.bsize; jj++){
-  for(int ii=0; ii < ccb.n; ii++){
-    cudaMemcpy(&val,&(ccb.dvecs)[jj*ccb.n + ii],sizeof(double),cudaMemcpyDeviceToHost);
-    printf(" dvecs[%d] = %+e\n", jj*ccb.n+ii, val);
+  nvecs = (ccl.bsize)*(ccl.nblocks);
+  for(int jj=0; jj < nvecs+ccl.bsize; jj++){
+  for(int ii=0; ii < ccl.n; ii++){
+    cudaMemcpy(&val,&(ccl.dvecs)[jj*ccl.n + ii],sizeof(double),cudaMemcpyDeviceToHost);
+    printf(" dvecs[%d] = %+e\n", jj*ccl.n+ii, val);
   }
   printf("\n");
   }
@@ -53,20 +53,20 @@ int main(){
 */
 
   // compute ritz values
-  cuchebblocklanczos_eig(&ccm,&ccb);
+  cucheblanczos_eig(&ccm,&ccl);
 
 /*
   // print bands
   for(int ii=0; ii < nvecs; ii++){
 
-    for(int jj=0; jj < nvecs+ccb.bsize; jj++){
-      printf(" schurvecs[%d] = %+e\n", ii*(nvecs+ccb.bsize)+jj, ccb.schurvecs[ii*(nvecs+ccb.bsize)+jj]);
+    for(int jj=0; jj < nvecs+ccl.bsize; jj++){
+      printf(" schurvecs[%d] = %+e\n", ii*(nvecs+ccl.bsize)+jj, ccl.schurvecs[ii*(nvecs+ccl.bsize)+jj]);
     }
     printf("\n");
 
-    for(int jj=0; jj < ccb.bsize+1; jj++){
-      printf(" bands[%d] = %+e\n", ii*(ccb.bsize+1)+jj,
-             ccb.bands[ii*(ccb.bsize+1)+jj]);
+    for(int jj=0; jj < ccl.bsize+1; jj++){
+      printf(" bands[%d] = %+e\n", ii*(ccl.bsize+1)+jj,
+             ccl.bands[ii*(ccl.bsize+1)+jj]);
     }
     printf("\n");
 
@@ -75,15 +75,15 @@ int main(){
 
   // print evals
   for(int ii=0; ii < nvecs; ii++){
-    printf(" evals[%d] = %+e\n", ii, ccb.evals[ii]);
+    printf(" evals[%d] = %+e\n", ii, ccl.evals[ii]);
   }
   printf("\n");
 
   // print ritz vectors
   for(int jj=0; jj < nvecs; jj++){
-  for(int ii=0; ii < ccb.n; ii++){
-    cudaMemcpy(&val,&(ccb.dvecs)[jj*ccb.n + ii],sizeof(double),cudaMemcpyDeviceToHost);
-    printf(" dvecs[%d] = %+e\n", jj*ccb.n+ii, val);
+  for(int ii=0; ii < ccl.n; ii++){
+    cudaMemcpy(&val,&(ccl.dvecs)[jj*ccl.n + ii],sizeof(double),cudaMemcpyDeviceToHost);
+    printf(" dvecs[%d] = %+e\n", jj*ccl.n+ii, val);
   }
   printf("\n");
   }
@@ -91,12 +91,12 @@ int main(){
 */
 
   // compute rayleigh quotients and residuals
-  cuchebblocklanczos_rayleigh(&ccm,&ccb);
+  cucheblanczos_rayleigh(&ccm,&ccl);
 
   // print ritz vectors
-  for(int jj=0; jj < (ccb.bsize)*(ccb.nblocks); jj++){
-    printf(" evals[%d] = %+e, res[%d] = %+e\n", jj, ccb.evals[jj], 
-           jj, ccb.res[jj]);
+  for(int jj=0; jj < (ccl.bsize)*(ccl.nblocks); jj++){
+    printf(" evals[%d] = %+e, res[%d] = %+e\n", jj, ccl.evals[jj], 
+           jj, ccl.res[jj]);
   }
   printf("\n");
 
@@ -107,7 +107,7 @@ int main(){
   cuchebmatrix_destroy(&ccm);
 
   // destroy CCL
-  cuchebblocklanczos_destroy(&ccb);
+  cucheblanczos_destroy(&ccl);
 
   // return 
   return 0;

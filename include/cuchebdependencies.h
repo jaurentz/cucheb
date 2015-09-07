@@ -14,5 +14,4 @@ using namespace std;
 #include <cublas_v2.h>
 #include <cusparse.h>
 #include <cufft.h>
-#include <lapacke.h>
 

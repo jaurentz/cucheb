@@ -4,48 +4,61 @@
 int cucheblanczos_arnoldi(cuchebmatrix* ccm, cucheblanczos* ccl){
 
   // local variables
-  int n, nvecs;
+  int n, bsize, nblocks, nvecs;
   double scl, one = 1.0, zero = 0.0, mone = -1.0;
-  double* sdiag;
+  double* bands;
   double* dtemp;
   double* dvecs;
   double* dschurvecs;
   n = ccl->n;
-  nvecs = ccl->nvecs;
-  sdiag = ccl->sdiag;
+  bsize = ccl->bsize;
+  nblocks = ccl->nblocks;
+  nvecs = bsize*nblocks;
+  bands = ccl->bands;
   dtemp = ccl->dtemp;
   dvecs = ccl->dvecs;
   dschurvecs = ccl->dschurvecs;
 
-  // loop through nvecs
-  for(int ii=0; ii < nvecs; ii++){
+  // loop through nblocks
+  int ind;
+  for(int ii=0; ii < nblocks; ii++){
 
-    // apply matrix
-    cuchebmatrix_mv(ccm,&one,&dvecs[ii*n],&zero,&dvecs[(ii+1)*n]);
+    // inner loop for bsize blocks
+    for(int jj=0; jj < bsize; jj++){
 
-    // orthogonalize
-    cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, (ii+1), &one, &dvecs[0], n, 
-                &dvecs[(ii+1)*n], 1, &zero, &dschurvecs[ii*nvecs], 1);
-    cublasDgemv(ccm->cublashandle, CUBLAS_OP_N, n, (ii+1), &mone, &dvecs[0], n, 
-                &dschurvecs[ii*nvecs], 1, &one, &dvecs[(ii+1)*n], 1);
+      // set index
+      ind = ii*bsize + jj;
 
-    // reorthogonalize
-    cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, (ii+1), &one, &dvecs[0], n, 
-                &dvecs[(ii+1)*n], 1, &zero, &dtemp[0], 1);
-    cublasDgemv(ccm->cublashandle, CUBLAS_OP_N, n, (ii+1), &mone, &dvecs[0], n, 
-                &dtemp[0], 1, &one, &dvecs[(ii+1)*n], 1);
-    cublasDaxpy(ccm->cublashandle, (ii+1), &one, &dtemp[0], 1, 
-                &dschurvecs[ii*nvecs], 1);
+      // apply matrix
+      cuchebmatrix_mv(ccm,&one,&dvecs[ind*n],&zero,&dvecs[(ind+bsize)*n]);
 
-    // normalize
-    cublasDnrm2(ccm->cublashandle, n, &dvecs[(ii+1)*n], 1, &sdiag[ii]);
-    scl = 1.0/sdiag[ii];
-    cublasDscal(ccm->cublashandle, n, &scl, &dvecs[(ii+1)*n], 1);
+      // orthogonalize
+      cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, (ind+bsize), &one, &dvecs[0], n, 
+                  &dvecs[(ind+bsize)*n], 1, &zero, &dschurvecs[ind*(nvecs+bsize)], 1);
+      cublasDgemv(ccm->cublashandle, CUBLAS_OP_N, n, (ind+bsize), &mone, &dvecs[0], n, 
+                  &dschurvecs[ind*(nvecs+bsize)], 1, &one, &dvecs[(ind+bsize)*n], 1);
+
+      // reorthogonalize
+      cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, (ind+bsize), &one, &dvecs[0], n, 
+                &dvecs[(ind+bsize)*n], 1, &zero, &dtemp[0], 1);
+      cublasDgemv(ccm->cublashandle, CUBLAS_OP_N, n, (ind+bsize), &mone, &dvecs[0], n, 
+                &dtemp[0], 1, &one, &dvecs[(ind+bsize)*n], 1);
+      cublasDaxpy(ccm->cublashandle, (ind+bsize), &one, &dtemp[0], 1, 
+                &dschurvecs[ind*(nvecs+bsize)], 1);
+
+      // normalize
+      cublasDnrm2(ccm->cublashandle, n, &dvecs[(ind+bsize)*n], 1,
+                  &bands[(ind+1)*(bsize+1)-1]);
+      scl = 1.0/bands[(ind+1)*(bsize+1)-1];
+      cublasDscal(ccm->cublashandle, n, &scl, &dvecs[(ind+bsize)*n], 1);
+
+    }
 
   }
 
   // copy data to host
-  cudaMemcpy(&(ccl->schurvecs)[0],&dschurvecs[0],nvecs*nvecs*sizeof(double),cudaMemcpyDeviceToHost);
+  cudaMemcpy(&(ccl->schurvecs)[0],&dschurvecs[0],nvecs*(nvecs+bsize)*sizeof(double),
+             cudaMemcpyDeviceToHost);
 
   // return  
   return 0;
