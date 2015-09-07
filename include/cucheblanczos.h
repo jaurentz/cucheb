@@ -4,20 +4,20 @@
 #ifndef __cucheblanczos_h__ 
 #define __cucheblanczos_h__
 
+/* convergence tolerance */
+#ifdef DOUBLE_TOL
+#undef DOUBLE_TOL
+#define DOUBLE_TOL (double)pow(2.0,-52)
+#else
+#define DOUBLE_TOL (double)pow(2.0,-52)
+#endif
+
 /* maximum number of restarts */
 #ifdef MAX_RESTARTS
 #undef MAX_RESTARTS
 #define MAX_RESTARTS 2
 #else
 #define MAX_RESTARTS 2
-#endif
-
-/* maximum number of arnoldi vectors */
-#ifdef MAX_ARNOLDI_VECS
-#undef MAX_ARNOLDI_VECS
-#define MAX_ARNOLDI_VECS 200
-#else
-#define MAX_ARNOLDI_VECS 200
 #endif
 
 /* maximum number of computed eigenvalues */
@@ -28,22 +28,32 @@
 #define MAX_NUM_EIGS 100
 #endif
 
-/* convergence tolerance */
-#ifdef DOUBLE_TOL
-#undef DOUBLE_TOL
-#define DOUBLE_TOL (double)pow(2.0,-52)
+/* maximum number of restarts */
+#ifdef MAX_BLOCK_SIZE
+#undef MAX_BLOCK_SIZE
+#define MAX_BLOCK_SIZE 3
 #else
-#define DOUBLE_TOL (double)pow(2.0,-52)
+#define MAX_BLOCK_SIZE 3
+#endif
+
+/* maximum number of arnoldi vectors */
+#ifdef MAX_NUM_BLOCKS
+#undef MAX_NUM_BLOCKS
+#define MAX_NUM_BLOCKS 100
+#else
+#define MAX_NUM_BLOCKS 100
 #endif
 
 /* cucheblanczos data type */
 typedef struct {
 
   int n;
-  int nvecs;
+  int bsize;
+  int nblocks;
   int* index;
-  double* diag;
-  double* sdiag;
+  double* evals;
+  double* res;
+  double* bands;
   double* schurvecs;
 
   double* dtemp;

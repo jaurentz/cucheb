@@ -5,14 +5,14 @@ int cucheblanczos_rayleigh(cuchebmatrix* ccm, cucheblanczos* ccl){
 
   // local variables
   int n, nvecs;
-  double* diag;
-  double* sdiag;
+  double* evals;
+  double* res;
   double* dtemp;
   double* dvecs;
   n = ccl->n;
-  nvecs = ccl->nvecs;
-  diag = ccl->diag;
-  sdiag = ccl->sdiag;
+  nvecs = (ccl->bsize)*(ccl->nblocks);
+  evals = ccl->evals;
+  res = ccl->res;
   dtemp = ccm->dtemp;
   dvecs = ccl->dvecs;
 
@@ -26,16 +26,16 @@ int cucheblanczos_rayleigh(cuchebmatrix* ccm, cucheblanczos* ccl){
 
     // compute rayleigh quotient
     cublasDnrm2(ccm->cublashandle,n,&dvecs[ii*n],1,&scl);
-    cublasDdot(ccm->cublashandle,n,dtemp,1,&dvecs[ii*n],1,&diag[ii]);
-    diag[ii] = diag[ii]/scl/scl;
+    cublasDdot(ccm->cublashandle,n,dtemp,1,&dvecs[ii*n],1,&evals[ii]);
+    evals[ii] = evals[ii]/scl/scl;
 
     // compute residual vector
-    rval = -diag[ii];
+    rval = -evals[ii];
     cublasDaxpy(ccm->cublashandle,n,&rval,&dvecs[ii*n],1,dtemp,1);
 
     // compute norm of residual
-    cublasDnrm2(ccm->cublashandle,n,dtemp,1,&sdiag[ii]);
-    sdiag[ii] = sdiag[ii]/scl;
+    cublasDnrm2(ccm->cublashandle,n,dtemp,1,&res[ii]);
+    res[ii] = res[ii]/scl;
 
   }
 

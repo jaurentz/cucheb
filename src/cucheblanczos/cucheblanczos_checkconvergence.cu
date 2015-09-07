@@ -1,26 +1,27 @@
 #include <cucheb.h>
 
 /* check convergence of eigenvalues */
-int cucheblanczos_checkconvergence(int* numconv, double rho, cuchebmatrix* ccm, cucheblanczos* ccl){
+int cucheblanczos_checkconvergence(int* numconv, double rho, cuchebmatrix* ccm, 
+                                        cucheblanczos* ccl){
 
   // local variables
   int n, nvecs;
   double nrm;
   int* index;
-  double* diag;
-  double* sdiag;
+  double* evals;
+  double* res;
   n = ccl->n;
-  nvecs = ccl->nvecs;
+  nvecs = (ccl->bsize)*(ccl->nblocks);
   nrm = n*max(abs(ccm->a),abs(ccm->b));
   index = ccl->index;
-  diag = ccl->diag;
-  sdiag = ccl->sdiag;
+  evals = ccl->evals;
+  res = ccl->res;
 
   // compute number of converged eigenvalues
   *numconv = 0;
   for(int ii=0; ii < nvecs; ii++){
 
-    if (sdiag[index[ii]] >= DOUBLE_TOL*nrm) {
+    if (res[index[ii]] >= DOUBLE_TOL*nrm) {
       *numconv = ii;
       break;
     }
@@ -29,17 +30,17 @@ int cucheblanczos_checkconvergence(int* numconv, double rho, cuchebmatrix* ccm, 
 
   // sort converged ones based on distance from rho
   // create a vector of evals and indices
-  vector< pair< double , int > > evals;
+  vector< pair< double , int > > temp;
   for(int ii=0; ii < *numconv; ii++){
-    evals.push_back(make_pair( abs(diag[ii]-rho) , index[ii] ));
+    temp.push_back(make_pair( abs(evals[ii]-rho) , index[ii] ));
   }
 
   // sort vector
-  sort(evals.begin(),evals.end());
+  sort(temp.begin(),temp.end());
 
   // update index
   for(int ii=0; ii < *numconv; ii++){
-    index[ii] = evals[ii].second;
+    index[ii] = temp[ii].second;
   }
 
   // return  

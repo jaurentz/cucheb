@@ -1,61 +1,73 @@
 #include <cucheb.h>
 
 /* compute ritz values and vectors */
-int cucheblanczos_eig(cuchebmatrix* ccm, cucheblanczos* ccl){
+int cucheblanczos_eig(cuchebmatrix* ccm, cucheblanczos* ccb){
 
   // local variables
-  int n, nvecs;
-  double* diag;
-  double* sdiag;
+  int n, bsize, nblocks, nvecs;
+  double* bands;
+  double* evals;
   double* schurvecs;
   double* dschurvecs;
   double* dvecs;
-  n = ccl->n;
-  nvecs = ccl->nvecs;
-  diag = ccl->diag;
-  sdiag = ccl->sdiag;
-  schurvecs = ccl->schurvecs;
-  dschurvecs = ccl->dschurvecs;
-  dvecs = ccl->dvecs;
+  n = ccb->n;
+  bsize = ccb->bsize;
+  nblocks = ccb->nblocks;
+  nvecs = bsize*nblocks;
+  bands = ccb->bands;
+  evals = ccb->evals;
+  schurvecs = ccb->schurvecs;
+  dschurvecs = ccb->dschurvecs;
+  dvecs = ccb->dvecs;
 
-  // fill diag
-  for(int ii=0; ii<nvecs; ii++){
-    diag[ii] = schurvecs[ii*nvecs + ii];
+  // fill bands
+  for(int jj=0; jj<nvecs; jj++) {
+    for(int ii=0; ii<bsize; ii++){
+      bands[jj*(bsize+1)+ii] = schurvecs[jj*(nvecs+bsize)+jj+ii];
+    }
   }
 
-  // call lapack
-  LAPACKE_dsteqr(LAPACK_COL_MAJOR, 'i', nvecs, &diag[0], &sdiag[0],
-                 &schurvecs[0], nvecs);
+  // initialize schurvectors
+  for(int jj=0; jj<nvecs; jj++) {
+    for(int ii=0; ii<nvecs+bsize; ii++){
+      if (ii == jj){ schurvecs[jj*(nvecs+bsize)+ii] = 1.0; }
+      else{ schurvecs[jj*(nvecs+bsize)+ii] = 0.0; }
+    }
+  }
+
+  // call bandsymqr
+  cuchebutils_bandsymqr(nvecs, bsize+1, bands, bsize+1,
+                evals, schurvecs, nvecs+bsize);
 
   // sort eigenvalues in descending order
   // create a vector of evals and indices
-  vector< pair< double , int > > evals;
+  vector< pair< double , int > > temp;
   for(int ii=0; ii < nvecs; ii++){
-    evals.push_back(make_pair( -diag[ii] , ii ));
+    temp.push_back(make_pair( -evals[ii] , ii ));
   }
 
   // sort vector
-  sort(evals.begin(),evals.end());
+  sort(temp.begin(),temp.end());
 
   // update diag
   for(int ii=0; ii < nvecs; ii++){
-    diag[ii] = -(evals[ii].first);
+    evals[ii] = -(temp[ii].first);
   }
 
   // update dschurvecs
   for(int ii=0; ii < nvecs; ii++){
-    cudaMemcpy(&dschurvecs[ii*nvecs],&schurvecs[(evals[ii].second)*nvecs],
-               nvecs*sizeof(double),cudaMemcpyHostToDevice);
+    cudaMemcpy(&dschurvecs[ii*(nvecs+bsize)],&schurvecs[(temp[ii].second)*(nvecs+bsize)],
+               (nvecs+bsize)*sizeof(double),cudaMemcpyHostToDevice);
   }
 
   // update schurvecs
   cudaMemcpy(&schurvecs[0],&dschurvecs[0],
-               nvecs*nvecs*sizeof(double),cudaMemcpyDeviceToHost);
+               nvecs*(nvecs+bsize)*sizeof(double),cudaMemcpyDeviceToHost);
 
   // update dvecs
   double one = 1.0, zero = 0.0;
   cublasDgemm(ccm->cublashandle, CUBLAS_OP_N, CUBLAS_OP_N, n, nvecs, nvecs, &one,
-              &dvecs[0], n, &dschurvecs[0], nvecs, &zero, &dvecs[0], n);
+              &dvecs[0], n, &dschurvecs[0], nvecs+bsize, &zero, &dvecs[0], n);
 
   // return  
   return 0;

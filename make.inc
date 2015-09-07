@@ -10,10 +10,9 @@ CUDA := -lcuda
 CUBLAS := -lcublas 
 CUSPARSE := -lcusparse
 CUFFT := -lcufft 
-LAPACK := -L $(HOME)/Mylibs/lapack-3.5.0 -llapacke -llapack -lblas -lgfortran
 
 # linking directories
-INCS := -I/home/aurentz/Mylibs/lapack-3.5.0/lapacke/include 
+INCS := 
 
 # All libraries
-LIBS := $(LAPACK) $(CUDA) $(CUBLAS) $(CUSPARSE) $(CUFFT)
+LIBS := $(CUDA) $(CUBLAS) $(CUSPARSE) $(CUFFT)

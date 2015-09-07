@@ -6,11 +6,14 @@ int cucheblanczos_destroy(cucheblanczos* ccl){
   // free index
   delete[] ccl->index;
 
-  // free diag
-  delete[] ccl->diag;
+  // free bands 
+  delete[] ccl->bands;
 
-  // free sdiag
-  delete[] ccl->sdiag;
+  // free evals
+  delete[] ccl->evals;
+
+  // free res
+  delete[] ccl->res;
 
   // free schurvecs
   delete[] ccl->schurvecs;

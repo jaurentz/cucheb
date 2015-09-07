@@ -6,11 +6,14 @@ int cucheblanczos_print(cucheblanczos* ccl){
   // print banner
   printf("\ncucheblanczos:\n");
 
-  // print m
+  // print n
   printf(" n = %d\n",ccl->n);
  
-  // print n
-  printf(" nvecs = %d\n",ccl->nvecs);
+  // print bsize
+  printf(" bsize = %d\n",ccl->bsize);
+ 
+  // print nblocks
+  printf(" nblocks = %d\n",ccl->nblocks);
   printf("\n");
  
   // return 

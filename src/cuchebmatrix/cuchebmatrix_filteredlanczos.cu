@@ -1,7 +1,7 @@
 #include <cucheb.h>
 
 /* filtered lanczos routine */
-int cuchebmatrix_filteredlanczos(int neig, double shift, cuchebmatrix* ccm,
+int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix* ccm,
                                  cucheblanczos* ccl){
 
   // check neig
@@ -24,15 +24,11 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, cuchebmatrix* ccm,
   else if (shift < ccm->a) { rho = ccm->a; }
   else { rho = shift; }
 
-  // number of arnoldi steps
-  int nvecs;
-  nvecs = min(ccm->m,MAX_ARNOLDI_VECS);
-
   // initialize lanczos object
-  cucheblanczos_init(nvecs,ccm,ccl);
+  cucheblanczos_init(bsize,MAX_NUM_BLOCKS,ccm,ccl);
 
   // set starting vector
-  cucheblanczos_startvec(ccl);
+  cucheblanczos_startvecs(ccl);
 
   // initialize filter polynomial
   cuchebpoly ccp;
@@ -42,10 +38,12 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, cuchebmatrix* ccm,
   int numconv = 0;
 
   // loop through various filters
+  int nvecs;
+  nvecs = (ccl->bsize)*(ccl->nblocks);
   double tau;
   tau = 10.0*(ccm->m);
   for (int jj=0; jj<MAX_RESTARTS+1; jj++) {
-  //for (int jj=0; jj<0; jj++) {
+  //for (int jj=0; jj<1; jj++) {
 
     // create filter polynomial
     //cuchebpoly_pointfilter(ccm->a,ccm->b,rho,50*(jj+3),&ccp);
@@ -69,19 +67,19 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, cuchebmatrix* ccm,
     cucheblanczos_rayleigh(ccm,ccl);
 
     // print eigenvalues
-    for(int ii=0; ii < ccl->nvecs; ii++){
-      printf(" diag[%d] = %+e, sdiag[%d] = %+e\n",
-             ii,ccl->diag[ii],ii,ccl->sdiag[ii]);
-    }
-    printf("\n");
+//    for(int ii=0; ii < nvecs; ii++){
+//      printf(" evals[%d] = %+e, res[%d] = %+e\n",
+//             ii,ccl->evals[ii],ii,ccl->res[ii]);
+//    }
+//    printf("\n");
 
     // check convergence
     cucheblanczos_checkconvergence(&numconv,rho,ccm,ccl); 
 
     // print eigenvalues
     for(int ii=0; ii < numconv; ii++){
-      printf(" diag[%d] = %+e, sdiag[%d] = %+e\n",
-             ii,ccl->diag[ccl->index[ii]],ii,ccl->sdiag[ccl->index[ii]]);
+      printf(" evals[%d] = %+e, res[%d] = %+e\n",
+             ii,ccl->evals[ccl->index[ii]],ii,ccl->res[ccl->index[ii]]);
     }
     printf("\n");
 
