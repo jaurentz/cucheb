@@ -14,13 +14,13 @@ int cuchebpoly_printlong(cuchebpoly* ccp){
   printf("\n");
   
   // points
-  for (int ii=0; ii < 2*DOUBLE_DEG; ii++) {
-    printf(" points[%d] = %+e\n",ii,ccp->points[ii]);
-  }
-  printf("\n");
+//  for (int ii=0; ii < 2*DOUBLE_DEG; ii++) {
+//    printf(" points[%d] = %+e\n",ii,ccp->points[ii]);
+//  }
+//  printf("\n");
   
   // coeffs
-  for (int ii=0; ii<DOUBLE_DEG+1; ii++) {
+  for (int ii=0; ii<ccp->degree+1; ii++) {
     printf(" coeffs[%d] = %+e\n",ii,ccp->coeffs[ii]);
   }
   printf("\n");

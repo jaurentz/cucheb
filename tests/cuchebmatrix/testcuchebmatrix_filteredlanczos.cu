@@ -10,9 +10,9 @@ int main(){
   //string mtxfile("../matrices/Si34H36.mtx");
   //string mtxfile("../matrices/dielFilterV2real.mtx");
   //string mtxfile("../matrices/CO.mtx");
-  //string mtxfile("../matrices/Si10H16.mtx");
+  string mtxfile("../matrices/Si10H16.mtx");
   //string mtxfile("../matrices/G2_circuit.mtx");
-  string mtxfile("../matrices/Trefethen_20000.mtx");
+  //string mtxfile("../matrices/Trefethen_20000.mtx");
 
   // cuhebmatrix
   cuchebmatrix ccm;
@@ -21,8 +21,11 @@ int main(){
   // cucheblanczos
   cucheblanczos ccl;
 
-  // call filtered lanczos
-  cuchebmatrix_filteredlanczos(4,-1e100,1,&ccm,&ccl);
+  // call filtered lanczos for a point
+//  cuchebmatrix_filteredlanczos(4,-1e100,&ccm,&ccl);
+
+  // call filtered lanczos for an interval
+  cuchebmatrix_filteredlanczos(0.0,0.01,3,&ccm,&ccl);
 
   // destroy CCM
   cuchebmatrix_destroy(&ccm);

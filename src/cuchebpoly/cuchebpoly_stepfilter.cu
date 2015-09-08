@@ -1,7 +1,7 @@
 #include <cucheb.h>
 
 /* routine for creating step filter */
-int cuchebpoly_stepfilter(double a, double b, double c, double d, cuchebpoly* ccp){
+int cuchebpoly_stepfilter(double a, double b, double c, double d, int order, cuchebpoly* ccp){
 
   // check a and b
   if ( a >= b ) {
@@ -26,7 +26,7 @@ int cuchebpoly_stepfilter(double a, double b, double c, double d, cuchebpoly* cc
   else {ub = d;}
 
   // set degree
-  ccp->degree = MAX_DOUBLE_DEG;
+  ccp->degree = min(max(0,order),MAX_DOUBLE_DEG);
 
   // set a and b in ccp
   ccp->a = a;
@@ -37,26 +37,24 @@ int cuchebpoly_stepfilter(double a, double b, double c, double d, cuchebpoly* cc
   ub = (2.0*ub - (b+a))/(b-a);
  
   // compute Chebyshev coefficients
+  int deg;
+  deg = ccp->degree;
   double pi = DOUBLE_PI;
   double aclb = acos(lb);
   double acub = acos(ub);
   ccp->coeffs[0] = (aclb - acub)/pi;
-  for (int ii=1; ii<MAX_DOUBLE_DEG+1; ii++) {
+  for (int ii=1; ii<deg+1; ii++) {
     ccp->coeffs[ii] = 2.0*(sin(ii*aclb) - sin(ii*acub))/(ii*pi);
   }
 
   // apply Jackson damping
-  int deg = MAX_DOUBLE_DEG;
   double alpha = 1.0/(deg+2.0);
   double beta = sin(pi*alpha);
   double gamma = cos(pi*alpha);
-  for (int ii=0; ii<MAX_DOUBLE_DEG+1; ii++) {
+  for (int ii=0; ii<deg+1; ii++) {
     ccp->coeffs[ii] = alpha*((deg+2.0-ii)*beta*cos(ii*pi*alpha) +
                        sin(ii*pi*alpha)*gamma)*ccp->coeffs[ii]/beta;
   }
-
-  // chop Chebyshev coefficients
-  cuchebpoly_chop(ccp);
 
   // return 
   return 0;

@@ -57,7 +57,7 @@ int cuchebpoly_chop(cuchebpoly* ccp);
 int cuchebpoly_pointfilter(double a, double b, double rho, int order, cuchebpoly* ccp);
 
 /* routine for creating step filter */
-int cuchebpoly_stepfilter(double a, double b, double c, double d, cuchebpoly* ccp);
+int cuchebpoly_stepfilter(double a, double b, double c, double d, int order, cuchebpoly* ccp);
 
 /* routine for creating gaussian filter */
 int cuchebpoly_gaussianfilter(double a, double b, double rho, double tau, cuchebpoly* ccp);
@@ -96,9 +96,13 @@ int cuchebmatrix_polymv(cuchebmatrix* ccm, cuchebpoly* ccp, double* x, double* y
 /* routine for estimating spectral interval */
 int cuchebmatrix_specint(cuchebmatrix* ccm);
 
-/* filtered block lanczos routine */
+/* filtered lanczos routine for isolated point*/
 int cuchebmatrix_filteredlanczos(int neigs, double shift, int bsize, 
                                       cuchebmatrix* ccm, cucheblanczos* ccl);
+
+/* filtered lanczos routine for interval */
+int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize, cuchebmatrix* ccm, 
+                                 cucheblanczos* ccl);
 
 
 
@@ -128,10 +132,13 @@ int cucheblanczos_eig(cuchebmatrix* ccm, cucheblanczos* ccl);
 /* compute rayleigh quotients */
 int cucheblanczos_rayleigh(cuchebmatrix* ccm, cucheblanczos* ccl);
 
-/* check convergence */
+/* check convergence and sort using rho */
 int cucheblanczos_checkconvergence(int* numconv, double rho, cuchebmatrix* ccm, 
                                         cucheblanczos* ccl);
 
+/* check convergence and sort smallest to largest */
+int cucheblanczos_checkconvergence(int* numconv, double lb, double ub, cuchebmatrix* ccm, 
+                                   cucheblanczos* ccl);
 
 
 #endif /* __cucheb_h__ */

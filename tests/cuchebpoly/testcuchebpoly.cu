@@ -33,22 +33,22 @@ int main(){
   cuchebpoly ccp2;
 
   // gaussian_filter
-  cuchebpoly_gaussianfilter(0.0,1000.0,900.0,100,&ccp2);
+  cuchebpoly_gaussianfilter(0.0,1000.0,900.0,100.0,&ccp2);
   cuchebpoly_print(&ccp2);
 
   // cuhebpoly 3
   cuchebpoly ccp3;
 
   // step_filter
-  cuchebpoly_stepfilter(0.0,100.0,10.0,20.0,&ccp3);
-  cuchebpoly_print(&ccp3);
+  cuchebpoly_stepfilter(-1.0,1.0,-1.0,0.1,30,&ccp3);
+  cuchebpoly_printlong(&ccp3);
 
   // cuhebpoly 4
   cuchebpoly ccp4;
 
   // point_filter
-  cuchebpoly_pointfilter(-1.0,1.0,0.1,100,&ccp4);
-  cuchebpoly_print(&ccp4);
+  cuchebpoly_pointfilter(-1.0,1.0,0.0,30,&ccp4);
+  cuchebpoly_printlong(&ccp4);
 
   // free memory
   cuchebpoly_destroy(&ccp1);

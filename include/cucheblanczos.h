@@ -31,17 +31,17 @@
 /* maximum number of restarts */
 #ifdef MAX_BLOCK_SIZE
 #undef MAX_BLOCK_SIZE
-#define MAX_BLOCK_SIZE 3
+#define MAX_BLOCK_SIZE 10
 #else
-#define MAX_BLOCK_SIZE 3
+#define MAX_BLOCK_SIZE 10
 #endif
 
 /* maximum number of arnoldi vectors */
 #ifdef MAX_NUM_BLOCKS
 #undef MAX_NUM_BLOCKS
-#define MAX_NUM_BLOCKS 100
+#define MAX_NUM_BLOCKS 200
 #else
-#define MAX_NUM_BLOCKS 100
+#define MAX_NUM_BLOCKS 200
 #endif
 
 /* cucheblanczos data type */
