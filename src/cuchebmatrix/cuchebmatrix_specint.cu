@@ -20,9 +20,11 @@ int cuchebmatrix_specint(cuchebmatrix* ccm){
   // compute ritz values
   cucheblanczos_eig(ccm,&ccl);
 
-  // compute residuals
+  // set endpoints
   ccm->a = (ccl.evals)[nblocks-1];
+  ccm->a = ccm->a - 0.1*abs(ccm->a);
   ccm->b = (ccl.evals)[0];
+  ccm->b = ccm->b + 0.1*abs(ccm->b);
 
   // destroy ccl
   cucheblanczos_destroy(&ccl);

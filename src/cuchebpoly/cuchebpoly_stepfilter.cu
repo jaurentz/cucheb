@@ -33,8 +33,8 @@ int cuchebpoly_stepfilter(double a, double b, double c, double d, int order, cuc
   ccp->b = b;
 
   // scale everything to [-1,1]
-  lb = (2.0*lb - (b+a))/(b-a);
-  ub = (2.0*ub - (b+a))/(b-a);
+  lb = max((2.0*lb - (b+a))/(b-a),-1.0);
+  ub = min((2.0*ub - (b+a))/(b-a),1.0);
  
   // compute Chebyshev coefficients
   int deg;

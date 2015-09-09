@@ -1,7 +1,7 @@
 #include <cucheb.h>
 
 /* compute ritz values and vectors */
-int cucheblanczos_eig(cuchebmatrix* ccm, cucheblanczos* ccb){
+int cucheblanczos_eig(cuchebmatrix* ccm, cucheblanczos* ccl){
 
   // local variables
   int n, bsize, nblocks, nvecs;
@@ -10,15 +10,15 @@ int cucheblanczos_eig(cuchebmatrix* ccm, cucheblanczos* ccb){
   double* schurvecs;
   double* dschurvecs;
   double* dvecs;
-  n = ccb->n;
-  bsize = ccb->bsize;
-  nblocks = ccb->nblocks;
+  n = ccl->n;
+  bsize = ccl->bsize;
+  nblocks = ccl->nblocks;
   nvecs = bsize*nblocks;
-  bands = ccb->bands;
-  evals = ccb->evals;
-  schurvecs = ccb->schurvecs;
-  dschurvecs = ccb->dschurvecs;
-  dvecs = ccb->dvecs;
+  bands = ccl->bands;
+  evals = ccl->evals;
+  schurvecs = ccl->schurvecs;
+  dschurvecs = ccl->dschurvecs;
+  dvecs = ccl->dvecs;
 
   // fill bands
   for(int jj=0; jj<nvecs; jj++) {
