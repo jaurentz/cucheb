@@ -39,9 +39,9 @@
 /* maximum number of arnoldi vectors */
 #ifdef MAX_NUM_BLOCKS
 #undef MAX_NUM_BLOCKS
-#define MAX_NUM_BLOCKS 200
+#define MAX_NUM_BLOCKS 100
 #else
-#define MAX_NUM_BLOCKS 200
+#define MAX_NUM_BLOCKS 100
 #endif
 
 /* cucheblanczos data type */

@@ -1,5 +1,6 @@
 #include <cuchebdependencies.h>
 
+#include <cuchebstats.h>
 #include <cuchebpoly.h>
 #include <cuchebmatrix.h>
 #include <cucheblanczos.h>
@@ -7,6 +8,8 @@
 /* header file for cucheb data type */
 #ifndef __cucheb_h__ 
 #define __cucheb_h__
+
+
 
 /* cuchebutils subroutines */
 /* rotation generator */
@@ -28,6 +31,16 @@ int cuchebutils_bandsymred(int n, int bwidth, double* bands, int ldbands,
 /* eigenvalues and eigenvectors of banded symmetric matrix via QR */
 int cuchebutils_bandsymqr(int n, int bwidth, double* bands, int ldbands,
                            double* evals, double* vecs, int ldvecs);
+
+
+
+/* cuchebstats subroutines */
+/* standard print cuchebstats object */
+int cuchebstats_print(cuchebstats* ccs);
+
+/* print cuchebstats objects to file */
+int cuchebstats_fileprint(const string& fname, int nummats, string* matnames,
+                          cuchebstats* ccstats);
 
 
 
@@ -103,6 +116,11 @@ int cuchebmatrix_filteredlanczos(int neigs, double shift, int bsize,
 /* filtered lanczos routine for interval */
 int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize, cuchebmatrix* ccm, 
                                  cucheblanczos* ccl);
+
+/* same routine as above but with statistics variable */
+int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize, 
+                                 cuchebmatrix* ccm, cucheblanczos* ccl, 
+                                 cuchebstats* ccs);
 
 
 
