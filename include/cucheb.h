@@ -113,6 +113,11 @@ int cuchebmatrix_specint(cuchebmatrix* ccm);
 int cuchebmatrix_filteredlanczos(int neigs, double shift, int bsize, 
                                       cuchebmatrix* ccm, cucheblanczos* ccl);
 
+/* filtered lanczos routine for isolated point with statistics*/
+int cuchebmatrix_filteredlanczos(int neigs, double shift, int bsize, 
+                                 cuchebmatrix* ccm, cucheblanczos* ccl,
+                                 cuchebstats* ccs);
+
 /* filtered lanczos routine for interval */
 int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize, cuchebmatrix* ccm, 
                                  cucheblanczos* ccl);

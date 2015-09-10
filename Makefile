@@ -26,6 +26,9 @@ objects: FORCE
 tests: FORCE
 	@$(MAKE) -C ./tests
 	
+numex: FORCE
+	@$(MAKE) -C ./numex
+	
 FORCE:
 	
 install: lib$(LIBNAME).so.$(VERSION) 

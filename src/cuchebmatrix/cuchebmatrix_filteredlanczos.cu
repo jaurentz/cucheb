@@ -4,15 +4,54 @@
 int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix* ccm,
                                  cucheblanczos* ccl){
 
+  // temp variables
+  cuchebstats ccstats;
+
+  // call filtered lanczos
+  return cuchebmatrix_filteredlanczos(neig,shift,bsize,ccm,ccl,&ccstats);
+
+} 
+  
+
+/* filtered lanczos routine for point value */
+int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix* ccm,
+                                 cucheblanczos* ccl, cuchebstats* ccstats){
+
   // check neig
   if (neig > MAX_NUM_EIGS) {
     printf("Number of desired eigenvalues is too large!\n");
     exit(1);
   }
 
+  // initialize ccstats
+  ccstats->mat_dim = 0;
+  ccstats->mat_nnz = 0;
+  ccstats->block_size = 0;
+  ccstats->num_blocks = 0;
+  ccstats->num_iters = 0;
+  ccstats->num_innerprods = 0;
+  ccstats->max_degree = 0;
+  ccstats->num_matvecs = 0;
+  ccstats->specint_time = 0.0;
+  ccstats->arnoldi_time = 0.0;
+  ccstats->num_conv = 0;
+  ccstats->max_res = 0.0;
+
+  // collect some matrix statistics
+  ccstats->mat_dim = ccm->m;
+  ccstats->mat_nnz = ccm->nnz;
+
+  // timing variables
+  time_t start, stop;
+
   // compute spectral interval
+  start = time(0);
   cuchebmatrix_specint(ccm);
-  cuchebmatrix_print(ccm);
+
+  // record compute time
+  stop = time(0);
+  ccstats->specint_time = difftime(stop,start);
+//  cuchebmatrix_print(ccm);
 
   // make sure shift is valid
   double rho;
@@ -27,6 +66,12 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
   // initialize lanczos object
   cucheblanczos_init(bsize,MAX_NUM_BLOCKS,ccm,ccl);
 
+  // collect some lanczos statistics
+  ccstats->block_size = ccl->bsize;
+  ccstats->num_blocks = ccl->nblocks;
+  int nvecs;
+  nvecs = (ccl->bsize)*(ccl->nblocks);
+
   // set starting vector
   cucheblanczos_startvecs(ccl);
 
@@ -37,6 +82,9 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
   // initialize number of converged eigenvalues
   int numconv = 0;
 
+  // start stop watch
+  start = time(0);
+
   // loop through various filters
   double tau;
   tau = 10.0*(ccm->m);
@@ -44,7 +92,7 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
 
     // create filter polynomial
     cuchebpoly_gaussianfilter(ccm->a,ccm->b,rho,pow(10.0,jj)*tau,&ccp);
-    cuchebpoly_print(&ccp);
+//    cuchebpoly_print(&ccp);
 
     // filtered arnoldi run
     cucheblanczos_filteredarnoldi(ccm,&ccp,ccl);
@@ -59,20 +107,44 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
     cucheblanczos_checkconvergence(&numconv,rho,ccm,ccl); 
 
     // print eigenvalues
-    for(int ii=0; ii < numconv; ii++){
-      printf(" evals[%d] = %+e, res[%d] = %+e\n",
-             ii,ccl->evals[ccl->index[ii]],ii,ccl->res[ccl->index[ii]]);
-    }
-    printf("\n");
+//    for(int ii=0; ii < numconv; ii++){
+//      printf(" evals[%d] = %+e, res[%d] = %+e\n",
+//             ii,ccl->evals[ccl->index[ii]],ii,ccl->res[ccl->index[ii]]);
+//    }
+//    printf("\n");
+
+    // update ccstats
+    // num_iters
+    ccstats->num_iters += 1;
+
+    // num_innerprods 
+    ccstats->num_innerprods += nvecs*(nvecs+1);
+
+    // max_degree
+    ccstats->max_degree = max(ccstats->max_degree,ccp.degree);
+    
+    // num_matvecs
+    ccstats->num_matvecs += (ccp.degree)*nvecs;
 
     // exit if converged
     if (numconv >= neig) { break; }
 
   }
 
-
   // destroy ccp
   cuchebpoly_destroy(&ccp);
+
+  // num_conv
+  ccstats->num_conv = numconv;
+
+  // max_res
+  for(int ii=0; ii < numconv; ii++){
+    ccstats->max_res = max(ccstats->max_res,ccl->res[ccl->index[ii]]);
+  }
+
+  // record compute time
+  stop = time(0);
+  ccstats->arnoldi_time = difftime(stop,start);
 
   // return  
   return 0;
