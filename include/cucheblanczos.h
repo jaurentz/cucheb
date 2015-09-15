@@ -7,9 +7,9 @@
 /* convergence tolerance */
 #ifdef DOUBLE_TOL
 #undef DOUBLE_TOL
-#define DOUBLE_TOL (double)pow(2.0,-52)
+#define DOUBLE_TOL (double)pow(2.0,-40)
 #else
-#define DOUBLE_TOL (double)pow(2.0,-52)
+#define DOUBLE_TOL (double)pow(2.0,-40)
 #endif
 
 /* maximum number of restarts */
@@ -42,6 +42,14 @@
 #define MAX_NUM_BLOCKS 100
 #else
 #define MAX_NUM_BLOCKS 100
+#endif
+
+/* maximum number of arnoldi vectors */
+#ifdef MAX_ORTH_DEPTH
+#undef MAX_ORTH_DEPTH
+#define MAX_ORTH_DEPTH 100
+#else
+#define MAX_ORTH_DEPTH 100
 #endif
 
 /* cucheblanczos data type */

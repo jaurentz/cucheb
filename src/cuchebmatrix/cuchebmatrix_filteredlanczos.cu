@@ -69,8 +69,6 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
   // collect some lanczos statistics
   ccstats->block_size = ccl->bsize;
   ccstats->num_blocks = ccl->nblocks;
-  int nvecs;
-  nvecs = (ccl->bsize)*(ccl->nblocks);
 
   // set starting vector
   cucheblanczos_startvecs(ccl);
@@ -87,15 +85,15 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
 
   // loop through various filters
   double tau;
-  tau = 10.0*(ccm->m);
+  tau = 1.0*(ccm->m);
   for (int jj=0; jj<MAX_RESTARTS+1; jj++) {
 
     // create filter polynomial
-    cuchebpoly_gaussianfilter(ccm->a,ccm->b,rho,pow(10.0,jj)*tau,&ccp);
+    cuchebpoly_gaussianfilter(ccm->a,ccm->b,rho,pow(2.0,jj)*tau,&ccp);
 //    cuchebpoly_print(&ccp);
 
     // filtered arnoldi run
-    cucheblanczos_filteredarnoldi(ccm,&ccp,ccl);
+    cucheblanczos_filteredarnoldi(ccm,&ccp,ccl,ccstats);
 
     // compute ritz values
     cucheblanczos_eig(ccm,ccl);
@@ -117,15 +115,9 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
     // num_iters
     ccstats->num_iters += 1;
 
-    // num_innerprods 
-    ccstats->num_innerprods += nvecs*(nvecs+1);
-
     // max_degree
     ccstats->max_degree = max(ccstats->max_degree,ccp.degree);
     
-    // num_matvecs
-    ccstats->num_matvecs += (ccp.degree)*nvecs;
-
     // exit if converged
     if (numconv >= neig) { break; }
 
@@ -141,6 +133,7 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
   for(int ii=0; ii < numconv; ii++){
     ccstats->max_res = max(ccstats->max_res,ccl->res[ccl->index[ii]]);
   }
+  ccstats->max_res = (ccstats->max_res)/max(abs(ccm->a),abs(ccm->b));
 
   // record compute time
   stop = time(0);
@@ -239,8 +232,6 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
   // collect some lanczos statistics
   ccstats->block_size = ccl->bsize;
   ccstats->num_blocks = ccl->nblocks;
-  int nvecs;
-  nvecs = (ccl->bsize)*(ccl->nblocks);
 
   // set starting vector
   cucheblanczos_startvecs(ccl);
@@ -263,7 +254,7 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
     cuchebpoly_print(&ccp);
 
     // filtered arnoldi run
-    cucheblanczos_filteredarnoldi(ccm,&ccp,ccl);
+    cucheblanczos_filteredarnoldi(ccm,&ccp,ccl,ccstats);
 
     // compute ritz values
     cucheblanczos_eig(ccm,ccl);
@@ -285,15 +276,9 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
     // num_iters
     ccstats->num_iters += 1;
 
-    // num_innerprods 
-    ccstats->num_innerprods += nvecs*(nvecs+1);
-
     // max_degree
     ccstats->max_degree = max(ccstats->max_degree,ccp.degree);
     
-    // num_matvecs
-    ccstats->num_matvecs += (ccp.degree)*nvecs;
-
     // exit if converged
     if (numconv > 0) { break; }
 
@@ -309,6 +294,7 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
   for(int ii=0; ii < numconv; ii++){
     ccstats->max_res = max(ccstats->max_res,ccl->res[ccl->index[ii]]);
   }
+  ccstats->max_res = (ccstats->max_res)/max(abs(ccm->a),abs(ccm->b));
 
   // record compute time
   stop = time(0);

@@ -147,7 +147,7 @@ int cucheblanczos_arnoldi(cuchebmatrix* ccm, cucheblanczos* ccl);
 
 /* filtered arnoldi run using cuchebmatrix */
 int cucheblanczos_filteredarnoldi(cuchebmatrix* ccm, cuchebpoly* ccp,
-                                       cucheblanczos* ccl);
+                                  cucheblanczos* ccl, cuchebstats* ccstats);
 
 /* compute ritz values and vectors */
 int cucheblanczos_eig(cuchebmatrix* ccm, cucheblanczos* ccl);
