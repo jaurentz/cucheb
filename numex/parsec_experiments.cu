@@ -33,7 +33,7 @@ int main(){
                                "Ga41As41H72" };
 
   // output file
-  string ofile("./numex/parsec_data.csv");
+  string ofile("./numex/parsec_data.txt");
 
   // cuchebstats array
   cuchebstats ccstats[nummats]; 
@@ -47,7 +47,7 @@ int main(){
   for (int ii=0; ii<nummats; ii++) {
 
     // print matname
-    printf(" %s\n",matnames[ii].c_str());
+    printf(" %s",matnames[ii].c_str());
 
     // set mtxfile
     mtxfile = rootdir + matnames[ii] + ".mtx";
@@ -60,6 +60,9 @@ int main(){
 
     // call filtered lanczos for an interval
     //cuchebmatrix_filteredlanczos(-10.0, -1.0, 3, &ccm, &ccl, &ccstats);
+
+    // print stats
+    cuchebstats_print(&ccstats[ii]);
 
     // destroy CCM
     cuchebmatrix_destroy(&ccm);

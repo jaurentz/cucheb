@@ -11,7 +11,7 @@ int cucheblanczos_checkconvergence(int* numconv, double rho, cuchebmatrix* ccm,
   double* evals;
   double* res;
   nvecs = (ccl->bsize)*(ccl->nblocks);
-  nrm = max(abs(ccm->a),abs(ccm->b));
+  nrm = (ccl->n)*max(abs(ccm->a),abs(ccm->b));
   index = ccl->index;
   evals = ccl->evals;
   res = ccl->res;
@@ -66,7 +66,7 @@ int cucheblanczos_checkconvergence(int* numconv, double lb, double ub, cuchebmat
   double* evals;
   double* res;
   nvecs = (ccl->bsize)*(ccl->nblocks);
-  nrm = max(abs(ccm->a),abs(ccm->b));
+  nrm = (ccl->n)*max(abs(ccm->a),abs(ccm->b));
   index = ccl->index;
   evals = ccl->evals;
   res = ccl->res;

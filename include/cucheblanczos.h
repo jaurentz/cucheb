@@ -7,9 +7,9 @@
 /* convergence tolerance */
 #ifdef DOUBLE_TOL
 #undef DOUBLE_TOL
-#define DOUBLE_TOL (double)pow(2.0,-40)
+#define DOUBLE_TOL (double)pow(2.0,-52)
 #else
-#define DOUBLE_TOL (double)pow(2.0,-40)
+#define DOUBLE_TOL (double)pow(2.0,-52)
 #endif
 
 /* maximum number of restarts */

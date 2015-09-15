@@ -34,8 +34,11 @@ int main(){
   // set starting vector
   cucheblanczos_startvecs(&ccl);
 
+  // cuchebstats
+  cuchebstats ccstats;
+
   // do arnoldi run
-  cucheblanczos_filteredarnoldi(&ccm,&ccp,&ccl);
+  cucheblanczos_filteredarnoldi(&ccm,&ccp,&ccl,&ccstats);
 
 /*
   // print arnoldi vectors

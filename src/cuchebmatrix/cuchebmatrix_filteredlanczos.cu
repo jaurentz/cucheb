@@ -86,10 +86,11 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
   // loop through various filters
   double tau;
   tau = 1.0*(ccm->m);
-  for (int jj=0; jj<MAX_RESTARTS+1; jj++) {
+  //for (int jj=0; jj<MAX_RESTARTS+1; jj++) {
+  for (int jj=0; jj<1; jj++) {
 
     // create filter polynomial
-    cuchebpoly_gaussianfilter(ccm->a,ccm->b,rho,pow(2.0,jj)*tau,&ccp);
+    cuchebpoly_gaussianfilter(ccm->a,ccm->b,rho,pow(10.0,jj)*tau,&ccp);
 //    cuchebpoly_print(&ccp);
 
     // filtered arnoldi run
