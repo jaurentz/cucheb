@@ -46,5 +46,6 @@ uninstall: clean
 clean:
 	@$(MAKE) clean -C ./src
 	@$(MAKE) clean -C ./tests
+	@$(MAKE) clean -C ./numex
 
 	
