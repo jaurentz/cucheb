@@ -6,11 +6,11 @@ int main(){
   // input file
   //string mtxfile("../matrices/H2O.mtx");
   //string mtxfile("../matrices/SiH4.mtx");
-  //string mtxfile("../matrices/Ga41As41H72.mtx");
+  string mtxfile("../matrices/Ga41As41H72.mtx");
   //string mtxfile("../matrices/Si87H76.mtx");
   //string mtxfile("../matrices/Si34H36.mtx");
   //string mtxfile("../matrices/dielFilterV2real.mtx");
-  string mtxfile("../matrices/CO.mtx");
+  //string mtxfile("../matrices/CO.mtx");
   //string mtxfile("../matrices/Si10H16.mtx");
   //string mtxfile("../matrices/G2_circuit.mtx");
   //string mtxfile("../matrices/Trefethen_20000.mtx");
@@ -26,10 +26,10 @@ int main(){
   cuchebstats ccstats;
 
   // call filtered lanczos for a point
-  //cuchebmatrix_filteredlanczos(10, -1e100, 3, &ccm, &ccl, &ccstats);
+  cuchebmatrix_filteredlanczos(10, -1e100, 3, &ccm, &ccl, &ccstats);
 
   // call filtered lanczos for an interval
-  cuchebmatrix_filteredlanczos(-10.0, 0.0, 3, &ccm, &ccl, &ccstats);
+  //cuchebmatrix_filteredlanczos(-10.0, 0.0, 3, &ccm, &ccl, &ccstats);
 
   // print ccm
   cuchebmatrix_print(&ccm);
@@ -38,8 +38,7 @@ int main(){
   cuchebstats_print(&ccstats);
 
   // print eigenvalues
-  int nvecs = (ccl.bsize)*(ccl.nblocks);
-  for (int ii=0; ii<10; ii++) {
+  for (int ii=0; ii<(ccstats.num_conv); ii++) {
     printf(" %+e, %e\n",ccl.evals[ccl.index[ii]],ccl.res[ccl.index[ii]]);
   }
   printf("\n");

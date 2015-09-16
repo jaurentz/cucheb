@@ -52,7 +52,6 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
   // record compute time
   stop = time(0);
   ccstats->specint_time = difftime(stop,start);
-//  cuchebmatrix_print(ccm);
 
   // make sure shift is valid
   double rho;
@@ -65,20 +64,18 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
   else if (shift < ccm->a) { rho = ccm->a; }
   else { rho = shift; }
 
-  // initialize lanczos object
-  //cucheblanczos_init(bsize,MAX_NUM_BLOCKS,ccm,ccl);
-  cucheblanczos_init(bsize,max(10*neig,500),ccm,ccl);
-
-  // collect some lanczos statistics
-  ccstats->block_size = ccl->bsize;
-  ccstats->num_blocks = ccl->nblocks;
-
-  // set starting vector
-  cucheblanczos_startvecs(ccl);
+  // compute interval
+  double lb, ub, scl;
+  scl = .001*(ccm->b - ccm->a);
+  lb = max(ccm->a,rho-scl);
+  ub = min(ccm->b,rho+scl);
 
   // initialize filter polynomial
   cuchebpoly ccp;
   cuchebpoly_init(&ccp);
+    
+  // create filter polynomial
+  cuchebpoly_stepfilter(ccm->a,ccm->b,lb,ub,50,&ccp);
 
   // initialize number of converged eigenvalues
   int numconv = 0;
@@ -87,13 +84,17 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
   start = time(0);
 
   // loop through various filters
-  double tau;
-  tau = 1.0*(ccm->m);
-  //for (int jj=0; jj<MAX_RESTARTS+1; jj++) {
-  for (int jj=0; jj<1; jj++) {
+  for (int jj=0; jj<MAX_RESTARTS+1; jj++) {
 
-    // create filter polynomial
-    cuchebpoly_gaussianfilter(ccm->a,ccm->b,rho,pow(10.0,jj)*tau,&ccp);
+    // initialize lanczos object
+    cucheblanczos_init(bsize,(jj+2)*50,ccm,ccl);
+
+    // collect some lanczos statistics
+    ccstats->block_size = ccl->bsize;
+    ccstats->num_blocks = ccl->nblocks;
+
+    // set starting vector
+    cucheblanczos_startvecs(ccl);
 
     // filtered arnoldi run
     cucheblanczos_filteredarnoldi(ccm,&ccp,ccl,ccstats);
@@ -116,6 +117,11 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
     
     // exit if converged
     if (numconv >= neig) { break; }
+
+    // destroy ccl 
+    if (jj < MAX_RESTARTS) {
+      cucheblanczos_destroy(ccl);
+    }
 
   }
 
@@ -223,7 +229,7 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
   else {ub = ubnd;}
 
   // initialize lanczos object
-  cucheblanczos_init(bsize,100,ccm,ccl);
+  cucheblanczos_init(bsize,MAX_NUM_BLOCKS,ccm,ccl);
 
   // collect some lanczos statistics
   ccstats->block_size = ccl->bsize;
@@ -243,8 +249,8 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
   start = time(0);
 
   // loop through various filters
-  //for (int jj=0; jj<MAX_RESTARTS+1; jj++) {
-  for (int jj=0; jj<1; jj++) {
+  for (int jj=0; jj<MAX_RESTARTS+1; jj++) {
+  //for (int jj=0; jj<1; jj++) {
 
     // create filter polynomial
     cuchebpoly_stepfilter(ccm->a,ccm->b,lb,ub,50*(jj+1),&ccp);
