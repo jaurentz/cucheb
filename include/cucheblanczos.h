@@ -58,6 +58,7 @@ typedef struct {
   int n;
   int bsize;
   int nblocks;
+  int stop;
   int* index;
   double* evals;
   double* res;

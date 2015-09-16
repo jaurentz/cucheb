@@ -23,7 +23,7 @@ int main(){
   cucheblanczos_startvecs(&ccl);
 
   // do arnoldi run
-  cucheblanczos_arnoldi(&ccm,&ccl);
+  cucheblanczos_arnoldi(5,&ccm,&ccl);
 
   // print arnoldi vectors
   double val;
@@ -39,7 +39,7 @@ int main(){
   printf("\n");
 
   // compute ritz values
-  cucheblanczos_eig(&ccm,&ccl);
+//  cucheblanczos_eig(&ccm,&ccl);
 
   // print bands
   for(int ii=0; ii < nvecs; ii++){

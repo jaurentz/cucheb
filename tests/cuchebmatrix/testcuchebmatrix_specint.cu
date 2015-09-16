@@ -5,11 +5,12 @@ int main(){
 
   // input file
   //string mtxfile("../matrices/H2O.mtx");
-  //string mtxfile("../matrices/Si10H16.mtx");
+  string mtxfile("../matrices/Si10H16.mtx");
   //string mtxfile("../matrices/Si34H36.mtx");
-  string mtxfile("../matrices/Ga41As41H72.mtx");
+  //string mtxfile("../matrices/Ga41As41H72.mtx");
   //string mtxfile("../matrices/G2_circuit.mtx");
   //string mtxfile("../matrices/Trefethen_20000.mtx");
+  //string mtxfile("../matrices/Stranke94.mtx");
 
   // cuhebmatrix
   cuchebmatrix ccm;

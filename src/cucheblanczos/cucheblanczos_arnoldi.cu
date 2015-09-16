@@ -1,10 +1,10 @@
 #include <cucheb.h>
 
 /* arnoldi run using cuchebmatrix */
-int cucheblanczos_arnoldi(cuchebmatrix* ccm, cucheblanczos* ccl){
+int cucheblanczos_arnoldi(int nsteps, cuchebmatrix* ccm, cucheblanczos* ccl){
 
   // local variables
-  int n, bsize, nblocks, nvecs;
+  int n, bsize, nblocks, nvecs, stop;
   double scl, one = 1.0, zero = 0.0, mone = -1.0;
   double* bands;
   double* dtemp;
@@ -14,20 +14,25 @@ int cucheblanczos_arnoldi(cuchebmatrix* ccm, cucheblanczos* ccl){
   bsize = ccl->bsize;
   nblocks = ccl->nblocks;
   nvecs = bsize*nblocks;
+  stop = ccl->stop;
   bands = ccl->bands;
   dtemp = ccl->dtemp;
   dvecs = ccl->dvecs;
   dschurvecs = ccl->dschurvecs;
 
+  // set niters
+  int niters;
+  niters = min(nsteps,nblocks-stop);
+
   // loop through nblocks
   int ind;
-  for(int ii=0; ii < nblocks; ii++){
+  for(int ii=0; ii < niters; ii++){
 
     // inner loop for bsize blocks
     for(int jj=0; jj < bsize; jj++){
 
       // set index
-      ind = ii*bsize + jj;
+      ind = (ii+stop)*bsize + jj;
 
       // apply matrix
       cuchebmatrix_mv(ccm,&one,&dvecs[ind*n],&zero,&dvecs[(ind+bsize)*n]);
@@ -56,8 +61,12 @@ int cucheblanczos_arnoldi(cuchebmatrix* ccm, cucheblanczos* ccl){
 
   }
 
+  // update stop 
+  ccl->stop += niters;
+
   // copy data to host
-  cudaMemcpy(&(ccl->schurvecs)[0],&dschurvecs[0],nvecs*(nvecs+bsize)*sizeof(double),
+  cudaMemcpy(&(ccl->schurvecs)[0],&dschurvecs[0],
+             (ccl->stop)*bsize*(nvecs+bsize)*sizeof(double),
              cudaMemcpyDeviceToHost);
 
   // return  

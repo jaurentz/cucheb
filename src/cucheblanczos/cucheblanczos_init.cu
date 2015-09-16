@@ -6,7 +6,8 @@ int cucheblanczos_init(int bsize, int nblocks, cuchebmatrix* ccm, cucheblanczos*
   // set dimensions
   ccl->n = ccm->m;
   ccl->bsize = min(max(1,bsize),MAX_BLOCK_SIZE);
-  ccl->nblocks = min(max(1,nblocks),MAX_NUM_BLOCKS);
+  ccl->nblocks = min(min((ccl->n)/(ccl->bsize),max(1,nblocks)),MAX_NUM_BLOCKS);
+  ccl->stop = 0;
 
   // allocate host memory
   int nvecs;

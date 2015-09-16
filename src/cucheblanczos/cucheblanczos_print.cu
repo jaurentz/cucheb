@@ -14,6 +14,9 @@ int cucheblanczos_print(cucheblanczos* ccl){
  
   // print nblocks
   printf(" nblocks = %d\n",ccl->nblocks);
+ 
+  // print stop
+  printf(" stop = %d\n",ccl->stop);
   printf("\n");
  
   // return 

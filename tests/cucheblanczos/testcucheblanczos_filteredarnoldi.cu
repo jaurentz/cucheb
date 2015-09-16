@@ -5,9 +5,9 @@ int main(){
 
   // input file
   //string mtxfile("../matrices/H2O.mtx");
-  string mtxfile("../matrices/G2_circuit.mtx");
+  //string mtxfile("../matrices/G2_circuit.mtx");
   //string mtxfile("../matrices/Si10H16.mtx");
-  //string mtxfile("../matrices/Stranke94.mtx");
+  string mtxfile("../matrices/Stranke94.mtx");
 
   // cuchebmatrix
   cuchebmatrix ccm;
@@ -17,16 +17,16 @@ int main(){
 
   // filter polynomial
   double tau;
-  tau = 100.0*(ccm.m);
+  tau = 10.0*(ccm.m);
   cuchebpoly ccp;
   cuchebpoly_init(&ccp);
-  cuchebpoly_gaussianfilter(ccm.a,ccm.b,0,tau,&ccp);
-  //cuchebpoly_pointfilter(ccm.a,ccm.b,0,100,&ccp);
+  //cuchebpoly_gaussianfilter(ccm.a,ccm.b,0,tau,&ccp);
+  cuchebpoly_pointfilter(ccm.a,ccm.b,0,10,&ccp);
   cuchebpoly_print(&ccp);
 
   // cucheblanczos
   cucheblanczos ccl;
-  cucheblanczos_init(3, 100, &ccm, &ccl);
+  cucheblanczos_init(1, MAX_NUM_BLOCKS, &ccm, &ccl);
 
   // print CCB
   cucheblanczos_print(&ccl);
@@ -38,7 +38,10 @@ int main(){
   cuchebstats ccstats;
 
   // do arnoldi run
-  cucheblanczos_filteredarnoldi(&ccm,&ccp,&ccl,&ccstats);
+  cucheblanczos_filteredarnoldi(5,&ccm,&ccp,&ccl,&ccstats);
+
+  // print ccl
+  cucheblanczos_print(&ccl);
 
 /*
   // print arnoldi vectors
@@ -56,7 +59,7 @@ int main(){
 */
 
   // compute ritz values
-  cucheblanczos_eig(&ccm,&ccl);
+//  cucheblanczos_eig(&ccm,&ccl);
 
 /*
   // print bands
