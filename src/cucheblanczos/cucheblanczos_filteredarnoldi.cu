@@ -41,11 +41,6 @@ int cucheblanczos_filteredarnoldi(cuchebmatrix* ccm, cuchebpoly* ccp,
       start = ind + bsize - odepth;
 
       // orthogonalize
-//      cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, (ind+bsize), &one, &dvecs[0], n, 
-//                  &dvecs[(ind+bsize)*n], 1, &zero, &dschurvecs[ind*(nvecs+bsize)], 1);
-//      cublasDgemv(ccm->cublashandle, CUBLAS_OP_N, n, (ind+bsize), &mone, &dvecs[0], n, 
-//                  &dschurvecs[ind*(nvecs+bsize)], 1, &one, &dvecs[(ind+bsize)*n], 1);
-
       cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, odepth, &one, &dvecs[start*n], 
                   n, &dvecs[(ind+bsize)*n], 1, &zero, &dschurvecs[ind*(nvecs+bsize)+start], 1);
       cublasDgemv(ccm->cublashandle, CUBLAS_OP_N, n, odepth, &mone, &dvecs[start*n], 
@@ -55,13 +50,6 @@ int cucheblanczos_filteredarnoldi(cuchebmatrix* ccm, cuchebpoly* ccp,
       ccstats->num_innerprods += odepth;
 
       // reorthogonalize
-//      cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, (ind+bsize), &one, &dvecs[0], n, 
-//                &dvecs[(ind+bsize)*n], 1, &zero, &dtemp[0], 1);
-//      cublasDgemv(ccm->cublashandle, CUBLAS_OP_N, n, (ind+bsize), &mone, &dvecs[0], n, 
-//                &dtemp[0], 1, &one, &dvecs[(ind+bsize)*n], 1);
-//      cublasDaxpy(ccm->cublashandle, (ind+bsize), &one, &dtemp[0], 1, 
-//                &dschurvecs[ind*(nvecs+bsize)], 1);
-
       cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, odepth, &one, &dvecs[start*n], 
                   n, &dvecs[(ind+bsize)*n], 1, &zero, &dtemp[0], 1);
       cublasDgemv(ccm->cublashandle, CUBLAS_OP_N, n, odepth, &mone, &dvecs[start*n], 

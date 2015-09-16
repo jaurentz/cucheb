@@ -39,17 +39,17 @@
 /* maximum number of arnoldi vectors */
 #ifdef MAX_NUM_BLOCKS
 #undef MAX_NUM_BLOCKS
-#define MAX_NUM_BLOCKS 100
+#define MAX_NUM_BLOCKS 200
 #else
-#define MAX_NUM_BLOCKS 100
+#define MAX_NUM_BLOCKS 200
 #endif
 
 /* maximum number of arnoldi vectors */
 #ifdef MAX_ORTH_DEPTH
 #undef MAX_ORTH_DEPTH
-#define MAX_ORTH_DEPTH 100
+#define MAX_ORTH_DEPTH 200
 #else
-#define MAX_ORTH_DEPTH 100
+#define MAX_ORTH_DEPTH 200
 #endif
 
 /* cucheblanczos data type */

@@ -23,9 +23,9 @@
 /* construction tolerance */
 #ifdef DOUBLE_EPS
 #undef DOUBLE_EPS
-#define DOUBLE_EPS (double)pow(2.0,-6)
+#define DOUBLE_EPS (double)pow(2.0,-8)
 #else
-#define DOUBLE_EPS (double)pow(2.0,-6)
+#define DOUBLE_EPS (double)pow(2.0,-8)
 #endif
 
 /* maximum filter degree */

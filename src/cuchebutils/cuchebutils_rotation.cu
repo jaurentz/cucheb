@@ -11,7 +11,8 @@ int cuchebutils_rotation(const double a, const double b, double* c, double* s,
 
   // return if a and/or b is NAN
   if ( a != a || b != b ){
-    printf(" a and b must not be NAN!\n");
+    printf("\ncuchebutils_rotation:\n");
+    printf(" a and b must not be NAN!\n\n");
     exit(1);
   }
 

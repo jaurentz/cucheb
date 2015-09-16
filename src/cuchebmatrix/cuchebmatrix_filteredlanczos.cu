@@ -19,7 +19,8 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
 
   // check neig
   if (neig > MAX_NUM_EIGS) {
-    printf("Number of desired eigenvalues is too large!\n");
+    printf("\ncuchebmatrix_filteredlanczos:\n");
+    printf(" Number of desired eigenvalues is too large!\n\n");
     exit(1);
   }
 
@@ -56,7 +57,8 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
   // make sure shift is valid
   double rho;
   if (isnan(shift)) {
-    printf("Shift cannot be NaN!\n");
+    printf("\ncuchebmatrix_filteredlanczos:\n");
+    printf(" Shift cannot be NaN!\n\n");
     exit(1);
   }
   else if (shift > ccm->b) { rho = ccm->b; }
@@ -64,7 +66,8 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
   else { rho = shift; }
 
   // initialize lanczos object
-  cucheblanczos_init(bsize,MAX_NUM_BLOCKS,ccm,ccl);
+  //cucheblanczos_init(bsize,MAX_NUM_BLOCKS,ccm,ccl);
+  cucheblanczos_init(bsize,max(10*neig,500),ccm,ccl);
 
   // collect some lanczos statistics
   ccstats->block_size = ccl->bsize;
@@ -91,7 +94,6 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
 
     // create filter polynomial
     cuchebpoly_gaussianfilter(ccm->a,ccm->b,rho,pow(10.0,jj)*tau,&ccp);
-//    cuchebpoly_print(&ccp);
 
     // filtered arnoldi run
     cucheblanczos_filteredarnoldi(ccm,&ccp,ccl,ccstats);
@@ -104,13 +106,6 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
 
     // check convergence
     cucheblanczos_checkconvergence(&numconv,rho,ccm,ccl); 
-
-    // print eigenvalues
-//    for(int ii=0; ii < numconv; ii++){
-//      printf(" evals[%d] = %+e, res[%d] = %+e\n",
-//             ii,ccl->evals[ccl->index[ii]],ii,ccl->res[ccl->index[ii]]);
-//    }
-//    printf("\n");
 
     // update ccstats
     // num_iters
@@ -228,7 +223,7 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
   else {ub = ubnd;}
 
   // initialize lanczos object
-  cucheblanczos_init(bsize,MAX_NUM_BLOCKS,ccm,ccl);
+  cucheblanczos_init(bsize,100,ccm,ccl);
 
   // collect some lanczos statistics
   ccstats->block_size = ccl->bsize;
@@ -248,11 +243,11 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
   start = time(0);
 
   // loop through various filters
-  for (int jj=0; jj<MAX_RESTARTS+1; jj++) {
+  //for (int jj=0; jj<MAX_RESTARTS+1; jj++) {
+  for (int jj=0; jj<1; jj++) {
 
     // create filter polynomial
-    cuchebpoly_stepfilter(ccm->a,ccm->b,lb,ub,50*(jj+2),&ccp);
-    cuchebpoly_print(&ccp);
+    cuchebpoly_stepfilter(ccm->a,ccm->b,lb,ub,50*(jj+1),&ccp);
 
     // filtered arnoldi run
     cucheblanczos_filteredarnoldi(ccm,&ccp,ccl,ccstats);
@@ -265,13 +260,6 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
 
     // check convergence
     cucheblanczos_checkconvergence(&numconv,lb,ub,ccm,ccl); 
-
-    // print eigenvalues
-    for(int ii=0; ii < numconv; ii++){
-      printf(" evals[%d] = %+e, res[%d] = %+e\n",
-             ii,ccl->evals[ccl->index[ii]],ii,ccl->res[ccl->index[ii]]);
-    }
-    printf("\n");
 
     // update ccstats
     // num_iters
