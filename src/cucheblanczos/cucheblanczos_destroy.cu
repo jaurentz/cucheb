@@ -15,6 +15,9 @@ int cucheblanczos_destroy(cucheblanczos* ccl){
   // free res
   delete[] ccl->res;
 
+  // free vecs
+  delete[] ccl->vecs;
+
   // free schurvecs
   delete[] ccl->schurvecs;
 

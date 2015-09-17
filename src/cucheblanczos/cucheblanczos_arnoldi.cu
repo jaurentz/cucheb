@@ -39,7 +39,8 @@ int cucheblanczos_arnoldi(int nsteps, cuchebmatrix* ccm, cucheblanczos* ccl){
 
       // orthogonalize
       cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, (ind+bsize), &one, &dvecs[0], n, 
-                  &dvecs[(ind+bsize)*n], 1, &zero, &dschurvecs[ind*(nvecs+bsize)], 1);
+                  &dvecs[(ind+bsize)*n], 1, &zero,
+                  &dschurvecs[ind*(nvecs+bsize)], 1);
       cublasDgemv(ccm->cublashandle, CUBLAS_OP_N, n, (ind+bsize), &mone, &dvecs[0], n, 
                   &dschurvecs[ind*(nvecs+bsize)], 1, &one, &dvecs[(ind+bsize)*n], 1);
 
@@ -52,9 +53,10 @@ int cucheblanczos_arnoldi(int nsteps, cuchebmatrix* ccm, cucheblanczos* ccl){
                 &dschurvecs[ind*(nvecs+bsize)], 1);
 
       // normalize
-      cublasDnrm2(ccm->cublashandle, n, &dvecs[(ind+bsize)*n], 1,
-                  &bands[(ind+1)*(bsize+1)-1]);
-      scl = 1.0/bands[(ind+1)*(bsize+1)-1];
+      cublasDnrm2(ccm->cublashandle, n, &dvecs[(ind+bsize)*n], 1, &scl);
+      cudaMemcpy(&dschurvecs[ind*(nvecs+bsize)+ind+bsize], &scl,
+                 sizeof(double), cudaMemcpyHostToDevice);
+      scl = 1.0/scl;
       cublasDscal(ccm->cublashandle, n, &scl, &dvecs[(ind+bsize)*n], 1);
 
     }

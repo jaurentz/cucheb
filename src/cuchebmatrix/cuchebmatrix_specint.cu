@@ -5,7 +5,7 @@ int cuchebmatrix_specint(cuchebmatrix* ccm){
 
   // number of arnoldi steps
   int nblocks;
-  nblocks = min(ccm->m,MAX_NUM_BLOCKS);
+  nblocks = min(ccm->m,200);
 
   // create lanczos object
   cucheblanczos ccl;
@@ -18,17 +18,12 @@ int cuchebmatrix_specint(cuchebmatrix* ccm){
   cucheblanczos_arnoldi(nblocks,ccm,&ccl);
 
   // compute ritz values
-  cucheblanczos_rayleigh(ccm,&ccl);
-
-
-  for (int ii=0; ii < nblocks; ii++){
-    printf(" %+e, %e\n",ccl.evals[ii],ccl.res[ii]);
-  }
+  cucheblanczos_ritz(ccm,&ccl);
 
   // set upper endpoint
   int indb = 0;
   ccm->b = -1e300;
-  for (int ii=0; ii < nblocks; ii++){
+  for (int ii=0; ii < ccl.nblocks; ii++){
     if (ccl.evals[ii] > ccm->b) {
       ccm->b = ccl.evals[ii];
       indb = ii;
@@ -38,7 +33,7 @@ int cuchebmatrix_specint(cuchebmatrix* ccm){
   // set lower endpoint
   int inda = 0;
   ccm->a = ccm->b;
-  for (int ii=0; ii < nblocks; ii++){
+  for (int ii=0; ii < ccl.nblocks; ii++){
     if (ccl.evals[ii] < ccm->a) {
       ccm->a = ccl.evals[ii];
       inda = ii;
@@ -46,8 +41,10 @@ int cuchebmatrix_specint(cuchebmatrix* ccm){
   }
 
   // add fudge factor
-  ccm->a = ccm->a - ccl.res[inda]*max(abs(ccm->b),abs(ccm->a));
-  ccm->b = ccm->b + ccl.res[indb]*max(abs(ccm->b),abs(ccm->a));
+  //ccm->a = ccm->a - ccl.res[inda]*max(abs(ccm->b),abs(ccm->a));
+  //ccm->b = ccm->b + ccl.res[indb]*max(abs(ccm->b),abs(ccm->a));
+  ccm->a = ccm->a - .01*abs(ccm->a);
+  ccm->b = ccm->b + .01*abs(ccm->b);
 
   // destroy ccl
   cucheblanczos_destroy(&ccl);

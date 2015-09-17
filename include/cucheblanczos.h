@@ -15,9 +15,9 @@
 /* maximum number of restarts */
 #ifdef MAX_RESTARTS
 #undef MAX_RESTARTS
-#define MAX_RESTARTS 2
+#define MAX_RESTARTS 20
 #else
-#define MAX_RESTARTS 2
+#define MAX_RESTARTS 20
 #endif
 
 /* maximum number of computed eigenvalues */
@@ -31,25 +31,25 @@
 /* maximum number of restarts */
 #ifdef MAX_BLOCK_SIZE
 #undef MAX_BLOCK_SIZE
-#define MAX_BLOCK_SIZE 10
+#define MAX_BLOCK_SIZE 3
 #else
-#define MAX_BLOCK_SIZE 10
+#define MAX_BLOCK_SIZE 3
 #endif
 
 /* maximum number of arnoldi vectors */
 #ifdef MAX_NUM_BLOCKS
 #undef MAX_NUM_BLOCKS
-#define MAX_NUM_BLOCKS 300
+#define MAX_NUM_BLOCKS 600
 #else
-#define MAX_NUM_BLOCKS 300
+#define MAX_NUM_BLOCKS 600
 #endif
 
 /* maximum number of arnoldi vectors */
 #ifdef MAX_ORTH_DEPTH
 #undef MAX_ORTH_DEPTH
-#define MAX_ORTH_DEPTH 300
+#define MAX_ORTH_DEPTH 600
 #else
-#define MAX_ORTH_DEPTH 300
+#define MAX_ORTH_DEPTH 600
 #endif
 
 /* cucheblanczos data type */
@@ -63,6 +63,7 @@ typedef struct {
   double* evals;
   double* res;
   double* bands;
+  double* vecs;
   double* schurvecs;
 
   double* dtemp;

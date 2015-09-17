@@ -132,6 +132,13 @@ int cuchebutils_bandsymqr(int n, int bwidth, double* bands, int ldbands,
 //  }
 //  printf("\n");
 
+    // print error if not converged
+    if (ii == maxits-1) {
+      printf("cuchebutils_bandsymqr:\n");
+      printf(" Did not converge!\n\n");
+      return 1;
+    }
+
   } 
 
   // return success

@@ -149,11 +149,18 @@ int cucheblanczos_arnoldi(int nsteps, cuchebmatrix* ccm, cucheblanczos* ccl);
 int cucheblanczos_filteredarnoldi(int nsteps, cuchebmatrix* ccm, cuchebpoly* ccp,
                                   cucheblanczos* ccl, cuchebstats* ccstats);
 
+/* compute ritz values */
+int cucheblanczos_ritz(cuchebmatrix* ccm, cucheblanczos* ccl);
+
 /* compute rayleigh quotients */
 int cucheblanczos_rayleigh(cuchebmatrix* ccm, cucheblanczos* ccl);
 
 /* reset Arnoldi vectors */
 int cucheblanczos_reset(cuchebmatrix* ccm, cucheblanczos* ccl);
+
+/* check convergence and sort using shift */
+int cucheblanczos_checkconvergence(int* numconv, double rho,
+                                   cuchebmatrix* ccm, cucheblanczos* ccl);
 
 /* check convergence and sort using interval bounds */
 int cucheblanczos_checkconvergence(int* numconv, double lb, double ub,

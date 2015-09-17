@@ -32,6 +32,11 @@ int cucheblanczos_init(int bsize, int nblocks, cuchebmatrix* ccm, cucheblanczos*
     printf("Memory allocation failed.\n");
     exit(1);
   }
+  ccl->vecs = new double[nvecs*(ccl->n)];
+  if (ccl->vecs == NULL) {
+    printf("Memory allocation failed.\n");
+    exit(1);
+  }
   ccl->schurvecs = new double[nvecs*(nvecs + ccl->bsize)];
   if (ccl->schurvecs == NULL) {
     printf("Memory allocation failed.\n");
