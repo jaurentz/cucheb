@@ -36,7 +36,8 @@ int cucheblanczos_rayleigh(cuchebmatrix* ccm, cucheblanczos* ccl){
 
   // compute rayleigh quotients and residuals
   double one = 1.0, zero = 0.0;
-  double scl, rval;
+  double rval, nrm;
+  nrm = max(abs(ccm->a),abs(ccm->b));
   for(int ii=0; ii<stop*bsize; ii++){
  
     // compute ritz vector
@@ -50,9 +51,8 @@ int cucheblanczos_rayleigh(cuchebmatrix* ccm, cucheblanczos* ccl){
     cuchebmatrix_mv(ccm,&one,dv1,&zero,dv2);
 
     // compute rayleigh quotient
-    cublasDnrm2(ccm->cublashandle,n,dv1,1,&scl);
     cublasDdot(ccm->cublashandle,n,dv1,1,dv2,1,&evals[ii]);
-    evals[ii] = evals[ii]/scl/scl;
+    evals[ii] = evals[ii];
 
     // compute residual vector
     rval = -evals[ii];
@@ -60,7 +60,7 @@ int cucheblanczos_rayleigh(cuchebmatrix* ccm, cucheblanczos* ccl){
 
     // compute norm of residual
     cublasDnrm2(ccm->cublashandle,n,dv2,1,&res[ii]);
-    res[ii] = res[ii]/scl;
+    res[ii] = res[ii]/nrm;
 
     // reset index 
     index[ii] = ii;

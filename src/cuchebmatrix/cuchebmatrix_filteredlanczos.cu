@@ -92,7 +92,7 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
   // start stop watch
   start = time(0);
 
-  // loop through various filters
+  // loop through various Krylov subspaces
   for (int jj=0; jj<MAX_RESTARTS; jj++) {
 
     // filtered arnoldi run
@@ -121,7 +121,6 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
   for(int ii=0; ii < ccl->nconv; ii++){
     ccstats->max_res = max(ccstats->max_res,ccl->res[ccl->index[ii]]);
   }
-  ccstats->max_res = (ccstats->max_res)/max(abs(ccm->a),abs(ccm->b));
 
   // record compute time
   stop = time(0);
@@ -168,7 +167,7 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
   ccstats->arnoldi_time = 0.0;
   ccstats->num_conv = 0;
   ccstats->max_res = 0.0;
-/*
+
   // collect some matrix statistics
   ccstats->mat_dim = ccm->m;
   ccstats->mat_nnz = ccm->nnz;
@@ -183,7 +182,6 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
   // record compute time
   stop = time(0);
   ccstats->specint_time = difftime(stop,start);
-  cuchebmatrix_print(ccm);
 
   // make sure lbnd is valid
   if (isnan(lbnd)) {
@@ -227,9 +225,6 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
   // max_degree
   ccstats->max_degree = max(ccstats->max_degree,ccp.degree);
     
-  // initialize number of converged eigenvalues
-  int numconv = 0;
-
   // initialize lanczos object
   cucheblanczos_init(bsize,MAX_NUM_BLOCKS,ccm,ccl);
 
@@ -242,25 +237,33 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
   // start stop watch
   start = time(0);
 
-  // loop through various filters
-  for (int jj=0; jj<MAX_RESTARTS+1; jj++) {
+  // loop through various Krylov subspaces
+  int numint = 0;
+  for (int jj=0; jj<MAX_RESTARTS; jj++) {
 
     // filtered arnoldi run
-    cucheblanczos_filteredarnoldi(50,ccm,&ccp,ccl,ccstats);
+    cucheblanczos_filteredarnoldi(MAX_STEP_SIZE,ccm,&ccp,ccl,ccstats);
 
     // update ccstats
     // num_iters
     ccstats->num_iters += 1;
-    ccstats->num_blocks += 50;
+    ccstats->num_blocks += MAX_STEP_SIZE;
 
-    // compute ritz values
+    // compute ritz values of p(A)
     cucheblanczos_ritz(ccm,ccl);
 
-    // check convergence
-    cucheblanczos_checkconvergence(&numconv,lb,ub,ccm,ccl); 
+    // check to see if in interval
+    numint = 0;
+    for(int ii=0; ii<ccl->nconv; ii++){
+      if(ccl->evals[ccl->index[ii]] >= .5){ numint += 1; }
+      else { break; }
+    }
 
     // exit if converged
-    if (numconv > 0) { break; }
+    if (ccl->nconv > numint) { 
+      ccl->nconv = numint;
+      break; 
+    }
 
   }
 
@@ -268,13 +271,12 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
   cucheblanczos_rayleigh(ccm,ccl);
 
   // num_conv
-  ccstats->num_conv = numconv;
+  ccstats->num_conv = ccl->nconv;
 
   // max_res
-  for(int ii=0; ii < numconv; ii++){
+  for(int ii=0; ii < ccl->nconv; ii++){
     ccstats->max_res = max(ccstats->max_res,ccl->res[ccl->index[ii]]);
   }
-  ccstats->max_res = (ccstats->max_res)/max(abs(ccm->a),abs(ccm->b));
 
   // record compute time
   stop = time(0);
@@ -282,7 +284,7 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
 
   // destroy ccp
   cuchebpoly_destroy(&ccp);
-*/
+
   // return  
   return 0;
 
