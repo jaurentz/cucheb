@@ -7,7 +7,6 @@ int cucheblanczos_filteredarnoldi(int nsteps, cuchebmatrix* ccm, cuchebpoly* ccp
   // local variables
   int n, bsize, nblocks, nvecs, stop;
   double scl, one = 1.0, zero = 0.0, mone = -1.0;
-  double* bands;
   double* dtemp;
   double* dvecs;
   double* dschurvecs;
@@ -16,7 +15,6 @@ int cucheblanczos_filteredarnoldi(int nsteps, cuchebmatrix* ccm, cuchebpoly* ccp
   nblocks = ccl->nblocks;
   nvecs = bsize*nblocks;
   stop = ccl->stop;
-  bands = ccl->bands;
   dtemp = ccl->dtemp;
   dvecs = ccl->dvecs;
   dschurvecs = ccl->dschurvecs;

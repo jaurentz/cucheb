@@ -3,48 +3,40 @@
 /* routine to estimate spectral interval */
 int cuchebmatrix_specint(cuchebmatrix* ccm){
 
-  // number of arnoldi steps
-  int nblocks;
-  nblocks = min(ccm->m,200);
+  // create stats object
+  cuchebstats ccstats;
 
   // create lanczos object
   cucheblanczos ccl;
-  cucheblanczos_init(1,nblocks,ccm,&ccl);
+  cucheblanczos_init(1,MAX_NUM_BLOCKS,ccm,&ccl);
 
   // set starting vector
   cucheblanczos_startvecs(&ccl);
 
-  // arnoldi run
-  cucheblanczos_arnoldi(nblocks,ccm,&ccl);
+  // loop to adaptively compute spectral interval
+  int inda, indb;
+  double nrm;
+  for (int jj=0; jj<MAX_RESTARTS; jj++){
 
-  // compute ritz values
-  cucheblanczos_ritz(ccm,&ccl);
+    // arnoldi run
+    cucheblanczos_arnoldi(MAX_STEP_SIZE,ccm,&ccl,&ccstats);
 
-  // set upper endpoint
-  int indb = 0;
-  ccm->b = -1e300;
-  for (int ii=0; ii < ccl.nblocks; ii++){
-    if (ccl.evals[ii] > ccm->b) {
-      ccm->b = ccl.evals[ii];
-      indb = ii;
-    }
+    // compute ritz values
+    cucheblanczos_ritz(ccm,&ccl);
+
+    // set upper endpoint
+    indb = ccl.index[0];
+    ccm->b = ccl.evals[indb];
+
+    // set lower endpoint
+    inda = ccl.index[ccl.bsize*ccl.stop-1];
+    ccm->a = ccl.evals[inda];
+
+    // check convergence
+    nrm = sqrt(DOUBLE_TOL)*max(abs(ccm->a),abs(ccm->b));
+    if ( max(ccl.res[inda],ccl.res[indb]) < nrm ) { break; }
+
   }
-
-  // set lower endpoint
-  int inda = 0;
-  ccm->a = ccm->b;
-  for (int ii=0; ii < ccl.nblocks; ii++){
-    if (ccl.evals[ii] < ccm->a) {
-      ccm->a = ccl.evals[ii];
-      inda = ii;
-    }
-  }
-
-  // add fudge factor
-  //ccm->a = ccm->a - ccl.res[inda]*max(abs(ccm->b),abs(ccm->a));
-  //ccm->b = ccm->b + ccl.res[indb]*max(abs(ccm->b),abs(ccm->a));
-  ccm->a = ccm->a - .01*abs(ccm->a);
-  ccm->b = ccm->b + .01*abs(ccm->b);
 
   // destroy ccl
   cucheblanczos_destroy(&ccl);

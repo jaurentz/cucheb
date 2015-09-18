@@ -1,12 +1,12 @@
 #include <cucheb.h>
 
 /* arnoldi run using cuchebmatrix */
-int cucheblanczos_arnoldi(int nsteps, cuchebmatrix* ccm, cucheblanczos* ccl){
+int cucheblanczos_arnoldi(int nsteps, cuchebmatrix* ccm, cucheblanczos* ccl,
+                          cuchebstats* ccstats){
 
   // local variables
   int n, bsize, nblocks, nvecs, stop;
   double scl, one = 1.0, zero = 0.0, mone = -1.0;
-  double* bands;
   double* dtemp;
   double* dvecs;
   double* dschurvecs;
@@ -15,7 +15,6 @@ int cucheblanczos_arnoldi(int nsteps, cuchebmatrix* ccm, cucheblanczos* ccl){
   nblocks = ccl->nblocks;
   nvecs = bsize*nblocks;
   stop = ccl->stop;
-  bands = ccl->bands;
   dtemp = ccl->dtemp;
   dvecs = ccl->dvecs;
   dschurvecs = ccl->dschurvecs;
@@ -25,7 +24,7 @@ int cucheblanczos_arnoldi(int nsteps, cuchebmatrix* ccm, cucheblanczos* ccl){
   niters = min(nsteps,nblocks-stop);
 
   // loop through nblocks
-  int ind;
+  int ind, odepth, start;
   for(int ii=0; ii < niters; ii++){
 
     // inner loop for bsize blocks
@@ -37,20 +36,33 @@ int cucheblanczos_arnoldi(int nsteps, cuchebmatrix* ccm, cucheblanczos* ccl){
       // apply matrix
       cuchebmatrix_mv(ccm,&one,&dvecs[ind*n],&zero,&dvecs[(ind+bsize)*n]);
 
+      // num_matvecs
+      ccstats->num_matvecs += 1;
+
+      // compute orthogonalization depth
+      odepth = min((MAX_ORTH_DEPTH)*bsize+jj,ind+bsize);
+      start = ind + bsize - odepth;
+
       // orthogonalize
-      cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, (ind+bsize), &one, &dvecs[0], n, 
-                  &dvecs[(ind+bsize)*n], 1, &zero,
-                  &dschurvecs[ind*(nvecs+bsize)], 1);
-      cublasDgemv(ccm->cublashandle, CUBLAS_OP_N, n, (ind+bsize), &mone, &dvecs[0], n, 
-                  &dschurvecs[ind*(nvecs+bsize)], 1, &one, &dvecs[(ind+bsize)*n], 1);
+      cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, odepth, &one, &dvecs[start*n], 
+                  n, &dvecs[(ind+bsize)*n], 1, &zero,
+                  &dschurvecs[ind*(nvecs+bsize)+start], 1);
+      cublasDgemv(ccm->cublashandle, CUBLAS_OP_N, n, odepth, &mone, &dvecs[start*n], 
+                  n, &dschurvecs[ind*(nvecs+bsize)+start], 1, &one, &dvecs[(ind+bsize)*n], 1);
+
+      // num_innerprods 
+      ccstats->num_innerprods += odepth;
 
       // reorthogonalize
-      cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, (ind+bsize), &one, &dvecs[0], n, 
-                &dvecs[(ind+bsize)*n], 1, &zero, &dtemp[0], 1);
-      cublasDgemv(ccm->cublashandle, CUBLAS_OP_N, n, (ind+bsize), &mone, &dvecs[0], n, 
-                &dtemp[0], 1, &one, &dvecs[(ind+bsize)*n], 1);
-      cublasDaxpy(ccm->cublashandle, (ind+bsize), &one, &dtemp[0], 1, 
-                &dschurvecs[ind*(nvecs+bsize)], 1);
+      cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, odepth, &one, &dvecs[start*n], 
+                  n, &dvecs[(ind+bsize)*n], 1, &zero, &dtemp[0], 1);
+      cublasDgemv(ccm->cublashandle, CUBLAS_OP_N, n, odepth, &mone, &dvecs[start*n], 
+                  n, &dtemp[0], 1, &one, &dvecs[(ind+bsize)*n], 1);
+      cublasDaxpy(ccm->cublashandle, odepth, &one, &dtemp[0], 1, 
+                  &dschurvecs[ind*(nvecs+bsize)+start], 1);
+
+      // num_innerprods 
+      ccstats->num_innerprods += odepth;
 
       // normalize
       cublasDnrm2(ccm->cublashandle, n, &dvecs[(ind+bsize)*n], 1, &scl);
@@ -70,6 +82,7 @@ int cucheblanczos_arnoldi(int nsteps, cuchebmatrix* ccm, cucheblanczos* ccl){
   cudaMemcpy(&(ccl->schurvecs)[0],&dschurvecs[0],
              (ccl->stop)*bsize*(nvecs+bsize)*sizeof(double),
              cudaMemcpyDeviceToHost);
+
 
   // return  
   return 0;

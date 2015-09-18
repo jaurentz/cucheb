@@ -17,6 +17,9 @@ int cucheblanczos_print(cucheblanczos* ccl){
  
   // print stop
   printf(" stop = %d\n",ccl->stop);
+ 
+  // print nconv
+  printf(" nconv = %d\n",ccl->nconv);
   printf("\n");
  
   // return 

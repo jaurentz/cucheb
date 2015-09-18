@@ -8,6 +8,9 @@ int main(){
   //string mtxfile("../matrices/Trefethen_20.mtx");
   string mtxfile("../matrices/Stranke94.mtx");
 
+  // cuchebstats
+  cuchebstats ccstats;
+
   // cuchebmatrix
   cuchebmatrix ccm;
   cuchebmatrix_init(mtxfile, &ccm);
@@ -23,7 +26,7 @@ int main(){
   cucheblanczos_startvecs(&ccl);
 
   // do arnoldi run
-  cucheblanczos_arnoldi(5,&ccm,&ccl);
+  cucheblanczos_arnoldi(5,&ccm,&ccl,&ccstats);
 
   // print arnoldi vectors
   double val;
