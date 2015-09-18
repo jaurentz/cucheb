@@ -15,26 +15,21 @@ SRCS := $(wildcard ./src/*/*.cu)
 # CUCHEB individual objects
 OBJS := $(SRCS:.cu=.o)
 
-# CUCHEB individual tests
-TESTSRCS := $(wildcard ./tests/*/*.cu)
-TESTS := $(TESTSRCS:.cu=)
-
 all: lib$(LIBNAME).so.$(VERSION)
 
-tests: $(TESTS) $(TESTSRCS)
-	@$(MAKE) -C ./tests
-	
-$(TESTSRCS):
+lib$(LIBNAME).so.$(VERSION): objects
+	@$(CUC) --compiler-options '-fPIC' --shared -o $@ $(OBJS)
 
-$(TESTS):
-
-lib$(LIBNAME).so.$(VERSION): $(OBJS)
-	$(CUC) --compiler-options '-fPIC' --shared -o $@ $^
-
-$(OBJS): $(SRCS)
+objects: FORCE
 	@$(MAKE) -C ./src
 
-$(SRCS):
+tests: FORCE
+	@$(MAKE) -C ./tests
+	
+numex: FORCE
+	@$(MAKE) -C ./numex
+	
+FORCE:
 	
 install: lib$(LIBNAME).so.$(VERSION) 
 	@mkdir -p $(INSTALLDIR)/cucheb 
@@ -44,12 +39,13 @@ install: lib$(LIBNAME).so.$(VERSION)
 	@mv ./lib$(LIBNAME).so.$(VERSION) $(INSTALLDIR)/cucheb/lib/
 	@ln -s $(INSTALLDIR)/cucheb/lib/lib$(LIBNAME).so.$(VERSION) lib$(LIBNAME).so
 	@mv ./lib$(LIBNAME).so $(INSTALLDIR)/cucheb/lib/
-
+	
 uninstall: clean
 	@rm -rf $(INSTALLDIR)/cucheb
 
 clean:
 	@$(MAKE) clean -C ./src
 	@$(MAKE) clean -C ./tests
+	@$(MAKE) clean -C ./numex
 
 	
