@@ -156,6 +156,9 @@ int cucheblanczos_ritz(cuchebmatrix* ccm, cucheblanczos* ccl);
 /* compute rayleigh quotients */
 int cucheblanczos_rayleigh(cuchebmatrix* ccm, cucheblanczos* ccl);
 
+/* sort evals in interval */
+int cucheblanczos_sort(double lb, double ub, cucheblanczos* ccl);
+
 
 
 

@@ -31,9 +31,9 @@
 /* maximum number of restarts */
 #ifdef MAX_RESTARTS
 #undef MAX_RESTARTS
-#define MAX_RESTARTS 20
+#define MAX_RESTARTS 16
 #else
-#define MAX_RESTARTS 20
+#define MAX_RESTARTS 16
 #endif
 
 /* maximum step size */

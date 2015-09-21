@@ -38,6 +38,10 @@ int cuchebmatrix_specint(cuchebmatrix* ccm){
 
   }
 
+  // fudge factor
+  ccm->a = ccm->a - .01*abs(ccm->a);
+  ccm->b = ccm->b + .01*abs(ccm->b);
+
   // destroy ccl
   cucheblanczos_destroy(&ccl);
 

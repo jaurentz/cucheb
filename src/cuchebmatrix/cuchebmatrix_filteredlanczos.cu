@@ -189,38 +189,32 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
     exit(1);
   }
 
-  // make sure ubnd is valid
-  if (isnan(ubnd)) {
-    printf("ubnd cannot be NaN!\n");
-    exit(1);
-  }
-
-  // check c and d
-  if ( lbnd >= ubnd ) {
-    return 1;
-  }
-
   // compute lower bound 
   double a, b;
   a = ccm->a;
   b = ccm->b;
   double lb;
   if (lbnd <= a) {lb = a;}
-  else if (lbnd >= b) {return 1;}
   else {lb = lbnd;}
 
   // compute upper bound 
   double ub;
   if (ubnd >= b) {ub = b;}
-  else if (ubnd <= a) {return 1;}
   else {ub = ubnd;}
+
+  // make sure ubnd is valid
+  if (lb >= ub) {
+    printf("\ncuchebmatrix_filteredlanczos:\n");
+    printf(" lb must be less than ub!\n\n");
+    exit(1);
+  }
 
   // initialize filter polynomial
   cuchebpoly ccp;
   cuchebpoly_init(&ccp);
 
   // create filter polynomial
-  cuchebpoly_stepfilter(ccm->a,ccm->b,lb,ub,50,&ccp);
+  cuchebpoly_stepfilter(ccm->a,ccm->b,lb,ub,200,&ccp);
 
   // max_degree
   ccstats->max_degree = max(ccstats->max_degree,ccp.degree);
@@ -255,7 +249,7 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
     // check to see if in interval
     numint = 0;
     for(int ii=0; ii<ccl->nconv; ii++){
-      if(ccl->evals[ccl->index[ii]] >= .5){ numint += 1; }
+      if(ccl->evals[ccl->index[ii]] >= .48){ numint += 1; }
       else { break; }
     }
 
@@ -269,6 +263,9 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
 
   // compute rayleigh quotients
   cucheblanczos_rayleigh(ccm,ccl);
+
+  // sort evals
+  cucheblanczos_sort(lb,ub,ccl);
 
   // num_conv
   ccstats->num_conv = ccl->nconv;
