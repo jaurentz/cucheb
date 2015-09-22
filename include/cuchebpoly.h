@@ -31,9 +31,9 @@
 /* maximum filter degree */
 #ifdef MAX_DOUBLE_DEG
 #undef MAX_DOUBLE_DEG
-#define MAX_DOUBLE_DEG 512
+#define MAX_DOUBLE_DEG 1024
 #else
-#define MAX_DOUBLE_DEG 512
+#define MAX_DOUBLE_DEG 1024
 #endif
 
 /* cuchebpoly data type */

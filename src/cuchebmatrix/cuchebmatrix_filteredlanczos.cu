@@ -18,7 +18,7 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
                                  cucheblanczos* ccl, cuchebstats* ccstats){
 
   // check neig
-  if (neig > MAX_NUM_EIGS) {
+  if (neig > DEF_NUM_VECS) {
     printf("\ncuchebmatrix_filteredlanczos:\n");
     printf(" Number of desired eigenvalues is too large!\n\n");
     exit(1);
@@ -81,7 +81,7 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
   ccstats->max_degree = max(ccstats->max_degree,ccp.degree);
     
   // initialize lanczos object
-  cucheblanczos_init(bsize,MAX_NUM_BLOCKS,ccm,ccl);
+  cucheblanczos_init(bsize,DEF_NUM_VECS,ccm,ccl);
 
   // collect some lanczos statistics
   ccstats->block_size = ccl->bsize;
@@ -93,15 +93,16 @@ int cuchebmatrix_filteredlanczos(int neig, double shift, int bsize, cuchebmatrix
   start = time(0);
 
   // loop through various Krylov subspaces
-  for (int jj=0; jj<MAX_RESTARTS; jj++) {
+  int nres;
+  nres = (ccl->nblocks)/(DEF_STEP_SIZE) + 1;
+  for (int jj=0; jj<nres; jj++) {
 
     // filtered arnoldi run
-    cucheblanczos_filteredarnoldi(MAX_STEP_SIZE,ccm,&ccp,ccl,ccstats);
+    cucheblanczos_filteredarnoldi(DEF_STEP_SIZE,ccm,&ccp,ccl,ccstats);
 
     // update ccstats
     // num_iters
     ccstats->num_iters += 1;
-    ccstats->num_blocks += MAX_STEP_SIZE;
 
     // compute ritz values of p(A)
     cucheblanczos_ritz(ccm,ccl);
@@ -214,13 +215,13 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
   cuchebpoly_init(&ccp);
 
   // create filter polynomial
-  cuchebpoly_stepfilter(ccm->a,ccm->b,lb,ub,200,&ccp);
+  cuchebpoly_stepfilter(ccm->a,ccm->b,lb,ub,300,&ccp);
 
   // max_degree
   ccstats->max_degree = max(ccstats->max_degree,ccp.degree);
     
   // initialize lanczos object
-  cucheblanczos_init(bsize,MAX_NUM_BLOCKS,ccm,ccl);
+  cucheblanczos_init(bsize,DEF_NUM_VECS,ccm,ccl);
 
   // collect some lanczos statistics
   ccstats->block_size = ccl->bsize;
@@ -233,15 +234,16 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
 
   // loop through various Krylov subspaces
   int numint = 0;
-  for (int jj=0; jj<MAX_RESTARTS; jj++) {
+  int nres;
+  nres = (ccl->nblocks)/(DEF_STEP_SIZE) + 1;
+  for (int jj=0; jj<nres; jj++) {
 
     // filtered arnoldi run
-    cucheblanczos_filteredarnoldi(MAX_STEP_SIZE,ccm,&ccp,ccl,ccstats);
+    cucheblanczos_filteredarnoldi(DEF_STEP_SIZE,ccm,&ccp,ccl,ccstats);
 
     // update ccstats
     // num_iters
     ccstats->num_iters += 1;
-    ccstats->num_blocks += MAX_STEP_SIZE;
 
     // compute ritz values of p(A)
     cucheblanczos_ritz(ccm,ccl);
@@ -249,7 +251,7 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
     // check to see if in interval
     numint = 0;
     for(int ii=0; ii<ccl->nconv; ii++){
-      if(ccl->evals[ccl->index[ii]] >= .48){ numint += 1; }
+      if(ccl->evals[ccl->index[ii]] >= .5*(ccl->evals[ccl->index[0]])){ numint += 1; }
       else { break; }
     }
 

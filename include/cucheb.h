@@ -131,7 +131,7 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
 
 /* cucheblanczos subroutines */
 /* instantiate cucheblanczos object */
-int cucheblanczos_init(int bsize, int nblocks, cuchebmatrix* ccm, cucheblanczos* ccl);
+int cucheblanczos_init(int bsize, int numvecs, cuchebmatrix* ccm, cucheblanczos* ccl);
 
 /* destroy cucheblanczos object */
 int cucheblanczos_destroy(cucheblanczos* ccl);

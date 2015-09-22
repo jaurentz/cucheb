@@ -12,15 +12,7 @@
 #define DOUBLE_TOL (double)pow(2.0,-52)
 #endif
 
-/* maximum number of computed eigenvalues */
-#ifdef MAX_NUM_EIGS    
-#undef MAX_NUM_EIGS    
-#define MAX_NUM_EIGS 100
-#else
-#define MAX_NUM_EIGS 100
-#endif
-
-/* maximum number of restarts */
+/* maximum block size */
 #ifdef MAX_BLOCK_SIZE
 #undef MAX_BLOCK_SIZE
 #define MAX_BLOCK_SIZE 3
@@ -28,36 +20,44 @@
 #define MAX_BLOCK_SIZE 3
 #endif
 
-/* maximum number of restarts */
-#ifdef MAX_RESTARTS
-#undef MAX_RESTARTS
-#define MAX_RESTARTS 16
-#else
-#define MAX_RESTARTS 16
-#endif
-
 /* maximum step size */
 #ifdef MAX_STEP_SIZE
 #undef MAX_STEP_SIZE
-#define MAX_STEP_SIZE 30
+#define MAX_STEP_SIZE 50
 #else
-#define MAX_STEP_SIZE 30
+#define MAX_STEP_SIZE 50
 #endif
 
 /* maximum number of arnoldi vectors */
-#ifdef MAX_NUM_BLOCKS
-#undef MAX_NUM_BLOCKS
-#define MAX_NUM_BLOCKS (MAX_RESTARTS)*(MAX_STEP_SIZE)
+#ifdef MAX_NUM_VECS
+#undef MAX_NUM_VECS
+#define MAX_NUM_VECS 3000
 #else
-#define MAX_NUM_BLOCKS (MAX_RESTARTS)*(MAX_STEP_SIZE)
+#define MAX_NUM_VECS 3000
 #endif
 
-/* maximum number of arnoldi vectors */
+/* maximum number orthogonalization depth */
 #ifdef MAX_ORTH_DEPTH
 #undef MAX_ORTH_DEPTH
-#define MAX_ORTH_DEPTH (MAX_NUM_BLOCKS)
+#define MAX_ORTH_DEPTH (MAX_NUM_VECS)
 #else
-#define MAX_ORTH_DEPTH (MAX_NUM_BLOCKS)
+#define MAX_ORTH_DEPTH (MAX_NUM_VECS)
+#endif
+
+/* default step size */
+#ifdef DEF_STEP_SIZE
+#undef DEF_STEP_SIZE
+#define DEF_STEP_SIZE 30
+#else
+#define DEF_STEP_SIZE 30
+#endif
+
+/* default number of arnoldi vectors */
+#ifdef DEF_NUM_VECS
+#undef DEF_NUM_VECS
+#define DEF_NUM_VECS 1200
+#else
+#define DEF_NUM_VECS 1200
 #endif
 
 /* cucheblanczos data type */

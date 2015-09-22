@@ -78,6 +78,9 @@ int cucheblanczos_filteredarnoldi(int nsteps, cuchebmatrix* ccm, cuchebpoly* ccp
   // update stop 
   ccl->stop += niters;
 
+  // num_blocks
+  ccstats->num_blocks += niters;
+
   // copy data to host
   cudaMemcpy(&(ccl->schurvecs)[0],&dschurvecs[0],
              (ccl->stop)*bsize*(nvecs+bsize)*sizeof(double),

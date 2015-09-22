@@ -39,7 +39,7 @@ int cucheblanczos_sort(double lb, double ub, cucheblanczos* ccl){
   // compute number of converged eigenvalues
   ccl->nconv = 0;
   for(int ii=0; ii < neig; ii++){
-    if (evals[index[ii]] > ub){ break; }
+    if (evals[index[ii]] > ub || evals[index[ii]] < lb){ break; }
     else { ccl->nconv = ii+1; }
   }
 

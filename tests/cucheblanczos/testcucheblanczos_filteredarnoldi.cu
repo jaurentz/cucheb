@@ -26,7 +26,7 @@ int main(){
 
   // cucheblanczos
   cucheblanczos ccl;
-  cucheblanczos_init(1, MAX_NUM_BLOCKS, &ccm, &ccl);
+  cucheblanczos_init(1, MAX_NUM_VECS, &ccm, &ccl);
 
   // print CCB
   cucheblanczos_print(&ccl);

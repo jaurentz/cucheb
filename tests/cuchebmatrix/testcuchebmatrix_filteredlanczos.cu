@@ -12,8 +12,8 @@ int main(){
   //string mtxfile("../matrices/CO.mtx");
   //string mtxfile("../matrices/Ga41As41H72.mtx");
   //string mtxfile("../matrices/Ge99H100.mtx");
-  //string mtxfile("../matrices/Andrews.mtx");
-  string mtxfile("../matrices/Laplacian.mtx");
+  string mtxfile("../matrices/Andrews.mtx");
+  //string mtxfile("../matrices/Laplacian.mtx");
 
   // cuhebmatrix
   cuchebmatrix ccm;
@@ -31,7 +31,7 @@ int main(){
   //cuchebmatrix_filteredlanczos(10, 0, 3, &ccm, &ccl, &ccstats);
 
   // call filtered lanczos for an interval
-  cuchebmatrix_filteredlanczos(1, 1.01, 3, &ccm, &ccl, &ccstats);
+  cuchebmatrix_filteredlanczos(4.00, 4.30, 3, &ccm, &ccl, &ccstats);
 
   // print ccm
   cuchebmatrix_print(&ccm);
@@ -40,7 +40,7 @@ int main(){
   cuchebstats_print(&ccstats);
 
   // print eigenvalues
-  for (int ii=0; ii<ccl.nconv; ii++) {
+  for (int ii=0; ii<max(ccl.nconv,100); ii++) {
     printf(" %+e, %e\n",ccl.evals[ccl.index[ii]],ccl.res[ccl.index[ii]]);
   }
   printf("\n");
