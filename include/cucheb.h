@@ -63,6 +63,9 @@ int cuchebpoly_points(double a, double b, cuchebpoly* ccp);
 /* convert values to coefficients */
 int cuchebpoly_coeffs(cuchebpoly* ccp);
 
+/* evaluate poly at scalar */
+double cuchebpoly_clenshaw(cuchebpoly* ccp, double x);
+
 /* threshold coefficients */
 int cuchebpoly_chop(cuchebpoly* ccp);
 
@@ -71,6 +74,9 @@ int cuchebpoly_pointfilter(double a, double b, double rho, int order, cuchebpoly
 
 /* routine for creating step filter */
 int cuchebpoly_stepfilter(double a, double b, double c, double d, int order, cuchebpoly* ccp);
+
+/* routine for creating smart filter */
+int cuchebpoly_smartfilter(double a, double b, double c, double d, cuchebpoly* ccp);
 
 /* routine for creating gaussian filter */
 int cuchebpoly_gaussianfilter(double a, double b, double rho, double tau, cuchebpoly* ccp);
@@ -127,6 +133,11 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
                                  cuchebmatrix* ccm, cucheblanczos* ccl, 
                                  cuchebstats* ccs);
 
+/* expert lanczos routine */ 
+int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
+                                 int bsize, int numvecs, int stepsize, 
+                                 cuchebmatrix* ccm, cucheblanczos* ccl, 
+                                 cuchebstats* ccstats);
 
 
 /* cucheblanczos subroutines */

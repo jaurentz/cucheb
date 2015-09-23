@@ -23,17 +23,17 @@
 /* maximum step size */
 #ifdef MAX_STEP_SIZE
 #undef MAX_STEP_SIZE
-#define MAX_STEP_SIZE 50
+#define MAX_STEP_SIZE 6000
 #else
-#define MAX_STEP_SIZE 50
+#define MAX_STEP_SIZE 6000
 #endif
 
 /* maximum number of arnoldi vectors */
 #ifdef MAX_NUM_VECS
 #undef MAX_NUM_VECS
-#define MAX_NUM_VECS 3000
+#define MAX_NUM_VECS 6000
 #else
-#define MAX_NUM_VECS 3000
+#define MAX_NUM_VECS 6000
 #endif
 
 /* maximum number orthogonalization depth */

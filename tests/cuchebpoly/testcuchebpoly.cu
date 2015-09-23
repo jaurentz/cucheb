@@ -16,7 +16,7 @@ int main(){
   cuchebpoly_printlong(&ccp1);
 
   // compute function values for f(x) = exp(-100*(x-.7)^2)
-  for (int ii=0; ii<2*DOUBLE_DEG; ii++) {
+  for (int ii=0; ii<2*MAX_DOUBLE_DEG; ii++) {
     ccp1.points[ii] = exp(-100.0*pow(ccp1.points[ii]-.7,2));
   }
   cuchebpoly_printlong(&ccp1);

@@ -14,7 +14,7 @@ int cuchebpoly_printlong(cuchebpoly* ccp){
   printf("\n");
   
   // points
-//  for (int ii=0; ii < 2*DOUBLE_DEG; ii++) {
+//  for (int ii=0; ii < 2*MAX_DOUBLE_DEG; ii++) {
 //    printf(" points[%d] = %+e\n",ii,ccp->points[ii]);
 //  }
 //  printf("\n");

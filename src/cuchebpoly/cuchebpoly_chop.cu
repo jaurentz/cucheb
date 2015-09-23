@@ -5,7 +5,7 @@ int cuchebpoly_chop(cuchebpoly* ccp){
 
   // find maximum
   double maximum = 0.0;
-  for (int ii=0; ii<DOUBLE_DEG+1; ii++) {
+  for (int ii=0; ii<MAX_DOUBLE_DEG+1; ii++) {
     maximum = max(maximum, abs((ccp->coeffs)[ii]));
   }
 

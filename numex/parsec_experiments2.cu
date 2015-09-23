@@ -3,6 +3,9 @@
 /* driver */
 int main(){
 
+  // set device
+  cudaSetDevice(1);
+
   // matrix files root directory
   const string rootdir("../matrices/");
 
@@ -59,7 +62,7 @@ int main(){
     cuchebmatrix_init(mtxfile, &ccm);
 
     // call filtered lanczos for an interval
-    cuchebmatrix_filteredlanczos(-10, -0.1, 3, &ccm, &ccl, &ccstats[ii]);
+    cuchebmatrix_filteredlanczos(-10.0, 1.0, 3, &ccm, &ccl, &ccstats[ii]);
 
     // print stats
     cuchebstats_print(&ccstats[ii]);

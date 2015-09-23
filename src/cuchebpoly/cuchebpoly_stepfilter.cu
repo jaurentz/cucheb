@@ -32,6 +32,11 @@ int cuchebpoly_stepfilter(double a, double b, double c, double d, int order, cuc
   ccp->a = a;
   ccp->b = b;
 
+  // save transition points
+  double p1, p2;
+  p1 = lb;
+  p2 = ub;
+
   // scale everything to [-1,1]
   lb = max((2.0*lb - (b+a))/(b-a),-1.0);
   ub = min((2.0*ub - (b+a))/(b-a),1.0);
@@ -54,6 +59,18 @@ int cuchebpoly_stepfilter(double a, double b, double c, double d, int order, cuc
   for (int ii=0; ii<deg+1; ii++) {
     ccp->coeffs[ii] = alpha*((deg+2.0-ii)*beta*cos(ii*pi*alpha) +
                        sin(ii*pi*alpha)*gamma)*ccp->coeffs[ii]/beta;
+  }
+
+  // compute transition values
+  p1 = cuchebpoly_clenshaw(ccp,p1); 
+  p2 = cuchebpoly_clenshaw(ccp,p2); 
+
+  // compute scale factor
+  p1 = .5/min(abs(p1),abs(p2));
+
+  // scale coefficients
+  for (int ii=0; ii<deg+1; ii++) {
+    ccp->coeffs[ii] = p1*ccp->coeffs[ii];
   }
 
   // return 

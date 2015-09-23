@@ -3,6 +3,9 @@
 /* driver */
 int main(){
 
+  // set device
+  cudaSetDevice(1);
+
   // matrix files root directory
   const string rootdir("../matrices/");
 

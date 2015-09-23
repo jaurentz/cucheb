@@ -39,8 +39,8 @@ int cuchebmatrix_specint(cuchebmatrix* ccm){
     if ( max(ccl.res[inda],ccl.res[indb]) < nrm ) { break; }
 
     // fudge factor
-    ccm->a = ccm->a - pow(ccl.res[inda],2)*max(abs(ccm->a),abs(ccm->b));
-    ccm->b = ccm->b + pow(ccl.res[indb],2)*max(abs(ccm->a),abs(ccm->b));
+    ccm->a = ccm->a - pow(ccl.res[inda],1)*max(abs(ccm->a),abs(ccm->b));
+    ccm->b = ccm->b + pow(ccl.res[indb],1)*max(abs(ccm->a),abs(ccm->b));
 
   }
 

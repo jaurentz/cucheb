@@ -3,6 +3,9 @@
 /* driver */
 int main(){
 
+  // set device
+  cudaSetDevice(1);
+
   // matrix files root directory
   const string rootdir("../matrices/");
 
@@ -53,6 +56,8 @@ int main(){
   // loop through matrices
   for (int ii=0; ii<nummats; ii++) {
 
+if (ii > 4) {break;}
+
     // print matname
     printf(" %s",matnames[ii].c_str());
 
@@ -61,6 +66,7 @@ int main(){
 
     // initialize matrix
     cuchebmatrix_init(mtxfile, &ccm);
+    cuchebmatrix_print(&ccm);
 
     // call filtered lanczos for an interval
     cuchebmatrix_filteredlanczos(lb[ii], ub[ii], 3, &ccm, &ccl, &ccstats[ii]);

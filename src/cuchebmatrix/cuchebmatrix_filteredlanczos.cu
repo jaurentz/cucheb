@@ -215,7 +215,8 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
   cuchebpoly_init(&ccp);
 
   // create filter polynomial
-  cuchebpoly_stepfilter(ccm->a,ccm->b,lb,ub,300,&ccp);
+  cuchebpoly_stepfilter(ccm->a,ccm->b,lb,ub,50,&ccp);
+  //cuchebpoly_smartfilter(ccm->a,ccm->b,lb,ub,&ccp);
 
   // max_degree
   ccstats->max_degree = max(ccstats->max_degree,ccp.degree);
@@ -251,7 +252,7 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
     // check to see if in interval
     numint = 0;
     for(int ii=0; ii<ccl->nconv; ii++){
-      if(ccl->evals[ccl->index[ii]] >= .5*(ccl->evals[ccl->index[0]])){ numint += 1; }
+      if(ccl->evals[ccl->index[ii]] >= .49){ numint += 1; }
       else { break; }
     }
 
