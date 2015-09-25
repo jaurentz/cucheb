@@ -1,0 +1,4 @@
+mat_name mat_dim mat_nnz block_size num_blocks num_iters num_innerprods max_degree num_matvecs specint_time arnoldi_time num_conv max_res
+Laplacian 1000000 6940000 3 480 17 2080800 1000 1440000 41 2431 0 0
+Laplacian 1000000 6940000 3 360 12 1171800 1600 1728000 42 2539 276 2.18038e-14
+Laplacian 1000000 6940000 3 240 8 522000 3128 2252160 40 3140 276 5.73438e-15

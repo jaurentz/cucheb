@@ -25,10 +25,14 @@ int cuchebpoly_smartfilter(double a, double b, double c, double d, cuchebpoly* c
   else if (d <= a) {return 1;}
   else {ub = d;}
 
+  // scale to [-1,1]
+  double A, B;
+  A = max((2.0*lb - (b+a))/(b-a),-1.0);
+  B = min((2.0*ub - (b+a))/(b-a),1.0);
+
   // local variables
   int degree;
-  degree = ceil(4.0*abs(b-a)/abs(ub-lb));
-  //degree = min(degree,1000);
+  degree = ceil(3.0*(DOUBLE_PI)/abs(acos(A)-acos(B)));
 
   // create stepfilter
   cuchebpoly_stepfilter(a,b,lb,ub,degree,ccp);

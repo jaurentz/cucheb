@@ -1,0 +1,4 @@
+mat_name mat_dim mat_nnz block_size num_blocks num_iters num_innerprods max_degree num_matvecs specint_time arnoldi_time num_conv max_res
+Andrews 60000 760154 1 4500 9 20254500 100 450000 1 651 1844 5.84154e-11
+Andrews 60000 760154 1 4000 8 16004000 200 800000 1 560 1844 1.63088e-10
+Andrews 60000 760154 1 4500 9 20254500 113 508500 1 667 1844 4.0026e-11

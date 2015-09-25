@@ -5,7 +5,7 @@ int main(){
 
   // input file
   //string mtxfile("../matrices/SiH4.mtx");
-  //string mtxfile("../matrices/Si10H16.mtx");
+  string mtxfile("../matrices/Si10H16.mtx");
   //string mtxfile("../matrices/H2O.mtx");
   //string mtxfile("../matrices/Si34H36.mtx");
   //string mtxfile("../matrices/Si87H76.mtx");
@@ -13,7 +13,8 @@ int main(){
   //string mtxfile("../matrices/Ga41As41H72.mtx");
   //string mtxfile("../matrices/Ge99H100.mtx");
   //string mtxfile("../matrices/Andrews.mtx");
-  string mtxfile("../matrices/Laplacian.mtx");
+  //string mtxfile("../matrices/Laplacian.mtx");
+  //string mtxfile("../matrices/Qdot3.mtx");
 
   // cuhebmatrix
   cuchebmatrix ccm;
@@ -28,14 +29,15 @@ int main(){
   //cuchebmatrix_specint(&ccm,&ccl);
 
   // call filtered lanczos for a point
-  //cuchebmatrix_filteredlanczos(10, 0, 3, &ccm, &ccl, &ccstats);
+  cuchebmatrix_filteredlanczos(100, -10.0, 3, &ccm, &ccl, &ccstats);
 
   // call filtered lanczos for an interval
-  //cuchebmatrix_filteredlanczos(1.00, 1.01, 3, &ccm, &ccl, &ccstats);
+  //cuchebmatrix_filteredlanczos(-0.66, -.33, 3, &ccm, &ccl, &ccstats);
 
   // call expert lanczos
-  //cuchebmatrix_expertlanczos(4.00, 5.00, 200, 1, 4000, 4000, &ccm, &ccl, &ccstats);
-  cuchebmatrix_expertlanczos(1.00, 1.01, 1600, 3, 1200, 400, &ccm, &ccl, &ccstats);
+  //cuchebmatrix_expertlanczos(4.00, 5.00, 150, 1, 4000, 4000, &ccm, &ccl, &ccstats);
+  //cuchebmatrix_expertlanczos(1.00, 1.01, 1600, 3, 1200, 400, &ccm, &ccl, &ccstats);
+  //cuchebmatrix_expertlanczos(-2.0, -.33, 100, 3, 1200, 40, &ccm, &ccl, &ccstats);
 
   // print ccm
   cuchebmatrix_print(&ccm);
@@ -44,8 +46,8 @@ int main(){
   cuchebstats_print(&ccstats);
 
   // print eigenvalues
-  //for (int ii=0; ii<max(ccl.nconv,100); ii++) {
-  for (int ii=0; ii<100; ii++) {
+  for (int ii=0; ii<min(ccl.nconv,100); ii++) {
+  //for (int ii=0; ii<100; ii++) {
     printf(" %+e, %e\n",ccl.evals[ccl.index[ii]],ccl.res[ccl.index[ii]]);
   }
   printf("\n");

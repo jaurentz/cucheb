@@ -133,7 +133,13 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
                                  cuchebmatrix* ccm, cucheblanczos* ccl, 
                                  cuchebstats* ccs);
 
-/* expert lanczos routine */ 
+/* expert lanczos routine for points */ 
+int cuchebmatrix_expertlanczos(int neig, double shift, int degree,
+                                 int bsize, int numvecs, int stepsize, 
+                                 cuchebmatrix* ccm, cucheblanczos* ccl, 
+                                 cuchebstats* ccstats);
+
+/* expert lanczos routine for intervals */ 
 int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
                                  int bsize, int numvecs, int stepsize, 
                                  cuchebmatrix* ccm, cucheblanczos* ccl, 
@@ -169,6 +175,9 @@ int cucheblanczos_rayleigh(cuchebmatrix* ccm, cucheblanczos* ccl);
 
 /* sort evals in interval */
 int cucheblanczos_sort(double lb, double ub, cucheblanczos* ccl);
+
+/* sort evals around point */
+int cucheblanczos_sort(double rho, cucheblanczos* ccl);
 
 
 
