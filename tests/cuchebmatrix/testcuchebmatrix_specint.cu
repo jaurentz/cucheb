@@ -10,7 +10,8 @@ int main(){
   //string mtxfile("../matrices/CO.mtx");
   //string mtxfile("../matrices/Ga41As41H72.mtx");
   //string mtxfile("../matrices/Andrews.mtx");
-  string mtxfile("../matrices/Laplacian.mtx");
+  //string mtxfile("../matrices/Laplacian.mtx");
+  string mtxfile("../matrices/DIMACS/al2010.mtx");
 
   // cuhebmatrix
   cuchebmatrix ccm;

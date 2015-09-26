@@ -19,15 +19,14 @@ int main(){
   double ub[nummats] = { 1.01 };
 
   // number of trials
-  const int numtrials = 3;
+  const int numtrials = 2;
 
   // matrix names
   string matnames[nummats*numtrials] = { "Laplacian",
-                                         "Laplacian",
                                          "Laplacian" };
 
   // matrix names
-  int degrees[nummats][numtrials] = { {1000,1600,-1} };
+  int degrees[nummats][numtrials] = { {1600,-1} };
 
 
   // output file

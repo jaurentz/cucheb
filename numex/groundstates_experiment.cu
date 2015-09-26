@@ -49,7 +49,7 @@ int main(){
 
 
   // output file
-  string ofile("./numex/gorundstates_data.txt" );
+  string ofile("./numex/groundstates_data.txt" );
 
   // cuchebstats array
   cuchebstats ccstats[nummats*numtrials]; 

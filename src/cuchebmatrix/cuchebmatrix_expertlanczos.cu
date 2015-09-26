@@ -50,15 +50,11 @@ int cuchebmatrix_expertlanczos(int neig, double shift, int degree,
   a = ccm->a;
   b = ccm->b;
   rho = min(max(a,shift),b);
-  rho = (2.0*rho-b-a)/(b-a);
   double scl;
-  scl = (DOUBLE_PI)*(2.0*neig*(ccl->bsize))/(2.0*ccm->m);
+  scl = abs(b-a)*(10.0*neig*(ccl->bsize))/(ccm->m);
   double lb, ub;
-  lb = cos(min(DOUBLE_PI,acos(rho)+scl));
-  ub = cos(max(0.0,acos(rho)-scl));
-  lb = ((b-a)*lb + b+a)/2.0;
-  ub = ((b-a)*ub + b+a)/2.0;
-  rho = ((b-a)*rho + b+a)/2.0;
+  lb = max(a,rho-scl);
+  ub = min(b,rho+scl);
 
   // initialize filter polynomial
   cuchebpoly ccp;
@@ -177,13 +173,11 @@ int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
   a = ccm->a;
   b = ccm->b;
   double lb;
-  if (lbnd <= a) {lb = a;}
-  else {lb = lbnd;}
+  lb = min(max(a,lbnd),b);
 
   // compute upper bound 
   double ub;
-  if (ubnd >= b) {ub = b;}
-  else {ub = ubnd;}
+  ub = max(min(b,ubnd),a);
 
   // make sure ubnd is valid
   if (lb >= ub) {
@@ -236,6 +230,11 @@ int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
 
     // compute ritz values of p(A)
     cucheblanczos_ritz(ccm,ccl);
+
+//  for(int ii=0; ii < ccl->nconv; ii++){
+//    printf(" e,r = %+e,%e\n",ccl->evals[ccl->index[ii]],ccl->res[ccl->index[ii]]);
+//  }
+//printf("\n");
 
     // check to see if in interval
     numint = 0;

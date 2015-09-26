@@ -1,0 +1,3 @@
+mat_name mat_dim mat_nnz block_size num_blocks num_iters num_innerprods max_degree num_matvecs specint_time arnoldi_time num_conv max_res
+DIMACS/144 144649 2148786 1 360 12 129960 50 18000 3 16 217 1.36113e-12
+DIMACS/144 144649 2148786 1 270 9 73170 100 27000 3 19 139 8.31872e-12
