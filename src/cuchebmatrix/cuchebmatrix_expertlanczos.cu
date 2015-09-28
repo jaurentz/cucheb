@@ -51,7 +51,7 @@ int cuchebmatrix_expertlanczos(int neig, double shift, int degree,
   b = ccm->b;
   rho = min(max(a,shift),b);
   double scl;
-  scl = abs(b-a)*(10.0*neig*(ccl->bsize))/(ccm->m);
+  scl = abs(b-a)*min(.01,(10.0*neig*(ccl->bsize))/(ccm->m));
   double lb, ub;
   lb = max(a,rho-scl);
   ub = min(b,rho+scl);
@@ -90,6 +90,11 @@ int cuchebmatrix_expertlanczos(int neig, double shift, int degree,
 
     // compute ritz values of p(A)
     cucheblanczos_ritz(ccm,ccl);
+
+//  for(int ii=0; ii < ccl->nconv; ii++){
+//    printf(" e,r = %+e,%e\n",ccl->evals[ccl->index[ii]],ccl->res[ccl->index[ii]]);
+//  }
+//printf("\n");
 
     // exit if converged
     if (ccl->nconv > neig) { 

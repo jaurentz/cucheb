@@ -10,56 +10,66 @@ int main(){
   const string rootdir("../matrices/DIMACS/");
 
   // number of matrices
-  const int nummats = 14;
+  const int nummats = 10;
 
   // number of trials
-  const int numtrials = 2;
+  const int numtrials = 3;
 
   // matrix names
   string matnames[nummats*numtrials] = { "144",
                                          "144",
-                                         "598a",
-                                         "598a",
-                                         "al2010",
-                                         "al2010",
-                                         "ar2010",
-                                         "ar2010",
+                                         "144",
                                          "auto",
                                          "auto",
-                                         "az2010",
-                                         "az2010",
+                                         "auto",
+                                         "ca2010",
                                          "ca2010",
                                          "ca2010",
                                          "caidaRouterLevel",
                                          "caidaRouterLevel",
-                                         "citationCiteseer",
-                                         "citationCiteseer",
-                                         "co2010",
-                                         "co2010",
-                                         "coAuthorsCiteseer",
-                                         "coAuthorsCiteseer",
-                                         "coAuthorsDBLP",
-                                         "coAuthorsDBLP",
-                                         "coPapersCiteseer",
-                                         "coPapersCiteseer",
+                                         "caidaRouterLevel",
                                          "coPapersDBLP",
-                                         "coPapersDBLP" };
+                                         "coPapersDBLP",
+                                         "coPapersDBLP",
+                                         "delaunay_n20",
+                                         "delaunay_n20",
+                                         "delaunay_n20",
+                                         "fe_ocean",
+                                         "fe_ocean",
+                                         "fe_ocean",
+                                         "m14b",
+                                         "m14b",
+                                         "m14b",
+                                         "mn2010",
+                                         "mn2010",
+                                         "mn2010",
+                                         "rgg_n_2_20_s0",
+                                         "rgg_n_2_20_s0",
+                                         "rgg_n_2_20_s0" };
 
-  // matrix names
-  int degrees[nummats][numtrials] = { {50,100},
-                                      {50,100},
-                                      {50,100},
-                                      {50,100},
-                                      {50,100},
-                                      {50,100},
-                                      {50,100},
-                                      {50,100},
-                                      {50,100},
-                                      {50,100},
-                                      {50,100},
-                                      {50,100},
-                                      {50,100},
-                                      {50,100} };
+  // filter degrees
+  int degrees[nummats][numtrials] = { {50,100,-1},
+                                      {50,100,-1},
+                                      {50,100,-1},
+                                      {50,100,-1},
+                                      {50,100,-1},
+                                      {50,100,-1},
+                                      {50,100,-1},
+                                      {50,100,-1},
+                                      {50,100,-1},
+                                      {50,100,-1} };
+
+  // block sizes
+  int bsize[nummats] = { 1,
+                         2,
+                         1,
+                         1,
+                         1,
+                         1,
+                         1,
+                         1,
+                         1,
+                         2 };
 
 
   // output file
@@ -89,8 +99,8 @@ int main(){
     for (int jj=0; jj<numtrials; jj++) {
 
       // call filtered lanczos for an interval
-      cuchebmatrix_expertlanczos(100, 1.0e300, degrees[ii][jj],
-                                 1, DEF_NUM_VECS, DEF_STEP_SIZE,
+      cuchebmatrix_expertlanczos(50, 1.0e300, degrees[ii][jj],
+                                 bsize[ii], DEF_NUM_VECS, DEF_STEP_SIZE,
                                  &ccm, &ccl, &ccstats[ii*numtrials+jj]);
 
       // print stats

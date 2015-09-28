@@ -92,7 +92,7 @@ int cucheblanczos_ritz(cuchebmatrix* ccm, cucheblanczos* ccl){
 
   // compute number of converged eigenvalues
   double nrm;
-  nrm = max(abs(ccm->a),abs(ccm->b));
+  nrm = abs(evals[index[0]]);
   ccl->nconv = 0;
   for(int ii=0; ii < nvecs; ii++){
     if (res[index[ii]] >= DOUBLE_TOL*nrm){ break; }

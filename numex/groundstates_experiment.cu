@@ -47,6 +47,15 @@ int main(){
                                       {100,200,-1},
                                       {200,300,-1} };
 
+  // block sizes
+  int bsize[nummats] = { 3,
+                         3,
+                         3,
+                         2,
+                         3,
+                         3,
+                         3 };
+
 
   // output file
   string ofile("./numex/groundstates_data.txt" );
@@ -76,7 +85,7 @@ int main(){
 
       // call filtered lanczos for an interval
       cuchebmatrix_expertlanczos(100, -10.0, degrees[ii][jj],
-                                 3, DEF_NUM_VECS, DEF_STEP_SIZE,
+                                 bsize[ii], DEF_NUM_VECS, DEF_STEP_SIZE,
                                  &ccm, &ccl, &ccstats[ii*numtrials+jj]);
 
       // print stats
