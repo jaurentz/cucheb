@@ -1,0 +1,10 @@
+144
+auto
+ca2010
+caidaRouterLevel
+coPapersDBLP
+delaunay_n20
+fe_ocean
+m14b
+mn2010
+rgg_n_2_20_s0
