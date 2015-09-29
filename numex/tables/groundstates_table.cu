@@ -34,8 +34,8 @@ int main(){
 
   // variables to parse file
   string matname;
-  int n, nnz, bsize, nblocks, niters, ndotprods, maxdeg, nmatvecs, nconv;
-  double a, b, neigs, preproc, lanczos, maxres;
+  int neigs, n, nnz, bsize, nblocks, niters, ndotprods, maxdeg, nmatvecs, nconv;
+  double preproc, lanczos, maxres;
 
   int exponent;
   double mantissa;
@@ -48,7 +48,7 @@ int main(){
     for (int ii=0; ii<3; ii++) {
 
       // read in data
-      input_file >> matname >> a >> b >> neigs >> n >> nnz >> bsize >> nblocks >> 
+      input_file >> matname >> neigs >> n >> nnz >> bsize >> nblocks >> 
                     niters >> ndotprods >> maxdeg >> nmatvecs >> preproc >> lanczos >>
                     nconv >> maxres;
 
@@ -58,13 +58,12 @@ int main(){
       // write to file
 
       // matrix name
-      if (ii==1) { output_file << "\\verb|" << matname << "|"; 
+      if (ii==1) { output_file << "\\verb|" << matname << "|"; }
+      else { output_file << ""; }
 
-        // neigs
-        if (nconv > 99) { output_file << " & $" << setprecision(0) << nconv << "$"; }
-        else { output_file << " & $\\phantom{0}" << setprecision(0) << nconv << "$"; }
-      }
-      else { output_file << " & &"; }
+      // neigs
+      if (nconv > 99) { output_file << " & $" << setprecision(0) << nconv << "$"; }
+      else { output_file << " & $\\phantom{0}" << setprecision(0) << nconv << "$"; }
 
       // degree
       if (maxdeg > 99) { output_file << " & $" << setprecision(0) << maxdeg << "$"; }
