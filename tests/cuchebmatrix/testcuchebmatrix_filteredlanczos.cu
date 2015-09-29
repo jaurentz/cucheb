@@ -4,11 +4,11 @@
 int main(){
 
   // set device
-  //cudaSetDevice(1);
+  cudaSetDevice(1);
 
   // input file
   //string mtxfile("../matrices/Si87H76.mtx");
-  //string mtxfile("../matrices/Ga41As41H72.mtx");
+  string mtxfile("../matrices/Ga41As41H72.mtx");
   //string mtxfile("../matrices/Ge99H100.mtx");
   //string mtxfile("../matrices/Andrews.mtx");
   //string mtxfile("../matrices/Laplacian.mtx");
@@ -38,9 +38,9 @@ int main(){
 
   // call expert lanczos
   //cuchebmatrix_expertlanczos(4.00, 5.00, 150, 1, 4000, 4000, &ccm, &ccl, &ccstats);
-  //cuchebmatrix_expertlanczos(1.00, 1.01, 1600, 3, 1200, 400, &ccm, &ccl, &ccstats);
+  //cuchebmatrix_expertlanczos(1.00, 1.01, 1600, 3, 1440, 480, &ccm, &ccl, &ccstats);
   //cuchebmatrix_expertlanczos(-2.0, -.33, 100, 3, 1200, 40, &ccm, &ccl, &ccstats);
-  cuchebmatrix_expertlanczos(10, 1.0e100, 20, 1, 500, 100, &ccm, &ccl, &ccstats);
+  cuchebmatrix_expertlanczos(100, -10.0, -1, 3, 1200, 30, &ccm, &ccl, &ccstats);
 
   // print ccm
   cuchebmatrix_print(&ccm);

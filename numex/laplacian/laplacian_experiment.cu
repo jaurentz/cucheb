@@ -4,77 +4,90 @@
 int main(){
 
   // set device
-  cudaSetDevice(1);
+  cudaSetDevice(0);
 
-  // matrix files root directory
-  const string rootdir("../matrices/");
-
-  // number of matrices
-  const int nummats = 1;
-
-  // lower bounds
-  double lb[nummats] = { 1.0 };
-
-  // upper bounds
-  double ub[nummats] = { 1.01 };
-
-  // number of trials
-  const int numtrials = 2;
-
-  // matrix names
-  string matnames[nummats*numtrials] = { "Laplacian",
-                                         "Laplacian" };
-
-  // matrix names
-  int degrees[nummats][numtrials] = { {1600,-1} };
-
-
-  // output file
-  string ofile("./numex/laplacian_data.txt" );
-
-  // cuchebstats array
-  cuchebstats ccstats[nummats*numtrials]; 
-  
-  // local variables
-  string mtxfile;
+  // compute variables
+  string temp;
+  string rootdir("/home/aurentz/Projects/CUCHEB/cucheb/numex/");
+  string matdir("/home/aurentz/Projects/CUCHEB/matrices/");
+  ifstream input_file;
+  ofstream output_file;
   cuchebmatrix ccm;
   cucheblanczos ccl;
+  cuchebstats ccstats;
 
-  // loop through matrices
-  for (int ii=0; ii<nummats; ii++) {
+  // attempt to open output file
+  temp = rootdir + "laplacian/laplacian_data.txt";
+  output_file.open( temp.c_str() );
+  if (!output_file.is_open()) { 
+    printf("Could not open output file.\n");
+    exit(1); 
+  }
 
-    // print matname
-    printf(" %s",matnames[ii].c_str());
+  // variables to parse file
+  string matname;
+  double a, b;
+  int neigs, deg, bsize, nvecs, ssize;
 
-    // set mtxfile
-    mtxfile = rootdir + matnames[ii] + ".mtx";
+  // attempt to open input file
+  temp = rootdir + "laplacian/laplacian_matrices.txt";
+  input_file.open( temp.c_str() );
+  if (!input_file.is_open()) { 
+    printf("Could not open matrix file.\n");
+    exit(1); 
+  }
+
+  // loop through lines
+  while (!input_file.eof()) {
+
+    // read in data
+    input_file >> matname >> a >> b >> neigs >> deg >> bsize >> nvecs >> ssize;
+
+    // exit if end of file
+    if(input_file.eof()) { break; }
 
     // initialize matrix
-    cuchebmatrix_init(mtxfile, &ccm);
+    temp = matdir + matname + ".mtx";
+    cuchebmatrix_init(temp, &ccm);
 
-    // trials with various degrees
-    for (int jj=0; jj<numtrials; jj++) {
+    // call filtered lanczos for an interval
+    cuchebmatrix_expertlanczos(a, b, deg, bsize, nvecs, ssize,
+                                 &ccm, &ccl, &ccstats);
 
-      // call filtered lanczos for an interval
-      cuchebmatrix_expertlanczos(lb[ii], ub[ii], degrees[ii][jj],
-                                 3, 1440, DEF_STEP_SIZE,
-                                 &ccm, &ccl, &ccstats[ii*numtrials+jj]);
+    // print stats
+    cuchebstats_print(&ccstats);
 
-      // print stats
-      cuchebstats_print(&ccstats[ii*numtrials+jj]);
+    // write to file
+    output_file << matname.c_str() << " "; 
+    output_file << setprecision(15) << a << " ";
+    output_file << setprecision(15) << b << " ";
+    output_file << neigs << " ";
+    output_file << ccstats.mat_dim << " ";
+    output_file << ccstats.mat_nnz << " ";
+    output_file << ccstats.block_size << " ";
+    output_file << ccstats.num_blocks << " ";
+    output_file << ccstats.num_iters << " ";
+    output_file << ccstats.num_innerprods << " ";
+    output_file << ccstats.max_degree << " ";
+    output_file << ccstats.num_matvecs << " ";
+    output_file << ccstats.specint_time << " ";
+    output_file << ccstats.arnoldi_time << " ";
+    output_file << ccstats.num_conv << " ";
+    output_file << ccstats.max_res << "\n";
 
-      // destroy CCL
-      cucheblanczos_destroy(&ccl);
-
-    }
-
-    // destroy CCM
+    // destroy cuchebmatrix
     cuchebmatrix_destroy(&ccm);
+
+    // destroy CCL
+    cucheblanczos_destroy(&ccl);
 
   }
 
-  // print ccstats to file
-  cuchebstats_fileprint(ofile,nummats*numtrials,&matnames[0],&ccstats[0]);
+  // close input file
+  input_file.close();
+
+  // close output file
+  output_file.close();
 
   // return 
   return 0;

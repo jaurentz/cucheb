@@ -51,7 +51,7 @@ int cuchebmatrix_expertlanczos(int neig, double shift, int degree,
   b = ccm->b;
   rho = min(max(a,shift),b);
   double scl;
-  scl = abs(b-a)*min(.01,(10.0*neig*(ccl->bsize))/(ccm->m));
+  scl = abs(b-a)*min(.01,(1.0*neig*(ccl->bsize))/(ccm->m));
   double lb, ub;
   lb = max(a,rho-scl);
   ub = min(b,rho+scl);

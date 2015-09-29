@@ -8,7 +8,7 @@ int main(){
   ofstream output_file;
 
   // attempt to open input file
-  input_file.open("./numex/tables/matrices.txt");
+  input_file.open("./numex/tables/matrices_info.txt");
   if (!input_file.is_open()) { 
     printf("Could not open input file.\n");
     exit(1); 
@@ -23,7 +23,12 @@ int main(){
 
   // output file banner
   output_file << "\\begin{tabular}{l|c|c|c|c}\n";
-  output_file << "Matrix & $n$ & $nnz$ & $nnz/n$ & Spectral interval \\\\\\hline\n";
+  output_file << "\\hline\n";
+  output_file << "\\multirow{2}{*}{Matrix} & \\multirow{2}{*}{$n$}" <<
+                 " & \\multirow{2}{*}{$nnz$} & \\multirow{2}{*}{$nnz/n$}" <<
+                 " & \\multirow{2}{*}{Spectral interval} \\\\\n";
+  output_file << " & & & & \\\\\\hline\n";
+  output_file << "\\hline\n";
 
   // variables to parse file
   string matname;
@@ -51,7 +56,7 @@ int main(){
     millions = (n-ones-1000*thousands)/1000000;
     output_file << " & $";
     if (millions > 0) { output_file  << millions << ","; }
-    else { output_file << "\\phantom{0,}"; }
+    else { output_file << "\\phantom{0,{}}"; }
     output_file << setw(3) << setfill('0') << setprecision(3) << thousands << "," << 
                    setw(3) << setfill('0') << setprecision(3) << ones << "$";
 
@@ -62,7 +67,7 @@ int main(){
     output_file << " & $";
     if (millions > 9) { output_file  << millions << ","; }
     else if (millions > 0) { output_file  << "\\phantom{0}" <<  millions << ","; }
-    else { output_file << "\\phantom{00,}"; }
+    else { output_file << "\\phantom{00,{}}"; }
     output_file << setw(3) << setfill('0') << setprecision(3) << thousands << "," << 
                    setw(3) << setfill('0') << setprecision(3) << ones << "$";
 
@@ -99,6 +104,7 @@ int main(){
   }
 
   // output_file footer
+    output_file << "\\hline\n";
   output_file << "\\end{tabular}";
 
   // close input file

@@ -8,28 +8,28 @@ int main(){
   ofstream output_file;
 
   // attempt to open input file
-  input_file.open("./numex/parsec/parsec_data.txt");
+  input_file.open("./numex/groundstates/groundstates_data.txt");
   if (!input_file.is_open()) { 
     printf("Could not open input file.\n");
     exit(1); 
   }
 
   // attempt to open output file
-  output_file.open("./numex/tables/parsec_table.tex");
+  output_file.open("./numex/tables/groundstates_table.tex");
   if (!output_file.is_open()) { 
     printf("Could not open output file.\n");
     exit(1); 
   }
 
   // output file banner
-  output_file << "\\begin{tabular}{l|c|c|c|c|c|c|c}\n";
+  output_file << "\\begin{tabular}{l|c|c|c|c|c|c}\n";
   output_file << "\\hline\n";
-  output_file << "\\multirow{2}{*}{Matrix} & \\multirow{2}{*}{interval}" <<
+  output_file << "\\multirow{2}{*}{Matrix}" <<
                  " & \\multirow{2}{*}{eigs} & \\multirow{2}{*}{deg}" <<
                  " & \\multirow{2}{*}{iters} & \\multirow{2}{*}{matvecs}" <<
                  " & \\multirow{2}{*}{time}" <<
                  " & \\multirow{2}{*}{residual} \\\\\n";
-  output_file << " & & & & & & & \\\\\\hline\n";
+  output_file << " & & & & & & \\\\\\hline\n";
   output_file << "\\hline\n";
 
   // variables to parse file
@@ -60,45 +60,9 @@ int main(){
       // matrix name
       if (ii==1) { output_file << "\\verb|" << matname << "|"; 
 
-        // write interval to file
-        output_file << " & $[";
-        output_file << fixed << setprecision(3) << a << ",";
-        output_file << fixed << setprecision(4) << b << "]$";
-
-/*
-        // write a
-        if (abs(a) == 0) {
-          exponent = 0;
-          mantissa = 0;
-        }
-        else {
-          exponent = floor(log10(abs(a)));
-          mantissa = a/pow(10.0,exponent);
-        }
-        if (mantissa >= 0) { output_file << "\\phantom{-{}}" << fixed <<
-                             setprecision(2) << mantissa; }
-        else { output_file << "-" << fixed << setprecision(2) << abs(mantissa); }
-        if (exponent >= 0) { output_file << "e{+" << exponent << "},"; }
-        else { output_file << "e{-" << abs(exponent) << "},"; }
-
-        // write b
-        if (abs(b) == 0) {
-          exponent = 0;
-          mantissa = 0;
-        }
-        else {
-          exponent = floor(log10(abs(b)));
-          mantissa = b/pow(10.0,exponent);
-        }
-        if (mantissa >= 0) { output_file << "\\phantom{-{}}" << fixed <<
-                           setprecision(2) << mantissa; }
-        else { output_file << "-" << fixed << setprecision(2) << abs(mantissa); }
-        if (exponent >= 0) { output_file << "e{+" << exponent << "}]$"; }
-        else { output_file << "e{-" << abs(exponent) << "}]$"; }
-*/
         // neigs
-        if (neigs > 99) { output_file << " & $" << setprecision(0) << neigs << "$"; }
-        else { output_file << " & $\\phantom{0}" << setprecision(0) << neigs << "$"; }
+        if (nconv > 99) { output_file << " & $" << setprecision(0) << nconv << "$"; }
+        else { output_file << " & $\\phantom{0}" << setprecision(0) << nconv << "$"; }
       }
       else { output_file << " & &"; }
 
