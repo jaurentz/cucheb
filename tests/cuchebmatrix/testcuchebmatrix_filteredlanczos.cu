@@ -20,7 +20,7 @@ int main(){
   cuchebstats ccstats;
 
   // call filtered lanczos for an interval
-  cuchebmatrix_filteredlanczos(9.0e6, 2.0e7, 1, &ccm, &ccl, &ccstats);
+  cuchebmatrix_filteredlanczos(4.0e6, 2.0e7, 1, &ccm, &ccl, &ccstats);
 
   // print ccm
   cuchebmatrix_print(&ccm);

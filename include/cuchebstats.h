@@ -19,7 +19,8 @@ typedef struct {
   int max_degree;
   int num_matvecs;
   double specint_time;
-  double arnoldi_time;
+  double innerprod_time;
+  double matvec_time;
   
   // convergence info
   int num_conv;

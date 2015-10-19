@@ -16,7 +16,8 @@ int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
   ccstats->max_degree = 0;
   ccstats->num_matvecs = 0;
   ccstats->specint_time = 0.0;
-  ccstats->arnoldi_time = 0.0;
+  ccstats->innerprod_time = 0.0;
+  ccstats->matvec_time = 0.0;
   ccstats->num_conv = 0;
   ccstats->max_res = 0.0;
 
@@ -119,6 +120,10 @@ int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
 
   }
 
+  // record compute time
+  stop = time(0);
+  ccstats->innerprod_time = difftime(stop,start) - ccstats->matvec_time;
+
   // compute rayleigh quotients
   cucheblanczos_rayleigh(ccm,ccl);
 
@@ -132,10 +137,6 @@ int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
   for(int ii=0; ii < ccl->nconv; ii++){
     ccstats->max_res = max(ccstats->max_res,ccl->res[ccl->index[ii]]);
   }
-
-  // record compute time
-  stop = time(0);
-  ccstats->arnoldi_time = difftime(stop,start);
 
   // destroy ccp
   cuchebpoly_destroy(&ccp);

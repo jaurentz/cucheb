@@ -17,7 +17,8 @@ int cuchebstats_print(cuchebstats* ccs){
   printf(" max_degree     = %d\n",ccs->max_degree);
   printf(" num_matvecs    = %d\n",ccs->num_matvecs);
   printf(" specint_time   = %e (sec)\n",ccs->specint_time);
-  printf(" arnoldi_time   = %e (sec)\n",ccs->arnoldi_time);
+  printf(" innerprod_time   = %e (sec)\n",ccs->innerprod_time);
+  printf(" matvec_time   = %e (sec)\n",ccs->matvec_time);
   printf("\n");
   printf(" num_conv = %d\n",ccs->num_conv);
   printf(" max_res  = %e\n",ccs->max_res);

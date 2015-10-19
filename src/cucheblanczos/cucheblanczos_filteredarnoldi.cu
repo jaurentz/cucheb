@@ -18,6 +18,7 @@ int cucheblanczos_filteredarnoldi(int nsteps, cuchebmatrix* ccm, cuchebpoly* ccp
   dtemp = ccl->dtemp;
   dvecs = ccl->dvecs;
   dschurvecs = ccl->dschurvecs;
+  time_t strt, stp;
 
   // set niters
   int niters;
@@ -32,9 +33,14 @@ int cucheblanczos_filteredarnoldi(int nsteps, cuchebmatrix* ccm, cuchebpoly* ccp
 
       // set index
       ind = (ii+stop)*bsize + jj;
+ 
+      // time matvecs
+      strt = time(0);
 
       // apply matrix
       cuchebmatrix_polymv(ccm,ccp,&dvecs[ind*n],&dvecs[(ind+bsize)*n]);
+      stp = time(0);
+      ccstats->matvec_time += difftime(stp,strt);
 
       // num_matvecs
       ccstats->num_matvecs += (ccp->degree);
