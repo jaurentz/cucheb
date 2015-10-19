@@ -26,8 +26,8 @@ int main(){
 
   // variables to parse file
   string matname;
-  double shift;
-  int neigs, deg, bsize, nvecs, ssize;
+  double a, b;
+  int deg, bsize, nvecs, ssize;
 
   // attempt to open input file
   temp = rootdir + "dimacs/dimacs_matrices.txt";
@@ -41,7 +41,7 @@ int main(){
   while (!input_file.eof()) {
 
     // read in data
-    input_file >> matname >> shift >> neigs >> deg >> bsize >> nvecs >> ssize;
+    input_file >> matname >> a >> b >> deg >> bsize >> nvecs >> ssize;
 
     // exit if end of file
     if(input_file.eof()) { break; }
@@ -51,7 +51,7 @@ int main(){
     cuchebmatrix_init(temp, &ccm);
 
     // call filtered lanczos for an interval
-    cuchebmatrix_expertlanczos(neigs, shift, deg, bsize, nvecs, ssize,
+    cuchebmatrix_expertlanczos(b-.03*abs(b-a), 1e100, deg, bsize, nvecs, ssize,
                                  &ccm, &ccl, &ccstats);
 
     // print stats
@@ -59,7 +59,8 @@ int main(){
 
     // write to file
     output_file << matname.c_str() << " "; 
-    output_file << neigs << " ";
+    output_file << b-.03*abs(b-a) << " ";
+    output_file << b << " ";
     output_file << ccstats.mat_dim << " ";
     output_file << ccstats.mat_nnz << " ";
     output_file << ccstats.block_size << " ";

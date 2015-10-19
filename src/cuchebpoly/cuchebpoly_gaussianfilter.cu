@@ -22,9 +22,10 @@ int cuchebpoly_gaussianfilter(double a, double b, double rho, double tau, cucheb
   else {shift = rho;}
 
   // compute function values for f(x) = exp(-100*(x-shift)^2)
-  double scl = pow(b - a,2);
+  double scl = abs(b - a);
   for (int ii=0; ii < 2*MAX_DOUBLE_DEG; ii++) {
-    (ccp->points)[ii] = exp(-abs(tau)*pow((ccp->points)[ii]-shift,2)/scl);
+    //(ccp->points)[ii] = exp(-abs(tau)*pow((ccp->points)[ii]-shift,2)/scl);
+    (ccp->points)[ii] = exp(-abs(tau)*abs((ccp->points)[ii]-shift)/scl);
   }
  
   // compute Chebyshev coefficients

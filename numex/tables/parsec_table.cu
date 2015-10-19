@@ -34,8 +34,8 @@ int main(){
 
   // variables to parse file
   string matname;
-  int n, nnz, bsize, nblocks, niters, ndotprods, maxdeg, nmatvecs, nconv;
-  double a, b, neigs, preproc, lanczos, maxres;
+  int neigs, n, nnz, bsize, nblocks, niters, ndotprods, maxdeg, nmatvecs, nconv;
+  double a, b, preproc, lanczos, maxres;
 
   int exponent;
   double mantissa;

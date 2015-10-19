@@ -115,14 +115,8 @@ int cuchebmatrix_polymv(cuchebmatrix* ccm, cuchebpoly* ccp, double* x, double* y
 /* routine for estimating spectral interval */
 int cuchebmatrix_specint(cuchebmatrix* ccm);
 
-/* filtered lanczos routine for isolated point*/
-int cuchebmatrix_filteredlanczos(int neigs, double shift, int bsize, 
-                                      cuchebmatrix* ccm, cucheblanczos* ccl);
-
-/* filtered lanczos routine for isolated point with statistics*/
-int cuchebmatrix_filteredlanczos(int neigs, double shift, int bsize, 
-                                 cuchebmatrix* ccm, cucheblanczos* ccl,
-                                 cuchebstats* ccs);
+/* routine for estimating spectral interval */
+int cuchebmatrix_specint(cuchebmatrix* ccm, cucheblanczos *ccl);
 
 /* filtered lanczos routine for interval */
 int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize, cuchebmatrix* ccm, 
@@ -132,12 +126,6 @@ int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize, cuchebmatr
 int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize, 
                                  cuchebmatrix* ccm, cucheblanczos* ccl, 
                                  cuchebstats* ccs);
-
-/* expert lanczos routine for points */ 
-int cuchebmatrix_expertlanczos(int neig, double shift, int degree,
-                                 int bsize, int numvecs, int stepsize, 
-                                 cuchebmatrix* ccm, cucheblanczos* ccl, 
-                                 cuchebstats* ccstats);
 
 /* expert lanczos routine for intervals */ 
 int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
