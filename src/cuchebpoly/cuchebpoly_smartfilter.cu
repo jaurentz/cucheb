@@ -33,7 +33,7 @@ int cuchebpoly_smartfilter(double a, double b, double c, double d, cuchebpoly* c
   // local variables
   int degree;
   degree = ceil(3.0*(DOUBLE_PI)/abs(acos(A)-acos(B)));
-  //degree = ceil(8.0*(DOUBLE_PI)/abs(acos(A)-acos(B)));
+  //degree = ceil(4.0*(DOUBLE_PI)/abs(acos(A)-acos(B)));
 
   // create stepfilter
   cuchebpoly_stepfilter(a,b,lb,ub,degree,ccp);

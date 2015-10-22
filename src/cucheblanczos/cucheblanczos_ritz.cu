@@ -75,29 +75,8 @@ int cucheblanczos_ritz(cuchebmatrix* ccm, cucheblanczos* ccl){
 
   }
 
-  // sort ritz values
-  // create a vector of evals and indices
-  vector< pair< double , int > > temp;
-  for(int ii=0; ii < stop*bsize; ii++){
-    temp.push_back(make_pair( -evals[ii], ii ));
-  }
-
-  // sort vector
-  sort(temp.begin(),temp.end());
-
-  // update index
-  for(int ii=0; ii < stop*bsize; ii++){
-    index[ii] = temp[ii].second;
-  }
-
-  // compute number of converged eigenvalues
-  double nrm;
-  nrm = abs(evals[index[0]]);
-  ccl->nconv = 0;
-  for(int ii=0; ii < nvecs; ii++){
-    if (res[index[ii]] >= DOUBLE_TOL*nrm){ break; }
-    else { ccl->nconv = ii+1; }
-  }
+  // set nconv
+  ccl->nconv = stop*bsize;
 
   // return  
   return 0;

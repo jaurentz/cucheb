@@ -11,11 +11,10 @@ int main(){
   cuchebmatrix ccm;
   cuchebmatrix_init(mtxfile, &ccm);
 
-  // call filtered lanczos for an interval
+  // call lanczos for an interval
   cucheblanczos ccl;
   cuchebstats ccstats;
-  //cuchebmatrix_filteredlanczos(4.0e6, 4.1e6, 1, &ccm, &ccl, &ccstats);
-  cuchebmatrix_expertlanczos(1.0e6, 1.1e6, -1, 1, 1200, 30, &ccm, &ccl, &ccstats);
+  cuchebmatrix_lanczos(2.0e6, 2.1e6, 1, 1200, 30, &ccm, &ccl, &ccstats);
 
   // print ccm
   cuchebmatrix_print(&ccm);

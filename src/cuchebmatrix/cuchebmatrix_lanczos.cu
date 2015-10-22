@@ -1,10 +1,10 @@
 #include <cucheb.h>
 
-/* expert lanczos routine for interval with statistics */
-int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
-                                 int bsize, int numvecs, int stepsize, 
-                                 cuchebmatrix* ccm, cucheblanczos* ccl, 
-                                 cuchebstats* ccstats){
+/* lanczos routine for interval with statistics */
+int cuchebmatrix_lanczos(double lbnd, double ubnd, 
+                         int bsize, int numvecs, int stepsize, 
+                         cuchebmatrix* ccm, cucheblanczos* ccl, 
+                         cuchebstats* ccstats){
 
   // initialize ccstats
   ccstats->mat_dim = 0;
@@ -54,26 +54,11 @@ int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
 
   // make sure ubnd is valid
   if (lb >= ub) {
-    printf("\ncuchebmatrix_expertlanczos:\n");
+    printf("\ncuchebmatrix_lanczos:\n");
     printf(" lb must be less than ub!\n\n");
     exit(1);
   }
 
-  // initialize filter polynomial
-  cuchebpoly ccp;
-  cuchebpoly_init(&ccp);
-
-  // create filter polynomial
-  if (degree > -1) {
-    cuchebpoly_stepfilter(ccm->a,ccm->b,lb,ub,degree,&ccp);
-  }
-  else {
-    cuchebpoly_smartfilter(ccm->a,ccm->b,lb,ub,&ccp);
-  }
-
-  // max_degree
-  ccstats->max_degree = max(ccstats->max_degree,ccp.degree);
-    
   // initialize lanczos object
   cucheblanczos_init(bsize,numvecs,ccm,ccl);
 
@@ -97,39 +82,26 @@ int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
   for (int jj=0; jj<nres; jj++) {
 
     // filtered arnoldi run
-    cucheblanczos_filteredarnoldi(step,ccm,&ccp,ccl,ccstats);
+    cucheblanczos_arnoldi(step,ccm,ccl,ccstats);
 
     // update ccstats
     // num_iters
     ccstats->num_iters += 1;
 
-    // compute ritz values of p(A)
+    // compute ritz values of A
     cucheblanczos_ritz(ccm,ccl);
 
-    // sort ritz values of p(A)
-    cucheblanczos_sort(ccl);
-
-    // check to see if in interval
-    numint = 0;
-    for(int ii=0; ii<ccl->nconv; ii++){
-      if(ccl->evals[ccl->index[ii]] >= .5){ numint += 1; }
-      else { break; }
-    }
+    // sort evals
+    cucheblanczos_sort(lb,ub,ccl);
 
     // exit if converged
-    if (ccl->nconv > numint && numint > 0) { 
-      ccl->nconv = numint;
-      break; 
-    }
+    if (ccl->nconv == numint && numint > 0) { break; }
+    else { numint = ccl->nconv; }
 
   }
 
   // compute rayleigh quotients
   cucheblanczos_rayleigh(ccm,ccl);
-
-  // sort evals
-  cucheblanczos_sort(lb,ub,ccl);
-  ccl->nconv = numint;
 
   // num_conv
   ccstats->num_conv = ccl->nconv;
@@ -143,9 +115,6 @@ int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
   ccstats->total_time = (clock()-tick) + ccstats->specint_time;
   ccstats->specint_time = (ccstats->specint_time)/((double)CLOCKS_PER_SEC);
   ccstats->total_time = (ccstats->total_time)/((double)CLOCKS_PER_SEC);
-
-  // destroy ccp
-  cuchebpoly_destroy(&ccp);
 
   // return  
   return 0;

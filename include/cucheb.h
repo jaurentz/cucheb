@@ -118,6 +118,12 @@ int cuchebmatrix_specint(cuchebmatrix* ccm);
 /* routine for estimating spectral interval */
 int cuchebmatrix_specint(cuchebmatrix* ccm, cucheblanczos *ccl);
 
+/* lanczos routine for intervals */ 
+int cuchebmatrix_lanczos(double lbnd, double ubnd,
+                         int bsize, int numvecs, int stepsize, 
+                         cuchebmatrix* ccm, cucheblanczos* ccl, 
+                         cuchebstats* ccstats);
+
 /* filtered lanczos routine for interval */
 int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize, cuchebmatrix* ccm, 
                                  cucheblanczos* ccl);
@@ -164,8 +170,8 @@ int cucheblanczos_rayleigh(cuchebmatrix* ccm, cucheblanczos* ccl);
 /* sort evals in interval */
 int cucheblanczos_sort(double lb, double ub, cucheblanczos* ccl);
 
-/* sort evals around point */
-int cucheblanczos_sort(double rho, cucheblanczos* ccl);
+/* sort evals by largest modulus */
+int cucheblanczos_sort(cucheblanczos* ccl);
 
 
 

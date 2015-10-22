@@ -42,6 +42,9 @@ int cuchebmatrix_specint(cuchebmatrix* ccm, cucheblanczos* ccl){
     // compute ritz values
     cucheblanczos_ritz(ccm,ccl);
 
+    // sort ritz values
+    cucheblanczos_sort(ccl);
+
     // set upper endpoint
     indb = ccl->index[0];
     ccm->b = ccl->evals[indb];

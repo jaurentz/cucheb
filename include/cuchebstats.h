@@ -21,6 +21,7 @@ typedef struct {
   double specint_time;
   double innerprod_time;
   double matvec_time;
+  double total_time;
   
   // convergence info
   int num_conv;
