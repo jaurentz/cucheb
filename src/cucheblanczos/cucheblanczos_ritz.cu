@@ -7,7 +7,6 @@ int cucheblanczos_ritz(cuchebmatrix* ccm, cucheblanczos* ccl){
   int bsize, nvecs, stop;
   double V[MAX_BLOCK_SIZE] = {0.0};
   double R[(MAX_BLOCK_SIZE)*(MAX_BLOCK_SIZE)] = {0.0};
-  int* index;
   double* evals;
   double* res;
   double* bands;
@@ -15,7 +14,6 @@ int cucheblanczos_ritz(cuchebmatrix* ccm, cucheblanczos* ccl){
   bsize = ccl->bsize;
   nvecs = (ccl->bsize)*(ccl->nblocks);
   stop = ccl->stop;
-  index = ccl->index;
   evals = ccl->evals;
   res = ccl->res;
   bands = ccl->bands;

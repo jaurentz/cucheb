@@ -15,7 +15,7 @@ int main(){
   cucheblanczos ccl;
   cuchebstats ccstats;
   //cuchebmatrix_filteredlanczos(4.0e6, 4.1e6, 1, &ccm, &ccl, &ccstats);
-  cuchebmatrix_expertlanczos(1.0e6, 1.1e6, -1, 1, 1200, 30, &ccm, &ccl, &ccstats);
+  cuchebmatrix_expertlanczos(-1.0e4, 1.0e4, -1, 1, 1000, 50, &ccm, &ccl, &ccstats);
 
   // print ccm
   cuchebmatrix_print(&ccm);
