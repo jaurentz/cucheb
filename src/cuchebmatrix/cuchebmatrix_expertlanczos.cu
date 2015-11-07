@@ -18,6 +18,7 @@ int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
   ccstats->specint_time = 0.0;
   ccstats->innerprod_time = 0.0;
   ccstats->matvec_time = 0.0;
+  ccstats->total_time = 0.0;
   ccstats->num_conv = 0;
   ccstats->max_res = 0.0;
 

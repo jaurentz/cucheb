@@ -1,5 +1,22 @@
 #include <cucheb.h>
 
+/* lanczos routine for interval */
+int cuchebmatrix_lanczos(double lbnd, double ubnd, 
+                         int bsize, int numvecs, int stepsize, 
+                         cuchebmatrix* ccm, cucheblanczos* ccl){
+
+  // cuchebstats variable
+  cuchebstats ccstats;
+
+  // call Lanczos
+  cuchebmatrix_lanczos(lbnd,ubnd,bsize,numvecs,stepsize,ccm,ccl,&ccstats);
+
+  // return
+  return 0;
+
+}
+
+
 /* lanczos routine for interval with statistics */
 int cuchebmatrix_lanczos(double lbnd, double ubnd, 
                          int bsize, int numvecs, int stepsize, 
@@ -18,6 +35,7 @@ int cuchebmatrix_lanczos(double lbnd, double ubnd,
   ccstats->specint_time = 0.0;
   ccstats->innerprod_time = 0.0;
   ccstats->matvec_time = 0.0;
+  ccstats->total_time = 0.0;
   ccstats->num_conv = 0;
   ccstats->max_res = 0.0;
 

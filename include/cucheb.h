@@ -121,6 +121,11 @@ int cuchebmatrix_specint(cuchebmatrix* ccm, cucheblanczos *ccl);
 /* lanczos routine for intervals */ 
 int cuchebmatrix_lanczos(double lbnd, double ubnd,
                          int bsize, int numvecs, int stepsize, 
+                         cuchebmatrix* ccm, cucheblanczos* ccl);
+
+/* lanczos routine for intervals with statistics variable */ 
+int cuchebmatrix_lanczos(double lbnd, double ubnd,
+                         int bsize, int numvecs, int stepsize, 
                          cuchebmatrix* ccm, cucheblanczos* ccl, 
                          cuchebstats* ccstats);
 

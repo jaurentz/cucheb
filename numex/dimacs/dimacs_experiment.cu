@@ -70,7 +70,9 @@ int main(){
     output_file << ccstats.max_degree << " ";
     output_file << ccstats.num_matvecs << " ";
     output_file << ccstats.specint_time << " ";
-    output_file << ccstats.arnoldi_time << " ";
+    output_file << ccstats.innerprod_time << " ";
+    output_file << ccstats.matvec_time << " ";
+    output_file << ccstats.total_time << " ";
     output_file << ccstats.num_conv << " ";
     output_file << ccstats.max_res << "\n";
 

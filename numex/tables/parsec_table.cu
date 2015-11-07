@@ -35,7 +35,7 @@ int main(){
   // variables to parse file
   string matname;
   int neigs, n, nnz, bsize, nblocks, niters, ndotprods, maxdeg, nmatvecs, nconv;
-  double a, b, preproc, lanczos, maxres;
+  double a, b, preproc, innerprod, matvec, total, maxres;
 
   int exponent;
   double mantissa;
@@ -49,8 +49,8 @@ int main(){
 
       // read in data
       input_file >> matname >> a >> b >> neigs >> n >> nnz >> bsize >> nblocks >> 
-                    niters >> ndotprods >> maxdeg >> nmatvecs >> preproc >> lanczos >>
-                    nconv >> maxres;
+                    niters >> ndotprods >> maxdeg >> nmatvecs >> preproc >> 
+                    innerprod >> matvec >> total >> nconv >> maxres;
 
       // exit if end of file
       if(input_file.eof()) { break; }
@@ -114,12 +114,12 @@ int main(){
       ones = nmatvecs%1000;
       thousands = (nmatvecs-ones)/1000;
       if (thousands > 99) {
-        output_file << " & $" << thousands << 
-                       "," << setw(3) << setfill('0') << setprecision(3) << ones << "$";
+        output_file << " & $" << thousands << "," << setw(3) << setfill('0') << 
+                       setprecision(3) << ones << "$";
       }
       else {
-        output_file << " & $\\phantom{0}" << thousands << 
-                       "," << setw(3) << setfill('0') << setprecision(3) << ones << "$";
+        output_file << " & $\\phantom{0}" << thousands << "," << setw(3) << 
+                       setfill('0') << setprecision(3) << ones << "$";
       }
 
       // ndotprods
@@ -127,20 +127,22 @@ int main(){
 //      thousands = (ndotprods-ones)/1000;
 //      if (thousands > 99) {
 //        output_file << " & $" << thousands << 
-//                       "," << setw(3) << setfill('0') << setprecision(3) << ones << "$";
+//                       "," << setw(3) << setfill('0') << setprecision(3) << 
+//                       ones << "$";
 //      }
 //      else {
 //        output_file << " & $\\phantom{0}" << thousands << 
-//                       "," << setw(3) << setfill('0') << setprecision(3) << ones << "$";
+//                       "," << setw(3) << setfill('0') << setprecision(3) << 
+//                       ones << "$";
 //      }
 
       // time
-      if (preproc+lanczos >= 100 ) { output_file << " & $" << fixed <<
-                                                     setprecision(0) << preproc+lanczos << "$"; }
-      else if (preproc+lanczos >= 10 ) { output_file << " & $\\phantom{0}" << fixed <<
-                                                         setprecision(0) << preproc+lanczos << "$"; }
+      if (total >= 100 ) { output_file << " & $" << fixed <<
+                                          setprecision(0) << total << "$"; }
+      else if (total >= 10 ) { output_file << " & $\\phantom{0}" << fixed <<
+                                              setprecision(0) << total << "$"; }
       else { output_file << " & $\\phantom{00}" << fixed << setprecision(0) << 
-                            preproc+lanczos << "$"; }
+                            total << "$"; }
 
       // maxres
       exponent = floor(log10(abs(maxres)));
