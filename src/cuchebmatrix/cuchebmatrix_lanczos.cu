@@ -30,7 +30,7 @@ int cuchebmatrix_lanczos(double lbnd, double ubnd,
   ccstats->num_blocks = 0;
   ccstats->num_iters = 0;
   ccstats->num_innerprods = 0;
-  ccstats->max_degree = 0;
+  ccstats->max_degree = 1;
   ccstats->num_matvecs = 0;
   ccstats->specint_time = 0.0;
   ccstats->innerprod_time = 0.0;
@@ -111,10 +111,14 @@ int cuchebmatrix_lanczos(double lbnd, double ubnd,
 
     // sort evals
     cucheblanczos_sort(lb,ub,ccl);
+    numint = ccl->nconv;
+
+    // checkconvergence
+    cucheblanczos_checkconvergence(ccl);
 
     // exit if converged
     if (ccl->nconv == numint && numint > 0) { break; }
-    else { numint = ccl->nconv; }
+    else { ccl->nconv = 0; }
 
   }
 

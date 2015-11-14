@@ -4,17 +4,18 @@
 int main(){
 
   // set device
-  cudaSetDevice(1);
+  cudaSetDevice(0);
 
   // cuhebmatrix
-  string mtxfile("../matrices/ca2010.mtx");
+  //string mtxfile("../matrices/ca2010.mtx");
+  string mtxfile("../matrices/144.mtx");
   cuchebmatrix ccm;
   cuchebmatrix_init(mtxfile, &ccm);
 
   // call lanczos for an interval
   cucheblanczos ccl;
   cuchebstats ccstats;
-  cuchebmatrix_lanczos(2.0e6, 2.1e6, 1, 1200, 30, &ccm, &ccl, &ccstats);
+  cuchebmatrix_lanczos(15.0, 16.0, 1, 3000, 3000, &ccm, &ccl, &ccstats);
 
   // print ccm
   cuchebmatrix_print(&ccm);

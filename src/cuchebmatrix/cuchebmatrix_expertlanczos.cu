@@ -110,18 +110,19 @@ int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
     // sort ritz values of p(A)
     cucheblanczos_sort(ccl);
 
-    // check to see if in interval
-    numint = 0;
-    for(int ii=0; ii<ccl->nconv; ii++){
-      if(ccl->evals[ccl->index[ii]] >= .5){ numint += 1; }
+    // check to see if in interval, i.e. ritz values greater than 1/2
+    ccl->nconv = 0;
+    for(int ii=0; ii<ccl->stop*ccl->bsize; ii++){
+      if(ccl->evals[ccl->index[ii]] >= .500){ ccl->nconv += 1; }
       else { break; }
     }
+    numint = ccl->nconv;
+
+    // check convergence ritz values of p(A)
+    cucheblanczos_checkconvergence(ccl);
 
     // exit if converged
-    if (ccl->nconv > numint && numint > 0) { 
-      ccl->nconv = numint;
-      break; 
-    }
+    if (ccl->nconv == numint && numint > 0) { break; }
 
   }
 
@@ -130,6 +131,13 @@ int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
 
   // sort evals
   cucheblanczos_sort(lb,ub,ccl);
+
+  // count number in interval
+  numint = 0;
+  for(int ii=0; ii<ccl->nconv; ii++){
+    if(ccl->evals[ccl->index[ii]] >= lb && ccl->evals[ccl->index[ii]] <= ub)
+      { numint += 1; }
+  }
   ccl->nconv = numint;
 
   // num_conv

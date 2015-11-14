@@ -130,8 +130,8 @@ int cuchebmatrix_lanczos(double lbnd, double ubnd,
                          cuchebstats* ccstats);
 
 /* filtered lanczos routine for interval */
-int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize, cuchebmatrix* ccm, 
-                                 cucheblanczos* ccl);
+int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
+                                 cuchebmatrix* ccm, cucheblanczos* ccl);
 
 /* same routine as above but with statistics variable */
 int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize, 
@@ -178,6 +178,8 @@ int cucheblanczos_sort(double lb, double ub, cucheblanczos* ccl);
 /* sort evals by largest modulus */
 int cucheblanczos_sort(cucheblanczos* ccl);
 
+/* check convergence */
+int cucheblanczos_checkconvergence(cucheblanczos* ccl);
 
 
 

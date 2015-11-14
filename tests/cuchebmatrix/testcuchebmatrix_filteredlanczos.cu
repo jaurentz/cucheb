@@ -7,15 +7,25 @@ int main(){
   cudaSetDevice(1);
 
   // cuhebmatrix
-  string mtxfile("../matrices/ca2010.mtx");
+  //string mtxfile("../matrices/ca2010.mtx");
+  //string mtxfile("../matrices/mn2010.mtx");
+  //string mtxfile("../matrices/Ge99H100.mtx");
+  string mtxfile("../matrices/caidaRouterLevel.mtx");
+  //string mtxfile("../matrices/rgg_n_2_20_s0.mtx");
   cuchebmatrix ccm;
   cuchebmatrix_init(mtxfile, &ccm);
+
+  double a, b, per;
+  a = -108;
+  b = 109;
+  per = .42;
 
   // call filtered lanczos for an interval
   cucheblanczos ccl;
   cuchebstats ccstats;
   //cuchebmatrix_filteredlanczos(4.0e6, 4.1e6, 1, &ccm, &ccl, &ccstats);
-  cuchebmatrix_expertlanczos(-1.0e4, 1.0e4, -1, 1, 1000, 50, &ccm, &ccl, &ccstats);
+  //cuchebmatrix_expertlanczos(3.0e6, 3.5e6, -1, 1, 1200, 30, &ccm, &ccl, &ccstats);
+  cuchebmatrix_expertlanczos(b-per*abs(b-a), 1.1*b, -1, 1, 1200, 30, &ccm, &ccl, &ccstats);
 
   // print ccm
   cuchebmatrix_print(&ccm);

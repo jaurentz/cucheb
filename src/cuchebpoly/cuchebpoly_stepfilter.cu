@@ -53,13 +53,13 @@ int cuchebpoly_stepfilter(double a, double b, double c, double d, int order, cuc
   }
 
   // apply Jackson damping
-  double alpha = 1.0/(deg+2.0);
-  double beta = sin(pi*alpha);
-  double gamma = cos(pi*alpha);
-  for (int ii=0; ii<deg+1; ii++) {
-    ccp->coeffs[ii] = alpha*((deg+2.0-ii)*beta*cos(ii*pi*alpha) +
-                       sin(ii*pi*alpha)*gamma)*ccp->coeffs[ii]/beta;
-  }
+//  double alpha = 1.0/(deg+2.0);
+//  double beta = sin(pi*alpha);
+//  double gamma = cos(pi*alpha);
+//  for (int ii=0; ii<deg+1; ii++) {
+//    ccp->coeffs[ii] = alpha*((deg+2.0-ii)*beta*cos(ii*pi*alpha) +
+//                       sin(ii*pi*alpha)*gamma)*ccp->coeffs[ii]/beta;
+//  }
 
   // compute transition values
   p1 = cuchebpoly_clenshaw(ccp,p1); 
