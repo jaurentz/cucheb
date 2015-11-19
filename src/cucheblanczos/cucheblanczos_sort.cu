@@ -15,11 +15,9 @@ int cucheblanczos_sort(double lb, double ub, cucheblanczos* ccl){
   int neig;
   int* index;
   double* evals;
-  double* res;
   neig = (ccl->nconv);
   index = ccl->index;
   evals = ccl->evals;
-  res = ccl->res;
 
   // sort ritz values
   // create a vector of evals and indices

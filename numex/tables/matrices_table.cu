@@ -39,6 +39,7 @@ int main(){
   double mantissa;
 
   // loop through lines
+  int ii = 0;
   while (!input_file.eof()) {
 
     // read in data
@@ -74,7 +75,8 @@ int main(){
     // write nnz/n to file
     output_file << " & $";
     if (nnz/(1.0*n) > 9) { output_file << fixed << setprecision(1) << nnz/(1.0*n); }
-    else { output_file  << "\\phantom{0}" << fixed << setprecision(1) << nnz/(1.0*n); }
+    else { output_file  << "\\phantom{0}" << fixed << setprecision(1) 
+                        << nnz/(1.0*n); }
     output_file << "$";
 
     // write specint to file
@@ -99,7 +101,11 @@ int main(){
     else { output_file << "e{-" << abs(exponent) << "}"; }
 
     // new line
-    output_file << "]$ \\\\\n";
+    if ( ii == 4 || ii == 8 ) { output_file << "]$ \\\\\\hline\n"; }
+    else { output_file << "]$ \\\\\n"; }
+
+    // update index
+    ii++;
 
   }
 
