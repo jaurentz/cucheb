@@ -3,42 +3,32 @@
 /* driver */
 int main(){
 
-  // set device
-  cudaSetDevice(1);
-
-  // cuhebmatrix
-  //string mtxfile("../matrices/ca2010.mtx");
-  //string mtxfile("../matrices/mn2010.mtx");
-  //string mtxfile("../matrices/Ge99H100.mtx");
-  string mtxfile("../matrices/caidaRouterLevel.mtx");
-  //string mtxfile("../matrices/rgg_n_2_20_s0.mtx");
+  // read in matrix and allocate memory
+  string mtxfile("../matrices/ca2010.mtx");
   cuchebmatrix ccm;
   cuchebmatrix_init(mtxfile, &ccm);
 
-  double a, b, per;
-  a = -108;
-  b = 109;
-  per = .42;
+  // set interval [alpha,beta]
+  double alpha, beta;
+  //alpha = 9.0e6; beta = 1.0e8;  // easy
+  //alpha = 4.0e6; beta = 5.0e6;  // less easy
+  alpha = 2.5e6; beta = 3.0e6;  // even less easy
 
-  // call filtered lanczos for an interval
+  // call filtered lanczos for an [alpha,beta]
   cucheblanczos ccl;
   cuchebstats ccstats;
-  //cuchebmatrix_filteredlanczos(4.0e6, 4.1e6, 1, &ccm, &ccl, &ccstats);
-  //cuchebmatrix_expertlanczos(3.0e6, 3.5e6, -1, 1, 1200, 30, &ccm, &ccl, &ccstats);
-  cuchebmatrix_expertlanczos(b-per*abs(b-a), 1.1*b, -1, 1, 1200, 30, &ccm, &ccl, &ccstats);
+  cuchebmatrix_filteredlanczos(alpha, beta, 1, &ccm, &ccl, &ccstats);
 
-  // print ccm
+  // print matrix
   cuchebmatrix_print(&ccm);
 
-  // print ccstats
+  // print statistics
   cuchebstats_print(&ccstats);
 
   // print eigenvalues
   for (int ii=0; ii<ccl.nconv; ii++) {
-  //for (int ii=0; ii<100; ii++) {
     printf(" %+e, %e\n",ccl.evals[ccl.index[ii]],ccl.res[ccl.index[ii]]);
-  }
-  printf("\n");
+  } printf("\n");
 
   // destroy CCM
   cuchebmatrix_destroy(&ccm);

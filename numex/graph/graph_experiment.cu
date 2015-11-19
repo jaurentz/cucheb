@@ -51,8 +51,7 @@ int main(){
     cuchebmatrix_init(temp, &ccm);
 
     // call filtered lanczos for an interval
-    per = per*abs(b-a);
-    cuchebmatrix_expertlanczos(b-per, b*1.1, deg, bsize, nvecs, ssize,
+    cuchebmatrix_expertlanczos(b-per*abs(b-a), b*1.1, deg, bsize, nvecs, ssize,
                                  &ccm, &ccl, &ccstats);
 
     // print stats
@@ -60,8 +59,9 @@ int main(){
 
     // write to file
     output_file << matname.c_str() << " "; 
-    output_file << b-per << " ";
+    output_file << a << " ";
     output_file << b << " ";
+    output_file << per << " ";
     output_file << ccstats.mat_dim << " ";
     output_file << ccstats.mat_nnz << " ";
     output_file << ccstats.block_size << " ";
@@ -86,21 +86,18 @@ int main(){
     // exit if end of file
     if(input_file.eof()) { break; }
 
-    // initialize matrix
-    temp = matdir + matname + ".mtx";
-    cuchebmatrix_init(temp, &ccm);
-
-    // call filtered lanczos for an interval
-    per = per*abs(b-a);
-    cuchebmatrix_lanczos(b-per, b*1.1, bsize, nvecs, ssize, &ccm, &ccl, &ccstats);
+    // call lanczos for an interval
+    cuchebmatrix_lanczos(b-per*abs(b-a), b*1.1, bsize, nvecs, ssize,
+                                 &ccm, &ccl, &ccstats);
 
     // print stats
     cuchebstats_print(&ccstats);
 
     // write to file
     output_file << matname.c_str() << " "; 
-    output_file << b-per << " ";
+    output_file << a << " ";
     output_file << b << " ";
+    output_file << per << " ";
     output_file << ccstats.mat_dim << " ";
     output_file << ccstats.mat_nnz << " ";
     output_file << ccstats.block_size << " ";

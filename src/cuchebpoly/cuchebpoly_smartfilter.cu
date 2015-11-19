@@ -55,9 +55,7 @@ int cuchebpoly_smartfilter(double a, double b, double c, double d, cuchebpoly* c
   double tol, nrm, nrm_exact;
   nrm = pi*(ccp->coeffs[0]*ccp->coeffs[0]);
   nrm_exact = sqrt(aclb-acub);
-  //tol = pow(2.0,-4)*nrm_exact;
   tol = 5.0e-2*nrm_exact;
-  //tol = pow(2.0,-5)*nrm_exact;
   
   // reduce tolerance if subinterval contains an end point
   if (lb == -1.0 || ub == 1.0 ){ tol = .25*tol; }
@@ -76,7 +74,6 @@ int cuchebpoly_smartfilter(double a, double b, double c, double d, cuchebpoly* c
     p2 += ccp->coeffs[jj+1]*cos((double)(jj+1)*acub);
 
     // check error
-    //if (abs(sqrt(nrm)-nrm_exact) < tol && jj >= 9) { break; }
     if (abs(sqrt(nrm)-nrm_exact) < tol) { break; }
 
   }

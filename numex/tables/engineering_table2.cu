@@ -19,14 +19,14 @@ int main(){
   ofstream output_file;
 
   // attempt to open input file
-  input_file.open("./numex/graph/graph_data.txt");
+  input_file.open("./numex/engineering/engineering_data.txt");
   if (!input_file.is_open()) { 
     printf("Could not open input file.\n");
     exit(1); 
   }
 
   // attempt to open output file
-  output_file.open("./numex/tables/graph_table2.tex");
+  output_file.open("./numex/tables/engineering_table2.tex");
   if (!output_file.is_open()) { 
     printf("Could not open output file.\n");
     exit(1); 

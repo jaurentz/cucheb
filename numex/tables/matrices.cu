@@ -47,8 +47,9 @@ int main(){
     cuchebmatrix_specint(&ccm);
 
     // write to file
-    output_file << matname << " " << ccm.m << " " << ccm.nnz << " " << 
-                   setprecision(15) << ccm.a << " " << setprecision(15) << ccm.b << "\n";
+    output_file << matname << " " << ccm.m << " " << ccm.nnz << " " 
+                << setprecision(15) << ccm.a << " " << setprecision(15) 
+                << ccm.b << "\n";
 
     // destroy cuchebmatrix
     cuchebmatrix_destroy(&ccm);
