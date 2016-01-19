@@ -33,12 +33,12 @@ int main(){
   }
 
   // output file banner
-  output_file << "\\begin{tabular}{l|c|c|c|c|c}\n";
+  output_file << "\\begin{tabular}{l|c|c|c|c}\n";
   output_file << "\\hline\n";
-  output_file << "\\multirow{2}{*}{Matrix} & \\multirow{2}{*}{deg}" <<
-                 " & \\multirow{2}{*}{iters} & \\multirow{2}{*}{nblocks}" <<
-                 " & \\multirow{2}{*}{dotprods}& \\multirow{2}{*}{matvecs} \\\\\n";
-  output_file << " & & & & & \\\\\\hline\n";
+  output_file << "\\multirow{2}{*}{Matrix} & \\multirow{2}{*}{$m$}" <<
+                 " & \\multirow{2}{*}{iters}" <<
+                 " & \\multirow{2}{*}{ORTH}& \\multirow{2}{*}{MV} \\\\\n";
+  output_file << " & & & & \\\\\\hline\n";
   output_file << "\\hline\n";
 
   // variables to parse file
@@ -76,13 +76,8 @@ int main(){
       else { output_file << " & $\\phantom{0}" << setprecision(0) << maxdeg << "$"; }
 
       // niters
-      if (niters > 9) { output_file << " & $" << setprecision(0) << niters << "$"; }
-      else { output_file << " & $\\phantom{0}" << setprecision(0) << niters << "$"; }
+      output_file << " & $" << setprecision(0) << nblocks << "$";
  
-      // nblocks
-      output_file << " & $" << setw(3) << setfill('0') << setprecision(3) 
-                  << nblocks << "$";
-
       // update total time
       if (ii==1) { total -= preproc; }
 

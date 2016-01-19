@@ -36,8 +36,8 @@ int main(){
   output_file << "\\begin{tabular}{l|c|c|c|c|c|c|c}\n";
   output_file << "\\hline\n";
   output_file << "\\multirow{2}{*}{Matrix} & \\multirow{2}{*}{fraction}" <<
-                 " & \\multirow{2}{*}{eigs} & \\multirow{2}{*}{deg}" <<
-                 " & \\multirow{2}{*}{iters} & \\multirow{2}{*}{matvecs}" <<
+                 " & \\multirow{2}{*}{eigs} & \\multirow{2}{*}{$m$}" <<
+                 " & \\multirow{2}{*}{iters} & \\multirow{2}{*}{MV}" <<
                  " & \\multirow{2}{*}{time}" <<
                  " & \\multirow{2}{*}{residual} \\\\\n";
   output_file << " & & & & & & & \\\\\\hline\n";
@@ -94,18 +94,26 @@ int main(){
       else { output_file << " & $\\phantom{0}" << setprecision(0) << maxdeg << "$"; }
 
       // niters
-      if (niters > 9) { output_file << " & $" << setprecision(0) << niters << "$"; }
-      else { output_file << " & $\\phantom{0}" << setprecision(0) << niters << "$"; }
-
-      // nmatvecs
-      ones = nmatvecs%1000;
-      thousands = (nmatvecs-ones)/1000;
+      ones = nblocks%1000;
+      thousands = (nblocks-ones)/1000;
       if (thousands > 0) {
         output_file << " & $" << thousands << "," << setw(3) << setfill('0') << 
                        setprecision(3) << ones << "$";
       }
       else {
         output_file << " & $\\phantom{0,{}}" << setw(3) << 
+                       setfill('0') << setprecision(3) << ones << "$";
+      }
+
+      // nmatvecs
+      ones = nmatvecs%1000;
+      thousands = (nmatvecs-ones)/1000;
+      if (thousands > 9) {
+        output_file << " & $" << thousands << "," << setw(3) << setfill('0') << 
+                       setprecision(3) << ones << "$";
+      }
+      else {
+        output_file << " & $\\phantom{0}" << thousands << "," << setw(3) << 
                        setfill('0') << setprecision(3) << ones << "$";
       }
 

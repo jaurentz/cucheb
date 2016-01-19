@@ -33,12 +33,12 @@ int main(){
   }
 
   // output file banner
-  output_file << "\\begin{tabular}{l|c|c|c|c|c}\n";
+  output_file << "\\begin{tabular}{l|c|c|c|c}\n";
   output_file << "\\hline\n";
-  output_file << "\\multirow{2}{*}{Matrix} & \\multirow{2}{*}{deg}" <<
-                 " & \\multirow{2}{*}{iters} & \\multirow{2}{*}{nblocks}" <<
-                 " & \\multirow{2}{*}{dotprods}& \\multirow{2}{*}{matvecs} \\\\\n";
-  output_file << " & & & & & \\\\\\hline\n";
+  output_file << "\\multirow{2}{*}{Matrix} & \\multirow{2}{*}{$m$}" <<
+                 " & \\multirow{2}{*}{iters}" <<
+                 " & \\multirow{2}{*}{ORTH}& \\multirow{2}{*}{MV} \\\\\n";
+  output_file << " & & & & \\\\\\hline\n";
   output_file << "\\hline\n";
 
   // variables to parse file
@@ -76,10 +76,6 @@ int main(){
       else { output_file << " & $\\phantom{0}" << setprecision(0) << maxdeg << "$"; }
 
       // niters
-      if (niters > 9) { output_file << " & $" << setprecision(0) << niters << "$"; }
-      else { output_file << " & $\\phantom{0}" << setprecision(0) << niters << "$"; }
- 
-      // nblocks
       ones = nblocks%1000;
       thousands = (nblocks-ones)/1000;
       if (thousands > 0) {
@@ -103,7 +99,7 @@ int main(){
       // matvec time
       ones = round(100.0*matvec/total);
       if (ones > 9) { output_file << " & $" << setprecision(0) << ones << "$"; }
-      else if (ones == 0) { output_file << " & ${}<1$"; }
+      else if (ones == 0) { output_file << " & ${}<\\!\\! 1$"; }
       else { output_file << " & $\\phantom{0}" << setprecision(0) << ones << "$"; }
       output_file << "\\%";
 
