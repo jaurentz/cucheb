@@ -63,6 +63,9 @@ int cuchebpoly_points(double a, double b, cuchebpoly* ccp);
 /* convert values to coefficients */
 int cuchebpoly_coeffs(cuchebpoly* ccp);
 
+/* evaluate poly at scalar */
+double cuchebpoly_clenshaw(cuchebpoly* ccp, double x);
+
 /* threshold coefficients */
 int cuchebpoly_chop(cuchebpoly* ccp);
 
@@ -71,6 +74,9 @@ int cuchebpoly_pointfilter(double a, double b, double rho, int order, cuchebpoly
 
 /* routine for creating step filter */
 int cuchebpoly_stepfilter(double a, double b, double c, double d, int order, cuchebpoly* ccp);
+
+/* routine for creating smart filter */
+int cuchebpoly_smartfilter(double a, double b, double c, double d, cuchebpoly* ccp);
 
 /* routine for creating gaussian filter */
 int cuchebpoly_gaussianfilter(double a, double b, double rho, double tau, cuchebpoly* ccp);
@@ -109,29 +115,39 @@ int cuchebmatrix_polymv(cuchebmatrix* ccm, cuchebpoly* ccp, double* x, double* y
 /* routine for estimating spectral interval */
 int cuchebmatrix_specint(cuchebmatrix* ccm);
 
-/* filtered lanczos routine for isolated point*/
-int cuchebmatrix_filteredlanczos(int neigs, double shift, int bsize, 
-                                      cuchebmatrix* ccm, cucheblanczos* ccl);
+/* routine for estimating spectral interval */
+int cuchebmatrix_specint(cuchebmatrix* ccm, cucheblanczos *ccl);
 
-/* filtered lanczos routine for isolated point with statistics*/
-int cuchebmatrix_filteredlanczos(int neigs, double shift, int bsize, 
-                                 cuchebmatrix* ccm, cucheblanczos* ccl,
-                                 cuchebstats* ccs);
+/* lanczos routine for intervals */ 
+int cuchebmatrix_lanczos(double lbnd, double ubnd,
+                         int bsize, int numvecs, int stepsize, 
+                         cuchebmatrix* ccm, cucheblanczos* ccl);
+
+/* lanczos routine for intervals with statistics variable */ 
+int cuchebmatrix_lanczos(double lbnd, double ubnd,
+                         int bsize, int numvecs, int stepsize, 
+                         cuchebmatrix* ccm, cucheblanczos* ccl, 
+                         cuchebstats* ccstats);
 
 /* filtered lanczos routine for interval */
-int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize, cuchebmatrix* ccm, 
-                                 cucheblanczos* ccl);
+int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize,
+                                 cuchebmatrix* ccm, cucheblanczos* ccl);
 
 /* same routine as above but with statistics variable */
 int cuchebmatrix_filteredlanczos(double lbnd, double ubnd, int bsize, 
                                  cuchebmatrix* ccm, cucheblanczos* ccl, 
                                  cuchebstats* ccs);
 
+/* expert lanczos routine for intervals */ 
+int cuchebmatrix_expertlanczos(double lbnd, double ubnd, int degree,
+                                 int bsize, int numvecs, int stepsize, 
+                                 cuchebmatrix* ccm, cucheblanczos* ccl, 
+                                 cuchebstats* ccstats);
 
 
 /* cucheblanczos subroutines */
 /* instantiate cucheblanczos object */
-int cucheblanczos_init(int bsize, int nblocks, cuchebmatrix* ccm, cucheblanczos* ccl);
+int cucheblanczos_init(int bsize, int numvecs, cuchebmatrix* ccm, cucheblanczos* ccl);
 
 /* destroy cucheblanczos object */
 int cucheblanczos_destroy(cucheblanczos* ccl);
@@ -156,6 +172,14 @@ int cucheblanczos_ritz(cuchebmatrix* ccm, cucheblanczos* ccl);
 /* compute rayleigh quotients */
 int cucheblanczos_rayleigh(cuchebmatrix* ccm, cucheblanczos* ccl);
 
+/* sort evals in interval */
+int cucheblanczos_sort(double lb, double ub, cucheblanczos* ccl);
+
+/* sort evals by largest modulus */
+int cucheblanczos_sort(cucheblanczos* ccl);
+
+/* check convergence */
+int cucheblanczos_checkconvergence(cucheblanczos* ccl);
 
 
 

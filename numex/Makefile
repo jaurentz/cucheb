@@ -1,15 +1,21 @@
 include ../make.inc
 
-TESTS := $(wildcard ./*.cu)
-TESTS := $(TESTS:.cu=)
+all: objects 
 
-CUCHEBINCS := -I $(INSTALLDIR)/cucheb/include
-CUCHEBLIBS := -L $(INSTALLDIR)/cucheb/lib -lcucheb 
+objects: FORCE
+	@$(MAKE) -C ./parsec
+	@$(MAKE) -C ./graph
+	@$(MAKE) -C ./engineering
+	@$(MAKE) -C ./tables
 
-all: $(TESTS)
+FORCE:
 
-%:: %.cu
-	$(CUC) $(CUFLAGS) -o $@ $< $(CUCHEBINCS) $(CUCHEBLIBS) $(INCS) $(LIBS) 
-	
 clean:
-	@rm -f $(TESTS)
+	@$(MAKE) clean -C ./parsec
+	@$(MAKE) clean -C ./graph
+	@$(MAKE) clean -C ./engineering
+	@$(MAKE) clean -C ./tables
+	
+	
+	
+	

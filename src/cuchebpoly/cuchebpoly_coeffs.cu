@@ -4,7 +4,7 @@
 int cuchebpoly_coeffs (cuchebpoly* ccp){
  
   // initialize input 
-  int deg = DOUBLE_DEG;
+  int deg = MAX_DOUBLE_DEG;
   cudaMemcpy(&(ccp->dinput)[0], &(ccp->points)[0], 2*deg*sizeof(double), cudaMemcpyHostToDevice);
 
   // execute plan

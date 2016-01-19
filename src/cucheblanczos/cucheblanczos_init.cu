@@ -1,12 +1,12 @@
 #include <cucheb.h>
 
 /* routine to initialize cucheblanczos object */
-int cucheblanczos_init(int bsize, int nblocks, cuchebmatrix* ccm, cucheblanczos* ccl){
+int cucheblanczos_init(int bsize, int numvecs, cuchebmatrix* ccm, cucheblanczos* ccl){
 
   // set dimensions
   ccl->n = ccm->m;
   ccl->bsize = min(max(1,bsize),MAX_BLOCK_SIZE);
-  ccl->nblocks = min(min((ccl->n)/(ccl->bsize),max(1,nblocks)),MAX_NUM_BLOCKS);
+  ccl->nblocks = min(min(ccl->n,MAX_NUM_VECS),max(1,numvecs))/(ccl->bsize);
   ccl->stop = 0;
 
   // allocate host memory

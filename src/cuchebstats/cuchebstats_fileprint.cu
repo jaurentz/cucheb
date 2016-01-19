@@ -14,7 +14,8 @@ int cuchebstats_fileprint(const string& fname, int nummats, string* matnames, cu
   // print banner
   output_file << "mat_name mat_dim mat_nnz "; 
   output_file << "block_size num_blocks num_iters num_innerprods max_degree "; 
-  output_file << "num_matvecs specint_time arnoldi_time num_conv max_res\n";
+  output_file << "num_matvecs specint_time innerprod_time matvec_time total_time ";
+  output_file << "num_conv max_res\n";
 
   // loop through data
   for (int ii=0; ii<nummats; ii++){
@@ -32,7 +33,9 @@ int cuchebstats_fileprint(const string& fname, int nummats, string* matnames, cu
     output_file << ccstats[ii].max_degree << " ";
     output_file << ccstats[ii].num_matvecs << " ";
     output_file << ccstats[ii].specint_time << " ";
-    output_file << ccstats[ii].arnoldi_time << " ";
+    output_file << ccstats[ii].innerprod_time << " ";
+    output_file << ccstats[ii].matvec_time << " ";
+    output_file << ccstats[ii].total_time << " ";
     output_file << ccstats[ii].num_conv << " ";
     output_file << ccstats[ii].max_res << "\n";
 

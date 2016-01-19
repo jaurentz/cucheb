@@ -114,7 +114,13 @@ int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){
     getline(input_file,line);
     iss.clear();
     iss.str(line);
-    iss >> (ccm->rowinds)[ii] >> (ccm->colinds)[ii] >> (ccm->vals)[ii];
+    if ((ccm->matcode)[2] != 'P') {
+      iss >> (ccm->rowinds)[ii] >> (ccm->colinds)[ii] >> (ccm->vals)[ii];
+    }
+    else {
+      iss >> (ccm->rowinds)[ii] >> (ccm->colinds)[ii];
+      (ccm->vals)[ii] = 1.0;
+    }
     (ccm->rowinds)[ii]--;  
     (ccm->colinds)[ii]--;
   }

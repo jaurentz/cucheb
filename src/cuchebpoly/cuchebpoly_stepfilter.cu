@@ -1,7 +1,8 @@
 #include <cucheb.h>
 
 /* routine for creating step filter */
-int cuchebpoly_stepfilter(double a, double b, double c, double d, int order, cuchebpoly* ccp){
+int cuchebpoly_stepfilter(double a, double b, double c, double d, int order, 
+                          cuchebpoly* ccp){
 
   // check a and b
   if ( a >= b ) {
@@ -42,18 +43,35 @@ int cuchebpoly_stepfilter(double a, double b, double c, double d, int order, cuc
   double pi = DOUBLE_PI;
   double aclb = acos(lb);
   double acub = acos(ub);
+
+  // initialize coefficients
   ccp->coeffs[0] = (aclb - acub)/pi;
-  for (int ii=1; ii<deg+1; ii++) {
-    ccp->coeffs[ii] = 2.0*(sin(ii*aclb) - sin(ii*acub))/(ii*pi);
+
+  // save transition points
+  double p1, p2;
+  p1 = ccp->coeffs[0];
+  p2 = p1;
+
+  // loop through degrees
+  for (int jj=0; jj<deg; jj++) {
+
+    // update coefficients
+    ccp->coeffs[jj+1] = 2.0*(sin((jj+1)*aclb) - sin((jj+1)*acub))/((jj+1)*pi);
+
+    // update transition points
+    p1 += ccp->coeffs[jj+1]*cos((double)(jj+1)*aclb);
+    p2 += ccp->coeffs[jj+1]*cos((double)(jj+1)*acub);
+
   }
 
-  // apply Jackson damping
-  double alpha = 1.0/(deg+2.0);
-  double beta = sin(pi*alpha);
-  double gamma = cos(pi*alpha);
+  // compute scale factor
+  if (lb == -1.0) { p1 = .5/abs(p2); }
+  else if (ub == 1.0) { p1 = .5/abs(p1); }
+  else { p1 = .5/min(abs(p1),abs(p2)); }
+
+  // scale coefficients
   for (int ii=0; ii<deg+1; ii++) {
-    ccp->coeffs[ii] = alpha*((deg+2.0-ii)*beta*cos(ii*pi*alpha) +
-                       sin(ii*pi*alpha)*gamma)*ccp->coeffs[ii]/beta;
+    ccp->coeffs[ii] = p1*ccp->coeffs[ii];
   }
 
   // return 

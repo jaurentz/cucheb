@@ -18,6 +18,7 @@ int cucheblanczos_arnoldi(int nsteps, cuchebmatrix* ccm, cucheblanczos* ccl,
   dtemp = ccl->dtemp;
   dvecs = ccl->dvecs;
   dschurvecs = ccl->dschurvecs;
+  clock_t tick;
 
   // set niters
   int niters;
@@ -33,11 +34,19 @@ int cucheblanczos_arnoldi(int nsteps, cuchebmatrix* ccm, cucheblanczos* ccl,
       // set index
       ind = (ii+stop)*bsize + jj;
 
+      // time matvecs
+      tick = clock();
+
       // apply matrix
       cuchebmatrix_mv(ccm,&one,&dvecs[ind*n],&zero,&dvecs[(ind+bsize)*n]);
+      cudaDeviceSynchronize();
+      ccstats->matvec_time += (clock()-tick)/((double)CLOCKS_PER_SEC);
 
       // num_matvecs
       ccstats->num_matvecs += 1;
+
+      // time innerprods
+      tick = clock();
 
       // compute orthogonalization depth
       odepth = min((MAX_ORTH_DEPTH)*bsize+jj,ind+bsize);
@@ -70,6 +79,8 @@ int cucheblanczos_arnoldi(int nsteps, cuchebmatrix* ccm, cucheblanczos* ccl,
                  sizeof(double), cudaMemcpyHostToDevice);
       scl = 1.0/scl;
       cublasDscal(ccm->cublashandle, n, &scl, &dvecs[(ind+bsize)*n], 1);
+      cudaDeviceSynchronize();
+      ccstats->innerprod_time += (clock()-tick)/((double)CLOCKS_PER_SEC);
 
     }
 
@@ -78,11 +89,13 @@ int cucheblanczos_arnoldi(int nsteps, cuchebmatrix* ccm, cucheblanczos* ccl,
   // update stop 
   ccl->stop += niters;
 
+  // num_blocks
+  ccstats->num_blocks += niters;
+
   // copy data to host
   cudaMemcpy(&(ccl->schurvecs)[0],&dschurvecs[0],
              (ccl->stop)*bsize*(nvecs+bsize)*sizeof(double),
              cudaMemcpyDeviceToHost);
-
 
   // return  
   return 0;

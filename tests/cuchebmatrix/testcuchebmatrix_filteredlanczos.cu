@@ -3,46 +3,32 @@
 /* driver */
 int main(){
 
-  // input file
-  //string mtxfile("../matrices/SiH4.mtx");
-  //string mtxfile("../matrices/Si10H16.mtx");
-  string mtxfile("../matrices/H2O.mtx");
-  //string mtxfile("../matrices/Si34H36.mtx");
-  //string mtxfile("../matrices/Si87H76.mtx");
-  //string mtxfile("../matrices/CO.mtx");
-  //string mtxfile("../matrices/Ga41As41H72.mtx");
-  //string mtxfile("../matrices/dielFilterV2real.mtx");
-  //string mtxfile("../matrices/G2_circuit.mtx");
-  //string mtxfile("../matrices/Trefethen_20000.mtx");
-
-  // cuhebmatrix
+  // read in matrix and allocate memory
+  string mtxfile("../matrices/ca2010.mtx");
   cuchebmatrix ccm;
   cuchebmatrix_init(mtxfile, &ccm);
 
-  // cucheblanczos
+  // set interval [alpha,beta]
+  double alpha, beta;
+  //alpha = 9.0e6; beta = 1.0e8;  // easy
+  //alpha = 4.0e6; beta = 5.0e6;  // less easy
+  alpha = 2.5e6; beta = 3.0e6;  // even less easy
+
+  // call filtered lanczos for an [alpha,beta]
   cucheblanczos ccl;
-
-  // cuchebstats
   cuchebstats ccstats;
+  cuchebmatrix_filteredlanczos(alpha, beta, 1, &ccm, &ccl, &ccstats);
 
-  // call filtered lanczos for a point
-  //cuchebmatrix_filteredlanczos(10, -1e100, 3, &ccm, &ccl, &ccstats);
-
-  // call filtered lanczos for an interval
-  cuchebmatrix_filteredlanczos(-10.0, 0.0, 3, &ccm, &ccl, &ccstats);
-
-  // print ccm
+  // print matrix
   cuchebmatrix_print(&ccm);
 
-  // print ccstats
+  // print statistics
   cuchebstats_print(&ccstats);
 
   // print eigenvalues
-  for (int ii=0; ii<ccstats.num_conv; ii++) {
-  //for (int ii=0; ii<ccl.stop*ccl.bsize; ii++) {
+  for (int ii=0; ii<ccl.nconv; ii++) {
     printf(" %+e, %e\n",ccl.evals[ccl.index[ii]],ccl.res[ccl.index[ii]]);
-  }
-  printf("\n");
+  } printf("\n");
 
   // destroy CCM
   cuchebmatrix_destroy(&ccm);

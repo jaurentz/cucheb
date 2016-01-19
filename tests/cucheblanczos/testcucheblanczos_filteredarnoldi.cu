@@ -16,17 +16,14 @@ int main(){
   cuchebmatrix_print(&ccm);
 
   // filter polynomial
-  double tau;
-  tau = 10.0*(ccm.m);
   cuchebpoly ccp;
   cuchebpoly_init(&ccp);
-  //cuchebpoly_gaussianfilter(ccm.a,ccm.b,0,tau,&ccp);
   cuchebpoly_pointfilter(ccm.a,ccm.b,0,10,&ccp);
   cuchebpoly_print(&ccp);
 
   // cucheblanczos
   cucheblanczos ccl;
-  cucheblanczos_init(1, MAX_NUM_BLOCKS, &ccm, &ccl);
+  cucheblanczos_init(1, MAX_NUM_VECS, &ccm, &ccl);
 
   // print CCB
   cucheblanczos_print(&ccl);

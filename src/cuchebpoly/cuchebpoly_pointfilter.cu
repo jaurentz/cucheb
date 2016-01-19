@@ -26,10 +26,10 @@ int cuchebpoly_pointfilter(double a, double b, double rho, int order, cuchebpoly
   coeffs = &(ccp->coeffs)[0];
   coeffs[0] = 1.0;
   coeffs[1] = shift;
-  for (int ii=2; ii < DOUBLE_DEG; ii++) {
+  for (int ii=2; ii < MAX_DOUBLE_DEG; ii++) {
     coeffs[ii] = 2.0*shift*coeffs[ii-1] - coeffs[ii-2];
   }
-  coeffs[DOUBLE_DEG] = shift*coeffs[DOUBLE_DEG-1] - coeffs[DOUBLE_DEG-2];
+  coeffs[MAX_DOUBLE_DEG] = shift*coeffs[MAX_DOUBLE_DEG-1] - coeffs[MAX_DOUBLE_DEG-2];
  
   // set length
   ccp->degree = min(MAX_DOUBLE_DEG,max(0,order));
