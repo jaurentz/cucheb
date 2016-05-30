@@ -1,5 +1,5 @@
 # cucheb - CUDA accelerated large sparse eigensolvers #
-Jared L. Aurentz and Vasileios Kalantzis, October 2015
+Jared L. Aurentz, Vassilis Kalantzis and Yousef Saad, June 2016
 
 ## Introduction ##
 __cucheb__ is a collection of C++ subroutines for accurately and 

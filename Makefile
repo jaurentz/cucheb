@@ -26,8 +26,8 @@ objects: FORCE
 tests: FORCE
 	@$(MAKE) -C ./tests
 	
-numex: FORCE
-	@$(MAKE) -C ./numex
+examples: FORCE
+	@$(MAKE) -C ./examples
 	
 FORCE:
 	
@@ -46,6 +46,6 @@ uninstall: clean
 clean:
 	@$(MAKE) clean -C ./src
 	@$(MAKE) clean -C ./tests
-	@$(MAKE) clean -C ./numex
+	@$(MAKE) clean -C ./examples
 
 	
