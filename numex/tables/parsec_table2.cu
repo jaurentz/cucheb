@@ -41,8 +41,8 @@ int main(){
   // loop through lines
   while (!input_file.eof()) {
 
-    // read 3 at a time
-    for (int ii=0; ii<3; ii++) {
+    // read 5 at a time
+    for (int ii=0; ii<5; ii++) {
 
       // read in data
       input_file >> matname >> a >> b >> neigs >> n >> nnz >> bsize >> nblocks >> 
@@ -55,7 +55,7 @@ int main(){
       // write to file
 
       // matrix name
-      if (ii==1) { output_file << "\\verb|" << matname << "|";}
+      if (ii==2) { output_file << "\\verb|" << matname << "|";}
       else { output_file << " "; }
 
       // degree
