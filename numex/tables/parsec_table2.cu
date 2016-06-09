@@ -85,7 +85,7 @@ int main(){
       output_file << "\\%";
 
       // new line
-      if (ii==2) { output_file << "\\\\\\hline\n"; }
+      if (ii==4) { output_file << "\\\\\\hline\n"; }
       else { output_file << "\\\\\n"; }
 
     }
