@@ -1,10 +1,10 @@
 # Cucheb - CUDA accelerated large sparse eigensolvers #
 Jared L. Aurentz, Vassilis Kalantzis and Yousef Saad, September 2016
 
-## Github ##
+## GitHub ##
 This README file is written in mark down. For the best experience please view this
 file, along with the rest of the Cucheb library on
-[github](https://github.com/jaurentz/cucheb).
+[GitHub](https://github.com/jaurentz/cucheb).
 
 ## Introduction ##
 Cucheb is a collection of C++ subroutines for accurately and efficiently
