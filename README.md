@@ -25,14 +25,14 @@ description of each file and a link for further information:
  - [cucheblanczos](include/cucheblanczos.h) - object for storing computed eigenvalues and eigenvectors
  
 The next set of files are programs used to initialize and delete objects and compute eigenvalues and eigenvectors:
-- [cuchebmatrix_init](https://github.com/jaurents/cucheb/src/cuchebmatrix/cuchebmatrix_init.cu) - initializes a cuchebmatrix object using a sparse matrix stored in [Matrix Market Format](http://math.nist.gov/MatrixMarket/)
-- [cuchebmatrix_destroy](https://github.com/jaurents/cucheb/src/cuchebmatrix/cuchebmatrix_destroy.cu) - frees all memory associated with an instance of a cuchebmatrix object
-- [cuchebmatrix_print](https://github.com/jaurents/cucheb/src/cuchebmatrix/cuchebmatrix_print.cu) - prints basic propertied of an instance of a cuchebmatrix object
-- [cuchebmatrix_lanczos](https://github.com/jaurents/cucheb/src/cuchebmatrix/cuchebmatrix_lanczos.cu) - computes all eigenvalues and eigenvectors in a user-defined interval using the Lanczos method and stores the output in a cucheblanczos object
-- [cuchebmatrix_filteredlanczos](https://github.com/jaurents/cucheb/src/cuchebmatrix/cuchebmatrix_filteredlanczos.cu) - computes all eigenvalues and eigenvectors in a user-defined interval using the filtered Lanczos procedure and stores the output in a cucheblanczos object
-- [cucheblanczos_init](https://github.com/jaurents/cucheb/src/cucheblanczos/cucheblanczos_init.cu) - initializes a cucheblanczos object
-- [cucheblanczos_destroy](https://github.com/jaurents/cucheb/src/cucheblanczos/cucheblanczos_destroy.cu) - frees all memory associated with an instance of a cucheblanczos object
-- [cucheblanczos_print](https://github.com/jaurents/cucheb/src/cucheblanczos/cucheblanczos_print.cu) - prints basic propertied of an instance of a cucheblanczos object
+- [cuchebmatrix_init](src/cuchebmatrix/cuchebmatrix_init.cu) - initializes a cuchebmatrix object using a sparse matrix stored in [Matrix Market Format](http://math.nist.gov/MatrixMarket/)
+- [cuchebmatrix_destroy](src/cuchebmatrix/cuchebmatrix_destroy.cu) - frees all memory associated with an instance of a cuchebmatrix object
+- [cuchebmatrix_print](src/cuchebmatrix/cuchebmatrix_print.cu) - prints basic propertied of an instance of a cuchebmatrix object
+- [cuchebmatrix_lanczos](src/cuchebmatrix/cuchebmatrix_lanczos.cu) - computes all eigenvalues and eigenvectors in a user-defined interval using the Lanczos method and stores the output in a cucheblanczos object
+- [cuchebmatrix_filteredlanczos](src/cuchebmatrix/cuchebmatrix_filteredlanczos.cu) - computes all eigenvalues and eigenvectors in a user-defined interval using the filtered Lanczos procedure and stores the output in a cucheblanczos object
+- [cucheblanczos_init](src/cucheblanczos/cucheblanczos_init.cu) - initializes a cucheblanczos object
+- [cucheblanczos_destroy](src/cucheblanczos/cucheblanczos_destroy.cu) - frees all memory associated with an instance of a cucheblanczos object
+- [cucheblanczos_print](src/cucheblanczos/cucheblanczos_print.cu) - prints basic propertied of an instance of a cucheblanczos object
 
 ## Installation ##
 Cucheb is built on top of the [NVIDIA CUDA
@@ -51,7 +51,7 @@ into the user specified installation directory. The installation does not
 create any symbolic links or export any library paths.
 
 ## Examples ##
-You can find several examples for using Cucheb in the [examples](https://github.com/jaurentz/cucheb/examples) subdirectory. In order to run these examples you will first have to download the matrices listed in each example from the University of Florida's [Sparse Matrix Collection](https://www.cise.ufl.edu/research/sparse/matrices/).
+You can find several examples for using Cucheb in the [examples](examples) subdirectory. In order to run these examples you will first have to download the matrices listed in each example from the University of Florida's [Sparse Matrix Collection](https://www.cise.ufl.edu/research/sparse/matrices/).
 
 ## Removing Cucheb ##
 If the source directory has not been removed simply move into the Cucheb
