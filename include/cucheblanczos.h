@@ -1,4 +1,37 @@
 #include <cuchebdependencies.h>
+/*
+
+  cucheblanczos
+
+  This file defines the cucheblanczos object. This object is needed for running
+  the Lanczos algorithm and storing the compute eigenvalues and eigenvectors.
+  The macros listed below are for default variables that are used in the
+  high-level routines. At the bottom of the file is the class definition. It
+  contains two sets of variables one for CPU memory and one for GPU memory.
+  These two sets of memory are needed to avoid time consuming memory transfers
+  between the CPU and GPU.
+
+  CPU variables:
+
+    n         - length of eigenvectors
+    bsize     - block size for block Lanczos
+    nblocks   - total number of blocks allocated
+    stop      - index of most recently computed Lanczos vectors
+    nconv     - number of converged eigenvalues
+    index     - pointer to array of indices used to sort eigenvalues
+    evals     - pointer to array of computed eigenvalues
+    res       - pointer to array of residuals
+    bands     - pointer to array of banded matrix computed during Lanczos process
+    vecs      - pointer to array of Lanczos vector
+    schurvecs - pointer to array of eigenvectors of banded matrix
+
+  GPU variables:
+
+    dtemp      - pointer to array of swap space on GPU
+    dvecs      - pointer to array of Lanczos vectors on GPU
+    dschurvecs - pointer to array of eigenvectors of banded matrix on GPU
+
+*/
 
 /* header file for cucheblanczos data type */
 #ifndef __cucheblanczos_h__ 
