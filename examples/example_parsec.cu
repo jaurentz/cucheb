@@ -13,9 +13,8 @@ int main(){
   int bsize;
 
   // initialize matrix
-  matname = "Ge87H76.mtx";
+  matname = "/path/to/Ge87H76.mtx";
   cuchebmatrix_init(matname, &ccm);
-  cuchebmatrix_print(&ccm);
 
   // set interval and block size
   lbnd = -0.645;
@@ -25,17 +24,20 @@ int main(){
   // call filtered lanczos for an interval
   cuchebmatrix_filteredlanczos(lbnd, ubnd, bsize, &ccm, &ccl);
 
+  // print matrix
+  cuchebmatrix_print(&ccm);
+
   // print eigenvalues and residuals
-  printf("\nComputed eigenvalues and residuals:\n")
+  printf("\nComputed eigenvalues and residuals:\n");
   for(int ii=0;ii<ccl.nconv;ii++){
     printf(" eig[%d] = %+e, res[%d] = %e\n",
            ii,ccl.evals[ccl.index[ii]],ii,ccl.res[ccl.index[ii]]);
   }
 
   // print first 10 entries of first eigenvector 
-  printf("\nFirst 10 entries of first eigenvector:\n")
+  printf("\nFirst 10 entries of first eigenvector:\n");
   for(int ii=0;ii<10;ii++){
-    printf(" vec[%d] = %+e\n",ii,ccl.vecs[ccl.index[ii]*n+ii]);
+    printf(" vec[%d] = %+e\n",ii,ccl.vecs[ccl.index[ii]*ccl.n+ii]);
   }
 
   // destroy ccl

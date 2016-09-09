@@ -1,4 +1,4 @@
-include ../../make.inc
+include ../make.inc
 
 EXS := $(wildcard ./*.cu)
 EXS := $(EXS:.cu=)
