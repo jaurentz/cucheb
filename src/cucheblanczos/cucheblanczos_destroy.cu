@@ -1,4 +1,13 @@
 #include <cucheb.h>
+/*
+  cucheblanczos_destroy
+
+  This routine frees memory associated with an instance of a cucheblanczos
+  object. The following inputs are required:
+
+    ccl - a reference to an instance of a cucheblanczos
+
+*/
 
 /* routine to free memory in cucheblanczos object */
 int cucheblanczos_destroy(cucheblanczos* ccl){

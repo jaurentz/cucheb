@@ -1,4 +1,13 @@
 #include <cucheb.h>
+/*
+  cuchebmatrix_destroy
+
+  This routine frees memory associated with an instance of a cuchebmatrix
+  object. The following inputs are required:
+
+    ccm - a reference to an instance of a cuchebmatrix
+
+*/
 
 /* routine to free memory in cuchebmatrix object */
 int cuchebmatrix_destroy(cuchebmatrix* ccm){

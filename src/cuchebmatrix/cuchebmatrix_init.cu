@@ -1,4 +1,14 @@
 #include <cucheb.h>
+/*
+  cuchebmatrix_init
+
+  This routine initializes an instance of a cuchebmatrix object. The following
+  inputs are required:
+
+    mtxfile - a string refernce to a Matrix Market file
+    ccm     - a reference to an initialized instance of a cuchebmatrix
+
+*/
 
 /* routine to initialize cuchebmatrix object */
 int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){

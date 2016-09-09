@@ -1,4 +1,16 @@
 #include <cucheb.h>
+/*
+  cucheblanczos_init
+
+  This routine initializes an instance of a cucheblanczos object. The following
+  inputs are required:
+
+    bsize   - size of the Lanczos blocks
+    numvecs - the total number of Lanczos vectors to allocate for
+    ccm     - a reference to an initialized instance of a cuchebmatrix
+    ccl     - a reference to an uninitialized instance of a cucheblanczos
+
+*/
 
 /* routine to initialize cucheblanczos object */
 int cucheblanczos_init(int bsize, int numvecs, cuchebmatrix* ccm, cucheblanczos* ccl){
