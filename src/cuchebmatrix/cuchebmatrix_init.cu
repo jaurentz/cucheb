@@ -105,17 +105,17 @@ int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){
   // for faster matvecs all elements of symmetric matrices must be stored
   ccm->rowinds = new int[2*(ccm->nnz)];
   if (ccm->rowinds == NULL) {
-    printf("Memory allocation failed.\n");
+    printf("Host memory allocation failed: rowinds\n");
     exit(1);
   }
   ccm->colinds = new int[2*(ccm->nnz)];
   if (ccm->colinds == NULL) {
-    printf("Memory allocation failed.\n");
+    printf("Host memory allocation failed: colinds\n");
     exit(1);
   }
   ccm->vals = new double[2*(ccm->nnz)];
   if (ccm->vals == NULL) {
-    printf("Memory allocation failed.\n");
+    printf("Host memory allocation failed: vals\n");
     exit(1);
   }
 
@@ -174,23 +174,31 @@ int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){
     exit(1);
   }
 
+size_t freeMem, totalMem;
+cudaMemGetInfo(&freeMem, &totalMem);
+printf("cuchebmatrix_init\n");
+printf("Free = %ld, Total = %ld\n", freeMem, totalMem);
+
   // allocate device memory
   if(cudaMalloc(&(ccm->drowinds),((ccm->m)+1)*sizeof(int)) != 0) {
-    printf("Memory allocation failed.\n");
+    printf("Device memory allocation failed: drowinds\n");
     exit(1);
   }
   if(cudaMalloc(&(ccm->dcolinds),(ccm->nnz)*sizeof(int)) != 0) {
-    printf("Memory allocation failed.\n");
+    printf("Device memory allocation failed: dcolinds\n");
     exit(1);
   }
   if(cudaMalloc(&(ccm->dvals),(ccm->nnz)*sizeof(double)) != 0) {
-    printf("Memory allocation failed.\n");
+    printf("Device memory allocation failed: dvals\n");
     exit(1);
   }
   if(cudaMalloc(&(ccm->dtemp),2*(ccm->m)*sizeof(double)) != 0) {
-    printf("Memory allocation failed.\n");
+    printf("Device memory allocation failed: dtemp\n");
     exit(1);
   }
+
+cudaMemGetInfo(&freeMem, &totalMem);
+printf("Free = %ld, Total = %ld\n", freeMem, totalMem);
 
   // sort entries of CCM
   cuchebmatrix_sort(ccm);
