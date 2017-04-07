@@ -116,6 +116,10 @@ int cuchebmatrix_polymv(cuchebmatrix* ccm, cuchebpoly* ccp, double* x, double* y
 int cuchebmatrix_mm(cuchebmatrix* ccm, int bsize, double* alpha, double* X, 
                     double* beta, double* Y);
 
+/* routine for poly mm multiply on GPU */
+int cuchebmatrix_polymm(cuchebmatrix* ccm, cuchebpoly* ccp, int bsize,
+                        double* X, double* Y, double* V1, double* V2);
+
 /* routine for estimating spectral interval */
 int cuchebmatrix_specint(cuchebmatrix* ccm);
 

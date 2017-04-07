@@ -39,6 +39,12 @@ int cucheblanczos_destroy(cucheblanczos* ccl){
   // free dschurvecs
   cudaFree(ccl->dschurvecs);
 
+  // free dv1
+  cudaFree(ccl->dv1);
+
+  // free dv2
+  cudaFree(ccl->dv2);
+
   // return  
   return 0;
 

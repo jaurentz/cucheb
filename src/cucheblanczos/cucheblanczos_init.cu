@@ -78,6 +78,14 @@ printf("Free = %ld, Total = %ld\n", freeMem, totalMem);
     printf("Device memory allocation failed: dschurvecs\n");
     exit(1);
   }
+  if(cudaMalloc(&(ccl->dv1),(ccl->n)*(ccl->bsize)*sizeof(double)) != 0) {
+    printf("Device memory allocation failed: dv1\n");
+    exit(1);
+  }
+  if(cudaMalloc(&(ccl->dv2),(ccl->n)*(ccl->bsize)*sizeof(double)) != 0) {
+    printf("Device memory allocation failed: dv2\n");
+    exit(1);
+  }
 
 cudaMemGetInfo(&freeMem, &totalMem);
 printf("Free = %ld, Total = %ld\n", freeMem, totalMem);
