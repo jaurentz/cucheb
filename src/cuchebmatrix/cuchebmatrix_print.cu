@@ -1,4 +1,13 @@
 #include <cucheb.h>
+/*
+  cuchebmatrix_print
+
+  This routine prints some basic properties of an instance of a cuchebmatrix
+  object. The following inputs are required:
+
+    ccm - a reference to an instance of a cuchebmatrix
+
+*/
 
 /* routine for standard print */
 int cuchebmatrix_print(cuchebmatrix* ccm){

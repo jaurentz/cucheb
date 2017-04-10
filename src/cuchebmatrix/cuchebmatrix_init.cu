@@ -1,4 +1,14 @@
 #include <cucheb.h>
+/*
+  cuchebmatrix_init
+
+  This routine initializes an instance of a cuchebmatrix object. The following
+  inputs are required:
+
+    mtxfile - a string refernce to a Matrix Market file
+    ccm     - a reference to an initialized instance of a cuchebmatrix
+
+*/
 
 /* routine to initialize cuchebmatrix object */
 int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){
@@ -95,17 +105,17 @@ int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){
   // for faster matvecs all elements of symmetric matrices must be stored
   ccm->rowinds = new int[2*(ccm->nnz)];
   if (ccm->rowinds == NULL) {
-    printf("Memory allocation failed.\n");
+    printf("Host memory allocation failed: rowinds\n");
     exit(1);
   }
   ccm->colinds = new int[2*(ccm->nnz)];
   if (ccm->colinds == NULL) {
-    printf("Memory allocation failed.\n");
+    printf("Host memory allocation failed: colinds\n");
     exit(1);
   }
   ccm->vals = new double[2*(ccm->nnz)];
   if (ccm->vals == NULL) {
-    printf("Memory allocation failed.\n");
+    printf("Host memory allocation failed: vals\n");
     exit(1);
   }
 
@@ -166,19 +176,19 @@ int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){
 
   // allocate device memory
   if(cudaMalloc(&(ccm->drowinds),((ccm->m)+1)*sizeof(int)) != 0) {
-    printf("Memory allocation failed.\n");
+    printf("Device memory allocation failed: drowinds\n");
     exit(1);
   }
   if(cudaMalloc(&(ccm->dcolinds),(ccm->nnz)*sizeof(int)) != 0) {
-    printf("Memory allocation failed.\n");
+    printf("Device memory allocation failed: dcolinds\n");
     exit(1);
   }
   if(cudaMalloc(&(ccm->dvals),(ccm->nnz)*sizeof(double)) != 0) {
-    printf("Memory allocation failed.\n");
+    printf("Device memory allocation failed: dvals\n");
     exit(1);
   }
   if(cudaMalloc(&(ccm->dtemp),2*(ccm->m)*sizeof(double)) != 0) {
-    printf("Memory allocation failed.\n");
+    printf("Device memory allocation failed: dtemp\n");
     exit(1);
   }
 

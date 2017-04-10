@@ -8,16 +8,20 @@ int cucheblanczos_filteredarnoldi(int nsteps, cuchebmatrix* ccm, cuchebpoly* ccp
   int n, bsize, nblocks, nvecs, stop;
   double scl, one = 1.0, zero = 0.0, mone = -1.0;
   double* dtemp;
-  double* dvecs;
+  double* dv1;
+  double* dv2;
   double* dschurvecs;
+  double* dvecs;
   n = ccl->n;
   bsize = ccl->bsize;
   nblocks = ccl->nblocks;
   nvecs = bsize*nblocks;
   stop = ccl->stop;
   dtemp = ccl->dtemp;
-  dvecs = ccl->dvecs;
   dschurvecs = ccl->dschurvecs;
+  dvecs = ccl->dvecs;
+  dv1 = ccl->dv1;
+  dv2 = ccl->dv2;
   clock_t tick;
 
   // set niters
@@ -28,22 +32,25 @@ int cucheblanczos_filteredarnoldi(int nsteps, cuchebmatrix* ccm, cuchebpoly* ccp
   int ind, odepth, start;
   for(int ii=0; ii < niters; ii++){
 
+    // set index
+    ind = (ii+stop)*bsize;
+
+    // time matvecs
+    tick = clock();
+
+    // apply filtered matrix
+    cuchebmatrix_polymm(ccm,ccp,bsize,&dvecs[ind*n],&dvecs[(ind+bsize)*n],dv1,dv2);
+    cudaDeviceSynchronize();
+    ccstats->matvec_time += (clock()-tick)/((double)CLOCKS_PER_SEC);
+
+    // num_matvecs
+    ccstats->num_matvecs += bsize*(ccp->degree);
+
     // inner loop for bsize blocks
     for(int jj=0; jj < bsize; jj++){
 
       // set index
       ind = (ii+stop)*bsize + jj;
- 
-      // time matvecs
-      tick = clock();
-
-      // apply matrix
-      cuchebmatrix_polymv(ccm,ccp,&dvecs[ind*n],&dvecs[(ind+bsize)*n]);
-      cudaDeviceSynchronize();
-      ccstats->matvec_time += (clock()-tick)/((double)CLOCKS_PER_SEC);
-
-      // num_matvecs
-      ccstats->num_matvecs += (ccp->degree);
 
       // time innerprods
       tick = clock();

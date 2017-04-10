@@ -1,4 +1,13 @@
 #include <cucheb.h>
+/*
+  cucheblanczos_print
+
+  This routine prints some basic properties of an instance of a cucheblanczos
+  object. The following inputs are required:
+
+    ccl - a reference to an instance of a cucheblanczos
+
+*/
 
 /* routine for standard print */
 int cucheblanczos_print(cucheblanczos* ccl){
