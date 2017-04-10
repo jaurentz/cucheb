@@ -174,11 +174,6 @@ int cuchebmatrix_init(const string& mtxfile, cuchebmatrix* ccm){
     exit(1);
   }
 
-size_t freeMem, totalMem;
-cudaMemGetInfo(&freeMem, &totalMem);
-printf("cuchebmatrix_init\n");
-printf("Free = %ld, Total = %ld\n", freeMem, totalMem);
-
   // allocate device memory
   if(cudaMalloc(&(ccm->drowinds),((ccm->m)+1)*sizeof(int)) != 0) {
     printf("Device memory allocation failed: drowinds\n");
@@ -196,9 +191,6 @@ printf("Free = %ld, Total = %ld\n", freeMem, totalMem);
     printf("Device memory allocation failed: dtemp\n");
     exit(1);
   }
-
-cudaMemGetInfo(&freeMem, &totalMem);
-printf("Free = %ld, Total = %ld\n", freeMem, totalMem);
 
   // sort entries of CCM
   cuchebmatrix_sort(ccm);

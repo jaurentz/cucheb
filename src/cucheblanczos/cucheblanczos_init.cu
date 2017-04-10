@@ -60,11 +60,6 @@ int cucheblanczos_init(int bsize, int numvecs, cuchebmatrix* ccm, cucheblanczos*
     (ccl->index)[ii] = ii;
   }
 
-size_t freeMem, totalMem;
-cudaMemGetInfo(&freeMem, &totalMem);
-printf("cucheblanczos_init\n");
-printf("Free = %ld, Total = %ld\n", freeMem, totalMem);
-
   // allocate device memory
   if(cudaMalloc(&(ccl->dtemp),(nvecs + ccl->bsize)*sizeof(double)) != 0) {
     printf("Device memory allocation failed: dtemp\n");
@@ -86,9 +81,6 @@ printf("Free = %ld, Total = %ld\n", freeMem, totalMem);
     printf("Device memory allocation failed: dv2\n");
     exit(1);
   }
-
-cudaMemGetInfo(&freeMem, &totalMem);
-printf("Free = %ld, Total = %ld\n", freeMem, totalMem);
 
   // return  
   return 0;

@@ -49,12 +49,15 @@ int cucheblanczos_filteredarnoldi(int nsteps, cuchebmatrix* ccm, cuchebpoly* ccp
     // inner loop for bsize blocks
     for(int jj=0; jj < bsize; jj++){
 
+      // set index
+      ind = (ii+stop)*bsize + jj;
+
       // time innerprods
       tick = clock();
 
       // compute orthogonalization depth
       odepth = min((MAX_ORTH_DEPTH)*bsize+jj,ind+bsize);
-      start = ind + jj + bsize - odepth;
+      start = ind + bsize - odepth;
 
       // orthogonalize
       cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, odepth, &one, &dvecs[start*n], 
