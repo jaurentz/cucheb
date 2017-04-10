@@ -2,7 +2,8 @@
 INSTALLDIR := $(HOME)/CUCHEB_INSTALL
 
 # CUDA compiler and flags
-CUC := /LUSTRE/apps/cuda-7.5/bin/nvcc
+#CUC := /LUSTRE/apps/cuda-7.5/bin/nvcc
+CUC := /soft/cuda/7.0/bin/nvcc
 CUFLAGS := -O3 -gencode arch=compute_35,code=sm_35 
 
 # CUDA libraries

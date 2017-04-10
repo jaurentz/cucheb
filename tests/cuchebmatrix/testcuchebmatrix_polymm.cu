@@ -4,7 +4,8 @@
 int main(){
 
   // input file
-  string mtxfile("/LUSTRE/users/jaurentz/Projects/CUCHEB/matrices/Trefethen_20.mtx");
+  //string mtxfile("/LUSTRE/users/jaurentz/Projects/CUCHEB/matrices/Trefethen_20.mtx");
+  string mtxfile("/home/saady/kalantzi/CUCHEB/matrices/Ga41As41H72.mtx");
 
   // cuhebmatrix
   cuchebmatrix ccm;
@@ -43,30 +44,30 @@ int main(){
     cudaMemcpy(&dy[ii],&beta,sizeof(double),cudaMemcpyHostToDevice);
   }
 
-  // print dx and dy 
-  for(int ii=0; ii < ccm.n; ii++){
-    for(int jj=0; jj < bsize; jj++){
-      cudaMemcpy(&alpha,&dx[ccm.n*jj+ii],sizeof(double),cudaMemcpyDeviceToHost);
-      cudaMemcpy(&beta,&dy[ccm.n*jj+ii],sizeof(double),cudaMemcpyDeviceToHost);
-      printf(" dx[%d] = %+e, dy[%d] = %+e, ", ccm.n*jj+ii, alpha, ccm.n*jj+ii, beta);
-    }
-      printf("\n");
-  }
-  printf("\n");
+//  // print dx and dy 
+//  for(int ii=0; ii < ccm.n; ii++){
+//    for(int jj=0; jj < bsize; jj++){
+//      cudaMemcpy(&alpha,&dx[ccm.n*jj+ii],sizeof(double),cudaMemcpyDeviceToHost);
+//      cudaMemcpy(&beta,&dy[ccm.n*jj+ii],sizeof(double),cudaMemcpyDeviceToHost);
+//      printf(" dx[%d] = %+e, dy[%d] = %+e, ", ccm.n*jj+ii, alpha, ccm.n*jj+ii, beta);
+//    }
+//      printf("\n");
+//  }
+//  printf("\n");
 
   // compute dy = p(A)*dx
   cuchebmatrix_polymm(&ccm,&ccp,bsize,dx,dy,dv1,dv2);
 
-  // print dx and dy 
-  for(int ii=0; ii < ccm.n; ii++){
-    for(int jj=0; jj < bsize; jj++){
-      cudaMemcpy(&alpha,&dx[ccm.n*jj+ii],sizeof(double),cudaMemcpyDeviceToHost);
-      cudaMemcpy(&beta,&dy[ccm.n*jj+ii],sizeof(double),cudaMemcpyDeviceToHost);
-      printf(" dx[%d] = %+e, dy[%d] = %+e, ", ccm.n*jj+ii, alpha, ccm.n*jj+ii, beta);
-    }
-      printf("\n");
-  }
-  printf("\n");
+//  // print dx and dy 
+//  for(int ii=0; ii < ccm.n; ii++){
+//    for(int jj=0; jj < bsize; jj++){
+//      cudaMemcpy(&alpha,&dx[ccm.n*jj+ii],sizeof(double),cudaMemcpyDeviceToHost);
+//      cudaMemcpy(&beta,&dy[ccm.n*jj+ii],sizeof(double),cudaMemcpyDeviceToHost);
+//      printf(" dx[%d] = %+e, dy[%d] = %+e, ", ccm.n*jj+ii, alpha, ccm.n*jj+ii, beta);
+//    }
+//      printf("\n");
+//  }
+//  printf("\n");
 
   // destroy CCM
   cuchebmatrix_destroy(&ccm);
