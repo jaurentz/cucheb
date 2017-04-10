@@ -29,6 +29,9 @@ tests: FORCE
 examples: FORCE
 	@$(MAKE) -C ./examples
 	
+numex: FORCE
+	@$(MAKE) -C ./numex
+	
 FORCE:
 	
 install: lib$(LIBNAME).so.$(VERSION) 
@@ -47,5 +50,6 @@ clean:
 	@$(MAKE) clean -C ./src
 	@$(MAKE) clean -C ./tests
 	@$(MAKE) clean -C ./examples
+	@$(MAKE) clean -C ./numex
 
 	
