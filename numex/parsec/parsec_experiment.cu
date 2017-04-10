@@ -8,8 +8,8 @@ int main(){
 
   // compute variables
   string temp;
-  string rootdir("/home/aurentz/Projects/CUCHEB/cucheb/numex/");
-  string matdir("/home/aurentz/Projects/CUCHEB/matrices/");
+  string rootdir("/LUSTRE/users/jaurentz/Projects/CUCHEB/cucheb/numex/");
+  string matdir("/LUSTRE/users/jaurentz/Projects/CUCHEB/matrices/");
   ifstream input_file;
   ofstream output_file;
   cuchebmatrix ccm;

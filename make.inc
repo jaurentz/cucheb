@@ -1,12 +1,12 @@
 # directory where CUCHEB will be installed
-INSTALLDIR := $(HOME)/Mylibs
+INSTALLDIR := $(HOME)/CUCHEB_INSTALL
 
 # CUDA compiler and flags
-CUC := /usr/local/cuda-7.0/bin/nvcc
+CUC := /LUSTRE/apps/cuda-7.5/bin/nvcc
 CUFLAGS := -O3 -gencode arch=compute_35,code=sm_35 
 
 # CUDA libraries
-CUDA := -lcuda 
+CUDA := -lcudart 
 CUBLAS := -lcublas 
 CUSPARSE := -lcusparse
 CUFFT := -lcufft 
