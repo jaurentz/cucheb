@@ -42,120 +42,56 @@ int main(){
   // loop through lines
   while (!input_file.eof()) {
 
-    // read in data
-    input_file >> matname >> a >> b >> neigs >> deg >> bsize >> nvecs >> ssize;
+    // loop through sub experiments
+    for (int jj=0; jj<5; jj++){ 
 
-    // exit if end of file
-    if(input_file.eof()) { break; }
+      // read in data
+      input_file >> matname >> a >> b >> neigs >> deg >> bsize >> nvecs >> ssize;
+  
+      // exit if end of file
+      if(input_file.eof()) { break; }
+  
+      // print matrix name
+      printf("\nMatrix: %s\n",matname.c_str());
+  
+      // initialize matrix
+      temp = matdir + matname + ".mtx";
+      if (jj==0){ cuchebmatrix_init(temp, &ccm); }
+  
+      // call filtered lanczos for an interval
+      cuchebmatrix_expertlanczos(a, b, deg, bsize, nvecs, ssize,
+                                   &ccm, &ccl, &ccstats);
+  
+      // print stats
+      cuchebstats_print(&ccstats);
+  
+      // write to file
+      output_file << matname.c_str() << " "; 
+      output_file << setprecision(15) << a << " ";
+      output_file << setprecision(15) << b << " ";
+      output_file << neigs << " ";
+      output_file << ccstats.mat_dim << " ";
+      output_file << ccstats.mat_nnz << " ";
+      output_file << ccstats.block_size << " ";
+      output_file << ccstats.num_blocks << " ";
+      output_file << ccstats.num_iters << " ";
+      output_file << ccstats.num_innerprods << " ";
+      output_file << ccstats.max_degree << " ";
+      output_file << ccstats.num_matvecs << " ";
+      output_file << ccstats.specint_time << " ";
+      output_file << ccstats.innerprod_time << " ";
+      output_file << ccstats.matvec_time << " ";
+      output_file << ccstats.total_time << " ";
+      output_file << ccstats.num_conv << " ";
+      output_file << ccstats.max_res << "\n";
+  
+      // destroy CCL
+      cucheblanczos_destroy(&ccl);
+  
+      // destroy cuchebmatrix
+      if (jj==4) { cuchebmatrix_destroy(&ccm); }
 
-    // initialize matrix
-    temp = matdir + matname + ".mtx";
-    cuchebmatrix_init(temp, &ccm);
-
-    // call filtered lanczos for an interval
-    cuchebmatrix_expertlanczos(a, b, deg, bsize, nvecs, ssize,
-                                 &ccm, &ccl, &ccstats);
-
-    // print stats
-    cuchebstats_print(&ccstats);
-
-    // write to file
-    output_file << matname.c_str() << " "; 
-    output_file << setprecision(15) << a << " ";
-    output_file << setprecision(15) << b << " ";
-    output_file << neigs << " ";
-    output_file << ccstats.mat_dim << " ";
-    output_file << ccstats.mat_nnz << " ";
-    output_file << ccstats.block_size << " ";
-    output_file << ccstats.num_blocks << " ";
-    output_file << ccstats.num_iters << " ";
-    output_file << ccstats.num_innerprods << " ";
-    output_file << ccstats.max_degree << " ";
-    output_file << ccstats.num_matvecs << " ";
-    output_file << ccstats.specint_time << " ";
-    output_file << ccstats.innerprod_time << " ";
-    output_file << ccstats.matvec_time << " ";
-    output_file << ccstats.total_time << " ";
-    output_file << ccstats.num_conv << " ";
-    output_file << ccstats.max_res << "\n";
-
-    // destroy CCL
-    cucheblanczos_destroy(&ccl);
-
-    // read in data
-    input_file >> matname >> a >> b >> neigs >> deg >> bsize >> nvecs >> ssize;
-
-    // exit if end of file
-    if(input_file.eof()) { break; }
-
-    // call filtered lanczos for an interval
-    cuchebmatrix_expertlanczos(a, b, deg, bsize, nvecs, ssize,
-                                 &ccm, &ccl, &ccstats);
-
-    // print stats
-    cuchebstats_print(&ccstats);
-
-    // write to file
-    output_file << matname.c_str() << " "; 
-    output_file << setprecision(15) << a << " ";
-    output_file << setprecision(15) << b << " ";
-    output_file << neigs << " ";
-    output_file << ccstats.mat_dim << " ";
-    output_file << ccstats.mat_nnz << " ";
-    output_file << ccstats.block_size << " ";
-    output_file << ccstats.num_blocks << " ";
-    output_file << ccstats.num_iters << " ";
-    output_file << ccstats.num_innerprods << " ";
-    output_file << ccstats.max_degree << " ";
-    output_file << ccstats.num_matvecs << " ";
-    output_file << ccstats.specint_time << " ";
-    output_file << ccstats.innerprod_time << " ";
-    output_file << ccstats.matvec_time << " ";
-    output_file << ccstats.total_time << " ";
-    output_file << ccstats.num_conv << " ";
-    output_file << ccstats.max_res << "\n";
-
-    // destroy CCL
-    cucheblanczos_destroy(&ccl);
-
-    // read in data
-    input_file >> matname >> a >> b >> neigs >> deg >> bsize >> nvecs >> ssize;
-
-    // exit if end of file
-    if(input_file.eof()) { break; }
-
-    // call filtered lanczos for an interval
-    cuchebmatrix_expertlanczos(a, b, deg, bsize, nvecs, ssize,
-                                 &ccm, &ccl, &ccstats);
-
-    // print stats
-    cuchebstats_print(&ccstats);
-
-    // write to file
-    output_file << matname.c_str() << " "; 
-    output_file << setprecision(15) << a << " ";
-    output_file << setprecision(15) << b << " ";
-    output_file << neigs << " ";
-    output_file << ccstats.mat_dim << " ";
-    output_file << ccstats.mat_nnz << " ";
-    output_file << ccstats.block_size << " ";
-    output_file << ccstats.num_blocks << " ";
-    output_file << ccstats.num_iters << " ";
-    output_file << ccstats.num_innerprods << " ";
-    output_file << ccstats.max_degree << " ";
-    output_file << ccstats.num_matvecs << " ";
-    output_file << ccstats.specint_time << " ";
-    output_file << ccstats.innerprod_time << " ";
-    output_file << ccstats.matvec_time << " ";
-    output_file << ccstats.total_time << " ";
-    output_file << ccstats.num_conv << " ";
-    output_file << ccstats.max_res << "\n";
-
-    // destroy CCL
-    cucheblanczos_destroy(&ccl);
-
-    // destroy cuchebmatrix
-    cuchebmatrix_destroy(&ccm);
+    }
 
   }
 
