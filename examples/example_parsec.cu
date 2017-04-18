@@ -13,7 +13,7 @@ int main(){
   int bsize;
 
   // initialize matrix
-  matname = "/LUSTRE/users/jaurentz/Projects/CUCHEB/matrices/Ge87H76.mtx";
+  matname = "Ge87H76.mtx";
   cuchebmatrix_init(matname, &ccm);
 
   // set interval and block size
