@@ -1,5 +1,5 @@
 # Cucheb - CUDA accelerated large sparse eigensolvers #
-Jared L. Aurentz, Vassilis Kalantzis and Yousef Saad, September 2016
+Jared L. Aurentz, Vassilis Kalantzis and Yousef Saad, 2017
 
 ## GitHub ##
 This README file is written in mark down. For the best experience please view this
@@ -81,5 +81,5 @@ removed explicitly by the user.
 
 ## Questions and issues ##
 If you have any questions or encounter any issues while using Cucheb please
-file an issue on the [Cucheb issues](https://github.com/jaurentz
-/cucheb/issues) page of Github.
+file an issue on the [Cucheb issues](https://github.com/jaurentz/cucheb/issues) 
+page of Github.
