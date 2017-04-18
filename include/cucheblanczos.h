@@ -30,6 +30,8 @@
     dtemp      - pointer to array of swap space on GPU
     dvecs      - pointer to array of Lanczos vectors on GPU
     dschurvecs - pointer to array of eigenvectors of banded matrix on GPU
+    dv1        - pointer to vector block on GPU for filtered lanczos
+    dv2        - pointer to vector block on GPU for filtered lanczos
 
 */
 
@@ -111,6 +113,8 @@ typedef struct {
   double* dtemp;
   double* dvecs;
   double* dschurvecs;
+  double* dv1;
+  double* dv2;
  
 } cucheblanczos;
 

@@ -26,32 +26,32 @@ int cucheblanczos_init(int bsize, int numvecs, cuchebmatrix* ccm, cucheblanczos*
   nvecs = (ccl->bsize)*(ccl->nblocks);
   ccl->index = new int[nvecs];
   if (ccl->index == NULL) {
-    printf("Memory allocation failed.\n");
+    printf("Host memory allocation failed: index\n");
     exit(1);
   }
   ccl->evals = new double[nvecs];
   if (ccl->evals == NULL) {
-    printf("Memory allocation failed.\n");
+    printf("Host memory allocation failed: evals\n");
     exit(1);
   }
   ccl->res = new double[nvecs];
   if (ccl->res == NULL) {
-    printf("Memory allocation failed.\n");
+    printf("Host memory allocation failed: res\n");
     exit(1);
   }
   ccl->bands = new double[nvecs*(ccl->bsize + 1)];
   if (ccl->bands == NULL) {
-    printf("Memory allocation failed.\n");
+    printf("Host memory allocation failed: bands\n");
     exit(1);
   }
   ccl->vecs = new double[nvecs*(ccl->n)];
   if (ccl->vecs == NULL) {
-    printf("Memory allocation failed.\n");
+    printf("Host memory allocation failed: vecs\n");
     exit(1);
   }
   ccl->schurvecs = new double[nvecs*(nvecs + ccl->bsize)];
   if (ccl->schurvecs == NULL) {
-    printf("Memory allocation failed.\n");
+    printf("Host memory allocation failed: schurvecs\n");
     exit(1);
   }
 
@@ -62,15 +62,23 @@ int cucheblanczos_init(int bsize, int numvecs, cuchebmatrix* ccm, cucheblanczos*
 
   // allocate device memory
   if(cudaMalloc(&(ccl->dtemp),(nvecs + ccl->bsize)*sizeof(double)) != 0) {
-    printf("Memory allocation failed.\n");
+    printf("Device memory allocation failed: dtemp\n");
     exit(1);
   }
   if(cudaMalloc(&(ccl->dvecs),(ccl->n)*(nvecs + ccl->bsize)*sizeof(double)) != 0) {
-    printf("Memory allocation failed.\n");
+    printf("Device memory allocation failed: dvecs\n");
     exit(1);
   }
   if(cudaMalloc(&(ccl->dschurvecs),nvecs*(nvecs + ccl->bsize)*sizeof(double)) != 0) {
-    printf("Memory allocation failed.\n");
+    printf("Device memory allocation failed: dschurvecs\n");
+    exit(1);
+  }
+  if(cudaMalloc(&(ccl->dv1),(ccl->n)*(ccl->bsize)*sizeof(double)) != 0) {
+    printf("Device memory allocation failed: dv1\n");
+    exit(1);
+  }
+  if(cudaMalloc(&(ccl->dv2),(ccl->n)*(ccl->bsize)*sizeof(double)) != 0) {
+    printf("Device memory allocation failed: dv2\n");
     exit(1);
   }
 

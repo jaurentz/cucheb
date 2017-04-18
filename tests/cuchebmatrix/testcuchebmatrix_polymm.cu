@@ -4,7 +4,7 @@
 int main(){
 
   // input file
-  string mtxfile("/LUSTRE/users/jaurentz/Projects/CUCHEB/matrices/Trefethen_20.mtx");
+  string mtxfile("Trefethen_20.mtx");
 
   // cuhebmatrix
   cuchebmatrix ccm;
@@ -23,38 +23,50 @@ int main(){
   cuchebpoly_print(&ccp);
 
   // create some vectors on the GPU
+  int bsize = 3;
   double alpha, beta;
   double* dx;
   double* dy;
+  double* dv1;
+  double* dv2;
 
-  cudaMalloc(&dx,(ccm.n)*sizeof(double));
-  cudaMalloc(&dy,(ccm.n)*sizeof(double));
+  cudaMalloc(&dx,bsize*(ccm.n)*sizeof(double));
+  cudaMalloc(&dy,bsize*(ccm.n)*sizeof(double));
+  cudaMalloc(&dv1,bsize*(ccm.n)*sizeof(double));
+  cudaMalloc(&dv2,bsize*(ccm.n)*sizeof(double));
 
   // initialize dx to all 1's and dy to all zeros
   alpha = 1.0;
   beta = 0.0;
-  for(int ii=0; ii < ccm.n; ii++){
+  for(int ii=0; ii < bsize*ccm.n; ii++){
     cudaMemcpy(&dx[ii],&alpha,sizeof(double),cudaMemcpyHostToDevice);
     cudaMemcpy(&dy[ii],&beta,sizeof(double),cudaMemcpyHostToDevice);
   }
 
   // print dx and dy 
   for(int ii=0; ii < ccm.n; ii++){
-    cudaMemcpy(&alpha,&dx[ii],sizeof(double),cudaMemcpyDeviceToHost);
-    cudaMemcpy(&beta,&dy[ii],sizeof(double),cudaMemcpyDeviceToHost);
-    printf(" dx[%d] = %+e, dy[%d] = %+e\n", ii, alpha, ii, beta);
+    for(int jj=0; jj < bsize; jj++){
+      cudaMemcpy(&alpha,&dx[ccm.n*jj+ii],sizeof(double),cudaMemcpyDeviceToHost);
+      cudaMemcpy(&beta,&dy[ccm.n*jj+ii],sizeof(double),cudaMemcpyDeviceToHost);
+      printf(" dx[%d] = %+e, dy[%d] = %+e, ", ccm.n*jj+ii, alpha, ccm.n*jj+ii, beta);
+    }
+      printf("\n");
   }
   printf("\n");
 
   // compute dy = p(A)*dx
-  cuchebmatrix_polymv(&ccm,&ccp,dx,dy);
+  cuchebmatrix_polymm(&ccm,&ccp,bsize,dx,dy,dv1,dv2);
 
   // print dx and dy 
   for(int ii=0; ii < ccm.n; ii++){
-    cudaMemcpy(&alpha,&dx[ii],sizeof(double),cudaMemcpyDeviceToHost);
-    cudaMemcpy(&beta,&dy[ii],sizeof(double),cudaMemcpyDeviceToHost);
-    printf(" dx[%d] = %+e, dy[%d] = %+e\n", ii, alpha, ii, beta);
+    for(int jj=0; jj < bsize; jj++){
+      cudaMemcpy(&alpha,&dx[ccm.n*jj+ii],sizeof(double),cudaMemcpyDeviceToHost);
+      cudaMemcpy(&beta,&dy[ccm.n*jj+ii],sizeof(double),cudaMemcpyDeviceToHost);
+      printf(" dx[%d] = %+e, dy[%d] = %+e, ", ccm.n*jj+ii, alpha, ccm.n*jj+ii, beta);
+    }
+      printf("\n");
   }
+  printf("\n");
 
   // destroy CCM
   cuchebmatrix_destroy(&ccm);
@@ -65,6 +77,8 @@ int main(){
   // destroy vectors
   cudaFree(dx);
   cudaFree(dy);
+  cudaFree(dv1);
+  cudaFree(dv2);
 
   // return 
   return 0;

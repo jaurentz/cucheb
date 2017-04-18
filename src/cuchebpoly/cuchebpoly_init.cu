@@ -1,5 +1,6 @@
 #include <cucheb.h>
 
+
 /* routine for basic initialization */
 int cuchebpoly_init(cuchebpoly* ccp){
 
@@ -15,14 +16,14 @@ int cuchebpoly_init(cuchebpoly* ccp){
 
   // allocate workspace
   if(cudaMalloc(&(ccp->dinput),2*MAX_DOUBLE_DEG*sizeof(cufftDoubleReal)) != 0) {
-    printf("Memory allocation failed.\n");
+    printf("Device memory allocation failed: dinput\n");
     exit(1);
   }
   if(cudaMalloc(&(ccp->doutput),(MAX_DOUBLE_DEG+1)*sizeof(cufftDoubleComplex)) != 0) {
-    printf("Memory allocation failed.\n");
+    printf("Device memory allocation failed: doutput\n");
     exit(1);
   }
- 
+
   // return 
   return 0;
 

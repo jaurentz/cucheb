@@ -28,29 +28,29 @@ int cucheblanczos_arnoldi(int nsteps, cuchebmatrix* ccm, cucheblanczos* ccl,
   int ind, odepth, start;
   for(int ii=0; ii < niters; ii++){
 
+    // set index
+    ind = (ii+stop)*bsize;
+
+    // time matvecs
+    tick = clock();
+
+    // apply matrix
+    cuchebmatrix_mm(ccm,bsize,&one,&dvecs[ind*n],&zero,&dvecs[(ind+bsize)*n]);
+    cudaDeviceSynchronize();
+    ccstats->matvec_time += (clock()-tick)/((double)CLOCKS_PER_SEC);
+
+    // num_matvecs
+    ccstats->num_matvecs += bsize;
+
     // inner loop for bsize blocks
     for(int jj=0; jj < bsize; jj++){
-
-      // set index
-      ind = (ii+stop)*bsize + jj;
-
-      // time matvecs
-      tick = clock();
-
-      // apply matrix
-      cuchebmatrix_mv(ccm,&one,&dvecs[ind*n],&zero,&dvecs[(ind+bsize)*n]);
-      cudaDeviceSynchronize();
-      ccstats->matvec_time += (clock()-tick)/((double)CLOCKS_PER_SEC);
-
-      // num_matvecs
-      ccstats->num_matvecs += 1;
 
       // time innerprods
       tick = clock();
 
       // compute orthogonalization depth
       odepth = min((MAX_ORTH_DEPTH)*bsize+jj,ind+bsize);
-      start = ind + bsize - odepth;
+      start = ind + jj + bsize - odepth;
 
       // orthogonalize
       cublasDgemv(ccm->cublashandle, CUBLAS_OP_T, n, odepth, &one, &dvecs[start*n], 

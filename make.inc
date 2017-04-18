@@ -6,7 +6,7 @@ CUC := nvcc
 CUFLAGS := -O3 -gencode arch=compute_35,code=sm_35 
 
 # CUDA libraries
-CUDA := -lcuda 
+CUDA := -lcudart 
 CUBLAS := -lcublas 
 CUSPARSE := -lcusparse
 CUFFT := -lcufft 

@@ -13,7 +13,7 @@ int main(){
   int bsize;
 
   // initialize matrix
-  matname = "/path/to/Ge87H76.mtx";
+  matname = "Ge87H76.mtx";
   cuchebmatrix_init(matname, &ccm);
 
   // set interval and block size
@@ -21,8 +21,15 @@ int main(){
   ubnd = -0.0053;
   bsize = 3;
 
+  // start timer
+  clock_t tick;
+  tick = clock();
+
   // call filtered lanczos for an interval
   cuchebmatrix_filteredlanczos(lbnd, ubnd, bsize, &ccm, &ccl);
+
+  // computation time
+  printf("\ncomputation time = %e\n",(clock()-tick)/((double)CLOCKS_PER_SEC));
 
   // print matrix
   cuchebmatrix_print(&ccm);
