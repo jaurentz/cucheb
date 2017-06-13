@@ -1,5 +1,5 @@
 # Cucheb - CUDA accelerated large sparse eigensolvers #
-Jared L. Aurentz, Vassilis Kalantzis and Yousef Saad, September 2016
+Jared L. Aurentz, Vassilis Kalantzis and Yousef Saad, 2017
 
 ## GitHub ##
 This README file is written in mark down. For the best experience please view this
@@ -13,7 +13,7 @@ methods are well suited for computing eigenvalues and eigenvectors of matrices
 arising in quantum physics, structural engineering and network analysis.
 
 ### Current features ###
-__cucheb-v0.1.0__ has the following features:
+__cucheb-v0.1.2__ has the following features:
  - double precision eigensolvers for real symmetric matrices
 
 ## User-level programs ##
@@ -62,13 +62,32 @@ make install
 ```
 This creates a shared object library __libcucheb.so._version___ and copies it
 into the user specified installation directory. The installation does not
-create any symbolic links or export any library paths.
+create any symbolic links or export any library paths. To add __cucheb__ to
+the library path type:
+```
+export LD_LIBRARY_PATH=/path/to/cucheb/lib:$LD_LIBRARY_PATH
+```
 
-## Examples ##
-You can find several examples for using Cucheb in the [examples](examples)
-subdirectory. In order to run these examples you will first have to download
-the matrices listed in each example from the University of Florida's [Sparse
-Matrix Collection](https://www.cise.ufl.edu/research/sparse/matrices/).
+## Tests ##
+You can find several examples for using Cucheb in the [tests](tests)
+subdirectory. Once Cucheb has been installed the tests can be compiled
+by typing:
+```
+make tests
+```
+The test matrices are included as part of Cucheb but more can be found at the 
+[Sparse Matrix Collection](https://www.cise.ufl.edu/research/sparse/matrices/).
+
+When using Cucheb for the first time we suggest that you start with 
+[testparsec.cu](tests/parsec/testparsec.cu). This tests computes a subset of the 
+ground states of a molecular Hamiltonian, which we consider a standard problem for 
+Cucheb. To execute __testparsec.cu__ once compiled type:
+```
+./tests/parsec/testparsec
+```
+CAUTION: When working on a cluster the relative path to the __matrices__ in the 
+test __source files__ may not be exported properly. To fix this modify the 
+specific test source file to use the __absolute path__ to the matrix.
 
 ## Removing Cucheb ##
 If the source directory has not been removed simply move into the Cucheb
