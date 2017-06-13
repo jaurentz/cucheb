@@ -4,7 +4,7 @@
 int main(){
 
   // input file
-  string mtxfile("Trefethen_20.mtx");
+  string mtxfile("../matrices/SiH4.mtx");
 
   // cuhebmatrix
   cuchebmatrix ccm;

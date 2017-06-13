@@ -7,8 +7,7 @@ int main(){
   cudaSetDevice(0);
 
   // cuhebmatrix
-  //string mtxfile("../matrices/ca2010.mtx");
-  string mtxfile("../matrices/144.mtx");
+  string mtxfile("../matrices/SiH4.mtx");
   cuchebmatrix ccm;
   cuchebmatrix_init(mtxfile, &ccm);
 

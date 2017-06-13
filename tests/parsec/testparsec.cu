@@ -8,13 +8,12 @@ int main(){
   cucheblanczos ccl;
 
   // variables to parse file
-  string matname;
+  string mtxfile("../matrices/SiH4.mtx");
   double lbnd, ubnd;
   int bsize;
 
   // initialize matrix
-  matname = "Ge87H76.mtx";
-  cuchebmatrix_init(matname, &ccm);
+  cuchebmatrix_init(mtxfile, &ccm);
 
   // set interval and block size
   lbnd = -0.645;

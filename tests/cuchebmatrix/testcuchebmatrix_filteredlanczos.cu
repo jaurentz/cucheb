@@ -4,7 +4,7 @@
 int main(){
 
   // read in matrix and allocate memory
-  string mtxfile("../matrices/ca2010.mtx");
+  string mtxfile("../matrices/SiH4.mtx");
   cuchebmatrix ccm;
   cuchebmatrix_init(mtxfile, &ccm);
 

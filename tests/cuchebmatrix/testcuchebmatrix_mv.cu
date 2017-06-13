@@ -4,7 +4,7 @@
 int main(){
 
   // input file
-  string mtxfile("/LUSTRE/users/jaurentz/Projects/CUCHEB/matrices/Trefethen_20.mtx");
+  string mtxfile("../matrices/Stranke94.mtx");
 
   // cuhebmatrix
   cuchebmatrix ccm;
