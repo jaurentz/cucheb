@@ -40,7 +40,7 @@ int main(){
   printf("\n");
 
   // compute ritz values
-  cucheblanczos_eig(&ccm,&ccl);
+  cucheblanczos_ritz(&ccm,&ccl);
 
   // print bands
   for(int ii=0; ii < nvecs; ii++){
