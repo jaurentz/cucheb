@@ -26,9 +26,6 @@ objects: FORCE
 tests: FORCE
 	@$(MAKE) -C ./tests
 	
-examples: FORCE
-	@$(MAKE) -C ./examples
-	
 FORCE:
 	
 install: lib$(LIBNAME).so.$(VERSION) 
@@ -46,6 +43,5 @@ uninstall: clean
 clean:
 	@$(MAKE) clean -C ./src
 	@$(MAKE) clean -C ./tests
-	@$(MAKE) clean -C ./examples
 
 	

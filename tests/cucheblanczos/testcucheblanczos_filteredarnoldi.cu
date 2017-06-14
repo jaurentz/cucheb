@@ -4,9 +4,6 @@
 int main(){
 
   // input file
-  //string mtxfile("../matrices/H2O.mtx");
-  //string mtxfile("../matrices/G2_circuit.mtx");
-  //string mtxfile("../matrices/Si10H16.mtx");
   string mtxfile("../matrices/Stranke94.mtx");
 
   // cuchebmatrix
@@ -40,7 +37,6 @@ int main(){
   // print ccl
   cucheblanczos_print(&ccl);
 
-/*
   // print arnoldi vectors
   double val;
   int nvecs;
@@ -53,12 +49,10 @@ int main(){
   printf("\n");
   }
   printf("\n");
-*/
 
   // compute ritz values
-//  cucheblanczos_eig(&ccm,&ccl);
+  cucheblanczos_ritz(&ccm,&ccl);
 
-/*
   // print bands
   for(int ii=0; ii < nvecs; ii++){
 
@@ -91,7 +85,6 @@ int main(){
   printf("\n");
   }
   printf("\n");
-*/
 
   // compute rayleigh quotients and residuals
   cucheblanczos_rayleigh(&ccm,&ccl);

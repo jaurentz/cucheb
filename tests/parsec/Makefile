@@ -1,15 +1,15 @@
-include ../make.inc
+include ../../make.inc
 
-EXS := $(wildcard ./*.cu)
-EXS := $(EXS:.cu=)
+TESTS := $(wildcard ./*.cu)
+TESTS := $(TESTS:.cu=)
 
 CUCHEBINCS := -I $(INSTALLDIR)/cucheb/include
 CUCHEBLIBS := -L $(INSTALLDIR)/cucheb/lib -lcucheb 
 
-all: $(EXS)
+all: $(TESTS)
 
 %:: %.cu
 	$(CUC) $(CUFLAGS) -o $@ $< $(CUCHEBINCS) $(CUCHEBLIBS) $(INCS) $(LIBS) 
 	
 clean:
-	@rm -f $(EXS)
+	@rm -f $(TESTS)

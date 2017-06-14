@@ -4,8 +4,6 @@
 int main(){
 
   // input file
-  //string mtxfile("./matrices/Sandi_authors.mtx");
-  //string mtxfile("../matrices/Trefethen_20.mtx");
   string mtxfile("../matrices/Stranke94.mtx");
 
   // cuchebstats
@@ -42,7 +40,7 @@ int main(){
   printf("\n");
 
   // compute ritz values
-//  cucheblanczos_eig(&ccm,&ccl);
+  cucheblanczos_ritz(&ccm,&ccl);
 
   // print bands
   for(int ii=0; ii < nvecs; ii++){
