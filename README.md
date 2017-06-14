@@ -15,6 +15,11 @@ arising in quantum physics, structural engineering and network analysis.
 ### Current features ###
 __cucheb-v0.1.2__ has the following features:
  - double precision eigensolvers for real symmetric matrices
+ 
+### Dependencies ###
+Cucheb depends on the 
+[__NVIDIA CUDA Toolkit__](https://developer.nvidia.com/cuda-toolkit) 
+(v7.0 or greater). 
 
 ## User-level programs ##
 There are many files in the Cucheb library but only a few will be necessary for
@@ -78,6 +83,7 @@ make tests
 The test matrices are included as part of Cucheb but more can be found at the 
 [Sparse Matrix Collection](https://www.cise.ufl.edu/research/sparse/matrices/).
 
+### First example ###
 When using Cucheb for the first time we suggest that you start with 
 [testparsec.cu](tests/parsec/testparsec.cu). This tests computes a subset of the 
 ground states of a molecular Hamiltonian, which we consider a standard problem for 
