@@ -16,8 +16,8 @@ int main(){
   cuchebmatrix_init(mtxfile, &ccm);
 
   // set interval and block size
-  lbnd = -0.645;
-  ubnd = -0.0053;
+  lbnd = -1.0;
+  ubnd =  1.0;
   bsize = 3;
 
   // start timer
